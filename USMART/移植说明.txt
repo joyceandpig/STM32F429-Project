@@ -1,0 +1,47 @@
+@版权说明
+该版本在@正点原子 ALIENTEK开发的USMART3.4版本的基础上进行改进所得；
+1、新增类linux tab快速输入功能；
+2、封装串口接收处理函数，方便移植；
+3、修改接收缓存大小可用户自定义；
+4、剥离USMART底层函数，用户仅需要实现串口的收发函数以及中断函数即可实现轻松移植
+5、修复其它一些已知错误
+
+@移植说明
+
+1、用户实现串口接收和串口发送程序
+修改usmart_config.c中
+
+void USMART_Send_Data(s8 data)
+{//移植使用
+	//USART_SendData(USART1,data);
+}
+
+u8 USMART_Recv_data(void)
+{//移植使用
+	//return USART_ReceiveData(USART1);
+}
+
+
+2、根据需要修改串口接收缓存USMART_RECV_LEN_MAX的大小
+在usmart_config.c中定义
+const u16 USMART_RECV_LEN_MAX = 1024;
+
+
+3、实现串口中断，并在中断中事宜位置添加USMART接收处理函数；
+USMART_Recv_Process();
+4、根据实际项目修改函数名列表初始化
+修改usmart_config.c中
+
+struct _m_usmart_nametab usmart_nametab[]=
+{
+#if USMART_USE_WRFUNS==1 	//如果使能了读写操作
+	(void*)read_addr,"u32 read_addr(u32 addr)",
+	(void*)write_addr,"void write_addr(u32 addr,u32 val)",	 
+#endif		
+//用户添加
+	(void*)STM_EVAL_LED_Init,"void STM_EVAL_LED_Init(void)",
+	(void*)SoftReset,"void SoftReset(void)",		
+};	
+
+
+
