@@ -57,10 +57,11 @@ u8 FTL_Init(void)
             return 2;
         }
     }else 	//创建LUT表成功
-	{
+		{
 		printf("total block num:%d\r\n",nand_dev.block_totalnum);
 		printf("good block num:%d\r\n",nand_dev.good_blocknum);
 		printf("valid block num:%d\r\n",nand_dev.valid_blocknum);
+		printf("NandFlash size: %d MB\r\n",(nand_dev.block_totalnum/1024)*(nand_dev.page_mainsize/1024)*nand_dev.block_pagenum);
     }
 	return 0;
 } 

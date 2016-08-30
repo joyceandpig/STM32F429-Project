@@ -1,0 +1,204 @@
+#include "spblcd.h"
+#include "spb.h"
+#include "dma.h"
+#include "lcd.h"
+#include "ltdc.h"
+#include "delay.h"
+#include "malloc.h"
+#include "usart.h"
+#include "stm32f4xx_hal_dma.h"
+
+
+#define __HAL_DMA_Stream_SET_CR(__HANDLE__, __VAL__)   ((uint32_t)((__HANDLE__)->Instance)->CR   |= (__VAL__))
+#define __HAL_DMA_Stream_SET_NDTR(__HANDLE__, __VAL__) ((uint32_t)((__HANDLE__)->Instance)->NDTR |= (__VAL__))
+#define __HAL_DMA_Stream_SET_PAR(__HANDLE__, __VAL__)  ((uint32_t)((__HANDLE__)->Instance)->PAR  |= (__VAL__))
+#define __HAL_DMA_Stream_SET_M0AR(__HANDLE__, __VAL__) ((uint32_t)((__HANDLE__)->Instance)->M0AR |= (__VAL__))
+#define __HAL_DMA_Stream_SET_M1AR(__HANDLE__, __VAL__) ((uint32_t)((__HANDLE__)->Instance)->M1AR |= (__VAL__))
+#define __HAL_DMA_Stream_SET_FCR(__HANDLE__, __VAL__)  ((uint32_t)((__HANDLE__)->Instance)->FCR  |= (__VAL__))
+
+
+
+//////////////////////////////////////////////////////////////////////////////////	 
+//本程序只供学习使用，未经作者许可，不得用于其它任何用途
+//ALIENTEK STM32开发板
+//SPBLCD 驱动代码	   
+//正点原子@ALIENTEK
+//技术论坛:www.openedv.com
+//创建日期:2016/3/20
+//版本：V1.1
+//版权所有，盗版必究。
+//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
+//All rights reserved				
+//********************************************************************************
+//修改说明 
+//V1.1  20160320 
+//修改为支持3页滑动.
+//////////////////////////////////////////////////////////////////////////////////	  
+
+
+u16 *sramlcdbuf;							//SRAM LCD BUFFER,背景图片显存区 
+DMA_HandleTypeDef SPIDMA_Handler;
+
+//在指定位置画点.
+//x,y:坐标
+//color:颜色.
+void slcd_draw_point(u16 x,u16 y,u16 color)
+{	 
+	if(lcdltdc.pwidth)x=spbdev.spbwidth*SPB_PAGE_NUM+spbdev.spbahwidth*2-x-1;
+	sramlcdbuf[y+x*spbdev.spbheight]=color;
+}
+//读取指定位置点的颜色值
+//x,y:坐标
+//返回值:颜色
+u16 slcd_read_point(u16 x,u16 y)
+{
+	if(lcdltdc.pwidth)x=spbdev.spbwidth*SPB_PAGE_NUM+spbdev.spbahwidth*2-x-1;
+	return sramlcdbuf[y+x*spbdev.spbheight];
+} 
+//填充颜色
+//x,y:起始坐标
+//width，height：宽度和高度
+//*color：颜色数组
+void slcd_fill_color(u16 x,u16 y,u16 width,u16 height,u16 *color)
+{   
+	u16 i,j; 
+ 	for(i=0;i<height;i++)
+	{
+		for(j=0;j<width;j++)
+		{
+			slcd_draw_point(x+j,y+i,*color++);
+		}	
+	}	
+} 
+//SRAM --> LCD_RAM dma配置
+//16位,外部SRAM传输到LCD_RAM. 
+void slcd_dma_init(void)
+{  
+//	RCC->AHB1ENR|=1<<22;		//DMA2时钟使能    
+//	while(DMA2_Stream0->CR&0X01);//等待DMA2_Stream0可配置 
+//	DMA2->LIFCR|=0X3D<<6*0;		//清空通道0上所有中断标志
+//	DMA2_Stream0->FCR=0X0000021;//设置为默认值	
+//	
+//	DMA2_Stream0->PAR=0;		//暂不设置
+//	DMA2_Stream0->M0AR=(u32)&LCD->LCD_RAM;	//目标地址为LCD_RAM
+//	DMA2_Stream0->M1AR=0;		//不用设置
+//	DMA2_Stream0->NDTR=0;		//暂时设置长度为0
+//	DMA2_Stream0->CR=0;			//先全部复位CR寄存器值  
+//	DMA2_Stream0->CR|=2<<6;		//存储器到存储器模式 
+//	DMA2_Stream0->CR|=0<<8;		//普通模式
+//	DMA2_Stream0->CR|=1<<9;		//外设增量模式
+//	DMA2_Stream0->CR|=0<<10;	//存储器非增量模式
+//	DMA2_Stream0->CR|=1<<11;	//外设数据长度:16位
+//	DMA2_Stream0->CR|=1<<13;	//存储器数据长度:16位
+//	DMA2_Stream0->CR|=0<<16;	//低优先级
+//	DMA2_Stream0->CR|=0<<18;	//单缓冲模式
+//	DMA2_Stream0->CR|=0<<21;	//外设突发单次传输
+//	DMA2_Stream0->CR|=0<<23;	//存储器突发单次传输
+//	DMA2_Stream0->CR|=0<<25;	//选择通道0 
+//	
+//	DMA2_Stream0->FCR&=~(1<<2);	//不使用FIFO模式
+//	DMA2_Stream0->FCR&=~(3<<0);	//无FIFO 设置  
+	
+
+	__HAL_RCC_DMA2_CLK_ENABLE();//DMA2时钟使能 
+	while(__HAL_DMA_GET_IT_SOURCE(&SPIDMA_Handler,HAL_DMA_STATE_READY));		//等待DMA2_Stream0可配置
+	SPIDMA_Handler.Instance = DMA2_Stream0;//选择数据流0
+	
+	HAL_DMA_DeInit(&SPIDMA_Handler);//先全部复位dma寄存器值  
+	__HAL_DMA_Stream_SET_M0AR(&SPIDMA_Handler,(u32)&LCD->LCD_RAM);//目标地址为LCD_RAM
+	SPIDMA_Handler.Init.Channel = DMA_CHANNEL_0;//选择通道0 
+	SPIDMA_Handler.Init.Direction = DMA_MEMORY_TO_MEMORY;//存储器到存储器模式 
+	SPIDMA_Handler.Init.Mode = DMA_NORMAL;//普通模式
+	SPIDMA_Handler.Init.PeriphInc = DMA_PINC_ENABLE;//外设增量模式
+	SPIDMA_Handler.Init.MemInc = DMA_MINC_DISABLE;//存储器非增量模式
+	SPIDMA_Handler.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;//外设数据长度:16位
+	SPIDMA_Handler.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;//存储器数据长度:16位
+	SPIDMA_Handler.Init.Priority = DMA_PRIORITY_LOW;//低优先级
+	SPIDMA_Handler.Init.FIFOMode = DMA_FIFOMODE_DISABLE;//不使用FIFO模式
+	SPIDMA_Handler.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;//无FIFO 设置  
+	SPIDMA_Handler.Init.MemBurst = DMA_MBURST_SINGLE;//存储器突发单次传输
+	SPIDMA_Handler.Init.PeriphBurst = DMA_PBURST_SINGLE;//外设突发单次传输
+	
+	HAL_DMA_Init(&SPIDMA_Handler);
+} 
+
+//开启一次SPI到LCD的DMA的传输
+//x:起始传输地址编号
+void slcd_dma_enable(u32 x)
+{	  
+	u32 lcdsize=spbdev.spbwidth*spbdev.spbheight;
+	u32 dmatransfered=0;
+//	while(lcdsize)
+//	{ 
+//		DMA2_Stream0->CR&=~(1<<0);			//关闭DMA传输 
+//		while(DMA2_Stream0->CR&0X01);		//等待DMA2_Stream0可配置 
+//		DMA2->LIFCR|=1<<5;					//清除上次的传输完成标记
+//		if(lcdsize>SLCD_DMA_MAX_TRANS)
+//		{
+//			lcdsize-=SLCD_DMA_MAX_TRANS;
+//			DMA2_Stream0->NDTR=SLCD_DMA_MAX_TRANS;	//设置传输长度
+//		}else
+//		{
+//			DMA2_Stream0->NDTR=lcdsize;	//设置传输长度
+//			lcdsize=0;
+//		}	
+//		DMA2_Stream0->PAR=(u32)(sramlcdbuf+x*spbdev.spbheight+dmatransfered);	
+//		dmatransfered+=SLCD_DMA_MAX_TRANS;		
+//		DMA2_Stream0->CR|=1<<0;				//开启DMA传输 		
+//		while((DMA2->LISR&(1<<5))==0);		//等待传输完成 
+//	} 
+//	DMA2_Stream0->CR&=~(1<<0);				//关闭DMA传输 
+
+	while(lcdsize)
+	{
+		__HAL_DMA_DISABLE(&SPIDMA_Handler);//关闭DMA传输 
+		while(__HAL_DMA_GET_IT_SOURCE(&SPIDMA_Handler,HAL_DMA_STATE_READY));		//等待DMA2_Stream0可配置 	
+		__HAL_DMA_CLEAR_FLAG(&SPIDMA_Handler,DMA2D_IFSR_CCEIF);	//清除上次的传输完成标记
+		if(lcdsize>SLCD_DMA_MAX_TRANS)
+		{
+			lcdsize-=SLCD_DMA_MAX_TRANS;
+			__HAL_DMA_SET_COUNTER(&SPIDMA_Handler,SLCD_DMA_MAX_TRANS);	//设置传输长度
+		}else
+		{
+			__HAL_DMA_SET_COUNTER(&SPIDMA_Handler,lcdsize);	//设置传输长度
+			lcdsize=0;
+		}	
+		__HAL_DMA_Stream_SET_PAR(&SPIDMA_Handler,(u32)(sramlcdbuf+x*spbdev.spbheight+dmatransfered));
+		dmatransfered+=SLCD_DMA_MAX_TRANS;		
+		__HAL_DMA_ENABLE(&SPIDMA_Handler);				//开启DMA传输 		
+		while(__HAL_DMA_GET_FLAG(&SPIDMA_Handler,DMA2D_ISR_CEIF)==0);		//等待传输完成
+	}
+	__HAL_DMA_DISABLE(&SPIDMA_Handler);//关闭DMA传输 
+}
+//显示一帧,即启动一次spi到lcd的显示.
+//x:坐标偏移量
+void slcd_frame_show(u32 x)
+{  
+	if(lcdltdc.pwidth)
+	{
+		x=spbdev.spbwidth*(SPB_PAGE_NUM-1)+spbdev.spbahwidth*2-x;
+		LTDC_Color_Fill(0,spbdev.stabarheight,spbdev.spbwidth-1,spbdev.stabarheight+spbdev.spbheight-1,sramlcdbuf+x*spbdev.spbheight);
+	}else
+	{
+		LCD_Scan_Dir(U2D_L2R);		//设置扫描方向  
+		if(lcddev.id==0X9341||lcddev.id==0X5310||lcddev.id==0X5510||lcddev.id==0X6804)
+		{
+			LCD_Set_Window(spbdev.stabarheight,0,spbdev.spbheight,spbdev.spbwidth);
+			LCD_SetCursor(spbdev.stabarheight,0);//设置光标位置 
+		}else
+		{
+			LCD_Set_Window(0,spbdev.stabarheight,spbdev.spbwidth,spbdev.spbheight);
+			if(lcddev.id!=0X1963)LCD_SetCursor(0,spbdev.stabarheight);//设置光标位置 		
+		}
+		LCD_WriteRAM_Prepare();     //开始写入GRAM	
+		slcd_dma_enable(x);
+		LCD_Scan_Dir(DFT_SCAN_DIR);	//恢复默认方向
+		LCD_Set_Window(0,0,lcddev.width,lcddev.height);//恢复默认窗口大小
+	} 
+}
+ 
+
+
+
+
+

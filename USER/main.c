@@ -20,6 +20,8 @@
 #include "usbd_desc.h"
 #include "usb_conf.h"
 #include "usbd_msc_bot.h"
+
+#include "spblcd.h"
 USB_OTG_CORE_HANDLE USB_OTG_dev;
 extern vu8 USB_STATUS_REG;		//USB状态
 extern vu8 bDeviceState;		//USB连接 情况
@@ -104,18 +106,20 @@ int main(void)
 	AT24CXX_Init();				    //初始化IIC
 	W25QXX_Init();				    //W25QXX初始化	
 	tp_dev.init();				    //初始化触摸屏
-	my_mem_init(SRAMIN);            //初始化内部内存池
+	my_mem_init(SRAMIN);     //初始化内部内存池
 	my_mem_init(SRAMEX);		//初始化外部内存池
 	my_mem_init(SRAMCCM);		//初始化CCM内存池 
+	
+	slcd_dma_init();
 
-	font_init(0);//初始化字库	
+	font_init(0);//初始化字库	 0检查  1强制更新
 	POINT_COLOR = RED;
 	Show_Str(30,50+32*4,300,32,		"F429 Develop Kit.",24,0);				    	 
 	Show_Str(30,50+32*4+24*1,300,32,"综合测试试验...",24,0);				    	 				    	 
 	Show_Str(30,50+32*4+24*2,300,32,"www.sunsheen.cn",24,0);				    	 
 	Show_Str(30,50+32*4+24*3,300,32,"2016年8月25日",24,0);
 
-	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测W25Q128错误
+	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测NandFlash错误
 	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存
 	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
 	Sleep(5000);
