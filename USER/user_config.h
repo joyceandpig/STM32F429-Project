@@ -14,8 +14,15 @@ extern "C" {
 #include "sys.h"
 #include "includes.h"
 #include "delay.h"
+
 	
 #define Sleep(x) delay_ms(x)
+	
+	
+	
+#define USART1_EN
+#define USART3_EN
+	
 /*
 *********************************************************************************************************
 *                                            TASK PRIORITIES
@@ -31,6 +38,7 @@ enum TASK_PRIO{
 	TASK_MAIN_PRIO ,
 	TASK_LED_PRIO,
 	TASK_USB_PRIO,
+	TASK_PICTURE_PRIO,
 	
 	
 	/////
@@ -50,6 +58,7 @@ enum TASK_PRIO{
 #define TASK_MAIN_STACK_SIZE				512
 #define TASK_LED_STACK_SIZE					512
 #define TASK_USB_STACK_SIZE					512
+#define TASK_PICTURE_STACK_SIZE			512
 /*
 *********************************************************************************************************
 *                               		IRQ_PRIORITY
@@ -65,6 +74,7 @@ enum IRQ_PRIORITY{
 	USART1_IRQn_Priority,
 	
 	USART2_IRQn_Priority,	
+	USART3_IRQn_Priority,
 
 };
 

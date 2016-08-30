@@ -30,7 +30,7 @@ struct _m_usmart_nametab usmart_nametab[]=
 #include "usart.h"
 void USMART_Send_Data(u8 data)
 {//“∆÷≤ π”√
-	if(HAL_UART_Transmit(&UART1_Handler, &data, 1,2000) != HAL_OK)
+	if(HAL_UART_Transmit(&USART1_Handler, &data, 1,2000) != HAL_OK)
 	{
 		
 	}

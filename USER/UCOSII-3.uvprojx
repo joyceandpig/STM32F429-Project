@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx,OS_UCOS,DEBUG,USE_USB_OTG_FS,MPL_LOG_NDEBUG=1,EMPL,MPU9250,EMPL_TARGET_STM32F4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\APP\SPB;..\HARDWARE\DMA;..\APP\COMMON</IncludePath>
+              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\HARDWARE\DMA;..\APP\SPB;..\APP\COMMON;..\GUI;..\HARDWARE\GSM</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -775,6 +775,11 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\DMA\dma.c</FilePath>
             </File>
+            <File>
+              <FileName>gsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\GSM\gsm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -789,6 +794,61 @@
               <FileName>spb.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\SPB\spb.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>GUI</GroupName>
+          <Files>
+            <File>
+              <FileName>button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\button.c</FilePath>
+            </File>
+            <File>
+              <FileName>edit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\edit.c</FilePath>
+            </File>
+            <File>
+              <FileName>filelistbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\filelistbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\gui.c</FilePath>
+            </File>
+            <File>
+              <FileName>listbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\listbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>memlcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\memlcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>memo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\memo.c</FilePath>
+            </File>
+            <File>
+              <FileName>progressbar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\progressbar.c</FilePath>
+            </File>
+            <File>
+              <FileName>scrollbar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\scrollbar.c</FilePath>
+            </File>
+            <File>
+              <FileName>window.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\window.c</FilePath>
             </File>
           </Files>
         </Group>

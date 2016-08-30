@@ -1,3 +1,4 @@
+#include "includes.h" 
 #include "user_config.h"
 #include "delay.h"
 #include "usart.h"
@@ -22,6 +23,10 @@
 #include "usbd_msc_bot.h"
 
 #include "spblcd.h"
+#include "spb.h"
+#include "piclib.h"
+#include "gui.h"
+
 USB_OTG_CORE_HANDLE USB_OTG_dev;
 extern vu8 USB_STATUS_REG;		//USB状态
 extern vu8 bDeviceState;		//USB连接 情况
@@ -98,7 +103,7 @@ int main(void)
     Stm32_Clock_Init(384,25,2,8);   //设置时钟,180Mhz
     delay_init(192);                //初始化延时函数
 #endif	
-  uart_init(115200);              //初始化USART
+  uart1_init(115200);              //初始化USART
 	usmart_dev.init(96);
 	LED_Init();                     //初始化LED
 	SDRAM_Init();                   //初始化SDRAM
@@ -110,6 +115,9 @@ int main(void)
 	my_mem_init(SRAMEX);		//初始化外部内存池
 	my_mem_init(SRAMCCM);		//初始化CCM内存池 
 	
+	TP_Init();
+	gui_init();
+	piclib_init();				//piclib初始化
 	slcd_dma_init();
 
 	font_init(0);//初始化字库	 0检查  1强制更新
@@ -166,7 +174,7 @@ void usb_Task(void *pdata)
 	MPU_Test();		    
 	while(1)
 	{
-        Sleep(100);				  
+    Sleep(100);				  
 		if(USB_STA!=USB_STATUS_REG)//状态改变了 
 		{	 						   		  	   
 			if(USB_STATUS_REG&0x01)//正在写		  
@@ -212,19 +220,73 @@ void usb_Task(void *pdata)
 		} 
 	} 	
 }
+void picture_task(void *pdata)
+{
+	pdata=pdata;
+//	ShowPicture();	//显示图片
+	while(1)
+	{
+		Sleep(100);
+	}
+}
+//vu8 system_task_return;		//任务强制返回标志.
 //主线程
 void main_thread(void *pdata)
 {
 
 	pdata=pdata;
-
+	u8 selx; 
+	u16 tcnt=0;
+	
 	OSStatInit();  //开启统计任务
 	thread_create(led_task, 0, TASK_LED_PRIO, 0, TASK_LED_STACK_SIZE, "led_task");
-	ShowPicture();	//显示图片
+	thread_create(picture_task, 0, TASK_PICTURE_PRIO, 0, TASK_PICTURE_STACK_SIZE, "picture_task");
+	
+	spb_init();			//初始化SPB界面
+	spb_load_mui();		//加载SPB主界面
+	slcd_frame_show(spbdev.spbahwidth);	//显示界面
 	while(1)
 	{
-		Sleep(100);
-	}	
+		selx=spb_move_chk(); 
+//		system_task_return=0;//清退出标志 
+		switch(selx)//发生了双击事件
+		{    
+//			case ebook_app		:ebook_play();		break;//电子图书 
+// 			case picviewer_app	:picviewer_play();	break;//数码相框  
+// 			case audio_app		:audio_play();		break;//音乐播放 
+// 			case video_app		:video_play();		break;//视频播放
+//			case calendar_app	:calendar_play();	break;//时钟 
+// 			case sysset_app		:sysset_play();		break;//系统设置
+//			case notepad_app	:notepad_play();	break;//记事本	
+//			case exe_app		:exe_play();		break;//运行器
+//			case paint_app		:paint_play();		break;//手写画笔
+// 			case camera_app		:camera_play();		break;//摄像头
+//			case recorder_app	:recorder_play();	break;//录音机
+// 			case usb_app		:usb_play();		break;//USB连接
+// 	    	case net_app		:net_play();		break;//网络测试
+//			case calc_app		:calc_play();		break;//计算器   
+//			case qr_app			:qr_play();			break;//二维码
+// 			case webcam_app		:webcam_play();		break;//网络摄像头
+//			case frec_app		:frec_play();		break;//人脸识别
+//			case gyro_app		:gyro_play();		break;//9轴传感器
+//			case grad_app		:grad_play();		break;//水平仪
+//			case key_app		:key_play();		break;//按键测试
+//			case led_app		:led_play();		break;//led测试
+
+//			case phone_app:phone_play();break;	//电话功能
+//			case AppCenter:app_play();break;	//APP 
+// 			case msm_app:sms_play();break;	//短信功能
+		} 
+		
+		if(selx!=0XFF)spb_load_mui();//显示主界面
+		delay_ms(1000/OS_TICKS_PER_SEC);//延时一个时钟节拍
+		tcnt++;
+		if(tcnt==500)	//500个节拍为1秒钟
+		{
+			tcnt=0;
+			spb_stabar_msg_show(0);//更新状态栏信息
+		}
+	}
 }
 
 
