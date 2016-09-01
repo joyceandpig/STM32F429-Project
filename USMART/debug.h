@@ -20,6 +20,7 @@ extern "C"
 #include "usmart.h"
 
 
+
 #if 1
 	extern char aTxBuffer[1024];
 	extern void UART_Printf(char *pData);	

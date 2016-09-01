@@ -4,7 +4,7 @@
 #include "touch.h"	 
 #include "includes.h"
 #include "gui.h"
-//#include "wm8978.h"
+#include "wm8978.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -143,9 +143,9 @@ void app_get_version(u8*buf,u32 ver,u8 len);//得到版本号
 void app_usmart_getsn(void);		//USMART专用.
 u8 app_system_parameter_init(void);	//系统信息初始化
 void app_lcd_auto_bklight(void);	//LCD背光自动控制函数
-//void app_wm8978_volset(u8 vol);		//WM8978音量设置
-//void app_wm8978_eqset(_wm8978_obj *wmset,u8 eqx);//eq设置
-//void app_wm8978_setall(void);		//设置所有WM8978参数
+void app_wm8978_volset(u8 vol);		//WM8978音量设置
+void app_wm8978_eqset(_wm8978_obj *wmset,u8 eqx);//eq设置
+void app_wm8978_setall(void);		//设置所有WM8978参数
 void app_set_default(void);			//恢复默认设置
 #endif
 

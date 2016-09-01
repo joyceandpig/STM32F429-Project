@@ -21,6 +21,10 @@
 #include <stm32f4xx.h>		
 /////////////end/////////////    
 #include "sys.h"
+#include "timer.h"
+
+#define TRUE 1
+#define FAULT 0
 
 
 extern volatile u8 system_task_return;		//任务强制返回标志.

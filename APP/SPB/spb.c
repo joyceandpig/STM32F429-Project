@@ -529,7 +529,7 @@ u8 spb_move_chk(void)
 			else skips=20;				//MCUÆÁ,Ìø20¸öÏñËØ
 			break;
 		case 600:
-			skips=20;
+			skips=80;
 			break; 
 	} 
 	tp_dev.scan(0);	//É¨Ãè		

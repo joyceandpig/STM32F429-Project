@@ -1,6 +1,7 @@
 #include "common.h"
 #include "spb.h"
-
+#include "settings.h"
+#include "calendar.h"
 
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -20,69 +21,69 @@
 //修改app_show_float函数的一个bug
 ////////////////////////////////////////////////////////////////////////////////// 	   
 
-////模式选择列表的窗体名字
-//u8*const APP_MODESEL_CAPTION_TBL[GUI_LANGUAGE_NUM]=
-//{
-//"模式选择","模式選擇","Mode Select",
-//}; 
-////提示信息的窗体名字
-//u8*const APP_REMIND_CAPTION_TBL[GUI_LANGUAGE_NUM]=
-//{
-//"提示信息","提示信息","Remind",	 
-//};
-////提醒保存的窗体名字
-//u8*const APP_SAVE_CAPTION_TBL[GUI_LANGUAGE_NUM]=
-//{
-//"是否保存编辑后的文件?","是否保存編輯后的文件?","Do you want to save?",
-//}; 
-////提醒删除的窗体名字
-//u8*const APP_DELETE_CAPTION_TBL[GUI_LANGUAGE_NUM]=
-//{
-//"确定删除这条短信?","確定刪除這條短信?","Are you sure to delete this SMS",
-//}; 
-////创建文件失败,提示是否存在SD卡? ,200的宽度
-//u8*const APP_CREAT_ERR_MSG_TBL[GUI_LANGUAGE_NUM]=
-//{							 
-//"创建文件失败,请检查!","創建文件失敗,請檢查!","Creat File Failed,Please Check!",
-//}; 
-////磁盘名字表
-//u8*const APP_DISK_NAME_TBL[3][GUI_LANGUAGE_NUM]=
-//{
-//	{"SD卡","SD卡","SD Card",},
-// 	{"FLASH磁盘","FLASH磁盤","FLASH Disk",},
-// 	{"U盘","U盤","U Disk",},
-//};  							 
-////app主要功能界面标题
-//u8*const APP_MFUNS_CAPTION_TBL[APP_FUNS_NUM][GUI_LANGUAGE_NUM]=
-//{
-//	{"电子图书","電子圖書","EBOOK",},
-//	{"数码相框","數碼相框","PHOTOS",},
-//	{"音乐播放器","音樂播放器","MUSIC PLAYER",},
-// 	{"视频播放器","視頻播放器","VIDEO PLAYER",}, 
-// 	{"","","",},	//时钟 
-//	{"系统设置","系統設置","SYSTEM SET",},
-//	{"游戏机","遊戲機","Games",},
-//	{"","","",},	//记事本
-//	{"运行器","運行器","EXE",},
-//	{"","","",},	//手写画笔
-//	{"","","",},	//照相机
-//	{"录音机","錄音機","RECODER",},
-//	{"USB连接","USB連接","USB",}, 
-//	{"网络通信","網絡通信","ETHERNET",},
-//	{"无线传书","無線傳書","WIRELESS",},
-//	{"科学计算器","科學計算器","Calculator",},
-//	{"二维码编码","二維碼编码","QR ENCODE",},
-//	{"网络摄像头","網酪攝像頭","Web Camera",},
-//	{"人脸识别","人臉識別","Face Recognition",},
-//	{"9轴姿态解算","9轴姿态解算","9D TEST",},
-//	{"水平仪","水平儀","Gradienter",},
-//	{"蜂鸣器测试","蜂鳴器測試","Beep Test",},
-//	{"按键测试","按鍵測試","Key Test",},
-//	{"LED测试","LED測試","LED Test",},
-//	{"","","",},	//电话
-//	{"应用中心","應用中心","APPLICATIONS",},
-//	{"短信","短信","SMS",},
-//};
+//模式选择列表的窗体名字
+u8*const APP_MODESEL_CAPTION_TBL[GUI_LANGUAGE_NUM]=
+{
+"模式选择","模式選擇","Mode Select",
+}; 
+//提示信息的窗体名字
+u8*const APP_REMIND_CAPTION_TBL[GUI_LANGUAGE_NUM]=
+{
+"提示信息","提示信息","Remind",	 
+};
+//提醒保存的窗体名字
+u8*const APP_SAVE_CAPTION_TBL[GUI_LANGUAGE_NUM]=
+{
+"是否保存编辑后的文件?","是否保存編輯后的文件?","Do you want to save?",
+}; 
+//提醒删除的窗体名字
+u8*const APP_DELETE_CAPTION_TBL[GUI_LANGUAGE_NUM]=
+{
+"确定删除这条短信?","確定刪除這條短信?","Are you sure to delete this SMS",
+}; 
+//创建文件失败,提示是否存在SD卡? ,200的宽度
+u8*const APP_CREAT_ERR_MSG_TBL[GUI_LANGUAGE_NUM]=
+{							 
+"创建文件失败,请检查!","創建文件失敗,請檢查!","Creat File Failed,Please Check!",
+}; 
+//磁盘名字表
+u8*const APP_DISK_NAME_TBL[3][GUI_LANGUAGE_NUM]=
+{
+	{"SD卡","SD卡","SD Card",},
+ 	{"FLASH磁盘","FLASH磁盤","FLASH Disk",},
+ 	{"U盘","U盤","U Disk",},
+};  							 
+//app主要功能界面标题
+u8*const APP_MFUNS_CAPTION_TBL[APP_FUNS_NUM][GUI_LANGUAGE_NUM]=
+{
+	{"电子图书","電子圖書","EBOOK",},
+	{"数码相框","數碼相框","PHOTOS",},
+	{"音乐播放器","音樂播放器","MUSIC PLAYER",},
+ 	{"视频播放器","視頻播放器","VIDEO PLAYER",}, 
+ 	{"","","",},	//时钟 
+	{"系统设置","系統設置","SYSTEM SET",},
+	{"游戏机","遊戲機","Games",},
+	{"","","",},	//记事本
+	{"运行器","運行器","EXE",},
+	{"","","",},	//手写画笔
+	{"","","",},	//照相机
+	{"录音机","錄音機","RECODER",},
+	{"USB连接","USB連接","USB",}, 
+	{"网络通信","網絡通信","ETHERNET",},
+	{"无线传书","無線傳書","WIRELESS",},
+	{"科学计算器","科學計算器","Calculator",},
+	{"二维码编码","二維碼编码","QR ENCODE",},
+	{"网络摄像头","網酪攝像頭","Web Camera",},
+	{"人脸识别","人臉識別","Face Recognition",},
+	{"9轴姿态解算","9轴姿态解算","9D TEST",},
+	{"水平仪","水平儀","Gradienter",},
+	{"蜂鸣器测试","蜂鳴器測試","Beep Test",},
+	{"按键测试","按鍵測試","Key Test",},
+	{"LED测试","LED測試","LED Test",},
+	{"","","",},	//电话
+	{"应用中心","應用中心","APPLICATIONS",},
+	{"短信","短信","SMS",},
+};
 
 u8*const APP_OK_PIC="1:/SYSTEM/APP/COMMON/ok.bmp";				//确认图标
 u8*const APP_CANCEL_PIC="1:/SYSTEM/APP/COMMON/cancel.bmp";		//取消图标
@@ -200,33 +201,33 @@ void opt1_delay(vu8 i)
 //ctbl:背景色存放指针
 void app_read_bkcolor(u16 x,u16 y,u16 width,u16 height,u16 *ctbl)
 {
-//	u32	x0,y0,ccnt;
-//	ccnt=0;
-//	for(y0=y;y0<y+height;y0++)
-//	{
-//		for(x0=x;x0<x+width;x0++)
-//		{
-//			ctbl[ccnt]=gui_phy.read_point(x0,y0);//读取颜色
-//			ccnt++;
-//			opt1_delay(5);
-//		}
-//	}
+	u32	x0,y0,ccnt;
+	ccnt=0;
+	for(y0=y;y0<y+height;y0++)
+	{
+		for(x0=x;x0<x+width;x0++)
+		{
+			ctbl[ccnt]=gui_phy.read_point(x0,y0);//读取颜色
+			ccnt++;
+			opt1_delay(5);
+		}
+	}
 }  
 //恢复背景色
 //x,y,width,height:背景色还原范围
 //ctbl:背景色存放指针
 void app_recover_bkcolor(u16 x,u16 y,u16 width,u16 height,u16 *ctbl)
 {
-//	u32 x0,y0,ccnt;
-//	ccnt=0;
-//	for(y0=y;y0<y+height;y0++)
-//	{
-//		for(x0=x;x0<x+width;x0++)
-//		{
-//			gui_phy.draw_point(x0,y0,ctbl[ccnt]);//读取颜色
-//			ccnt++;
-//		}
-//	}
+	u32 x0,y0,ccnt;
+	ccnt=0;
+	for(y0=y;y0<y+height;y0++)
+	{
+		for(x0=x;x0<x+width;x0++)
+		{
+			gui_phy.draw_point(x0,y0,ctbl[ccnt]);//读取颜色
+			ccnt++;
+		}
+	}
 }
 //2色条
 //x,y,width,height:坐标及尺寸.
@@ -237,13 +238,13 @@ void app_recover_bkcolor(u16 x,u16 y,u16 width,u16 height,u16 *ctbl)
 //		[0]:上边分界线
 void app_gui_tcbar(u16 x,u16 y,u16 width,u16 height,u8 mode)
 {
-// 	u16 halfheight=height/2;
-// 	gui_fill_rectangle(x,y,width,halfheight,LIGHTBLUE);  			//填充底部颜色(浅蓝色)	
-// 	gui_fill_rectangle(x,y+halfheight,width,halfheight,GRAYBLUE); 	//填充底部颜色(灰蓝色)
-//	if(mode&0x01)gui_draw_hline(x,y,width,DARKBLUE);
-//	if(mode&0x02)gui_draw_hline(x,y+height-1,width,DARKBLUE);
-//	if(mode&0x04)gui_draw_vline(x,y,height,DARKBLUE);
-//	if(mode&0x08)gui_draw_vline(x+width-1,y,width,DARKBLUE);
+ 	u16 halfheight=height/2;
+ 	gui_fill_rectangle(x,y,width,halfheight,LIGHTBLUE);  			//填充底部颜色(浅蓝色)	
+ 	gui_fill_rectangle(x,y+halfheight,width,halfheight,GRAYBLUE); 	//填充底部颜色(灰蓝色)
+	if(mode&0x01)gui_draw_hline(x,y,width,DARKBLUE);
+	if(mode&0x02)gui_draw_hline(x,y+height-1,width,DARKBLUE);
+	if(mode&0x04)gui_draw_vline(x,y,height,DARKBLUE);
+	if(mode&0x08)gui_draw_vline(x+width-1,y,width,DARKBLUE);
 } 
 //得到数字的位数
 //num:数字
@@ -252,36 +253,36 @@ void app_gui_tcbar(u16 x,u16 y,u16 width,u16 height,u8 mode)
 //注:0,的位数为0位.
 u8 app_get_numlen(long long num,u8 dir)
 {
-//#define MAX_NUM_LENTH		10		//最大的数字长度
-//	u8 i=0,j;
-//	u8 temp=0;  
-//	if(dir==0)//从高到底
-//	{
-//		i=MAX_NUM_LENTH-1;
-//		while(1)
-//		{
-//			temp=(num/gui_pow(10,i))%10;
-//			if(temp||i==0)break;
-//			i--;
-//		}
-//	}else	//从低到高
-//	{
-//		j=0;
-// 		while(1)
-//		{
-//			if(num%10)
-//			{
-//				i=app_get_numlen(num,0);    
-//				return i;
-//			}
-//			if(j==(MAX_NUM_LENTH-1))break;	 
-//			num/=10;
-//			j++;
-//		}
-//	}
-//	if(i)return i+1;
-//	else if(temp)return 1;
-//	else 
+#define MAX_NUM_LENTH		10		//最大的数字长度
+	u8 i=0,j;
+	u8 temp=0;  
+	if(dir==0)//从高到底
+	{
+		i=MAX_NUM_LENTH-1;
+		while(1)
+		{
+			temp=(num/gui_pow(10,i))%10;
+			if(temp||i==0)break;
+			i--;
+		}
+	}else	//从低到高
+	{
+		j=0;
+ 		while(1)
+		{
+			if(num%10)
+			{
+				i=app_get_numlen(num,0);    
+				return i;
+			}
+			if(j==(MAX_NUM_LENTH-1))break;	 
+			num/=10;
+			j++;
+		}
+	}
+	if(i)return i+1;
+	else if(temp)return 1;
+	else 
 return 0;	
 }
 
@@ -293,31 +294,31 @@ return 0;
 //bkcolor:背景色
 void app_show_mono_icos(u16 x,u16 y,u8 width,u8 height,u8 *icosbase,u16 color,u16 bkcolor)
 {
-//	u16 rsize;
-//	u8 i,j;
-//	u8 temp;
-//	u8 t=0;
-//	u16 x0=x;//保留x的位置
-//	rsize=width/8+((width%8)?1:0);//每行的字节数
-// 	for(i=0;i<rsize*height;i++)
-//	{
-//		temp=icosbase[i];
-//		for(j=0;j<8;j++)
-//		{
-//	        if(temp&0x80)gui_phy.draw_point(x,y,color);  
-//			else gui_phy.draw_point(x,y,bkcolor);  	 
-//			temp<<=1;
-//			x++;
-//			t++;			//宽度计数器
-//			if(t==width)
-//			{
-//				t=0;
-//				x=x0;
-//				y++;  
-//				break;
-//			}
-//		}
-//	}				
+	u16 rsize;
+	u8 i,j;
+	u8 temp;
+	u8 t=0;
+	u16 x0=x;//保留x的位置
+	rsize=width/8+((width%8)?1:0);//每行的字节数
+ 	for(i=0;i<rsize*height;i++)
+	{
+		temp=icosbase[i];
+		for(j=0;j<8;j++)
+		{
+	        if(temp&0x80)gui_phy.draw_point(x,y,color);  
+			else gui_phy.draw_point(x,y,bkcolor);  	 
+			temp<<=1;
+			x++;
+			t++;			//宽度计数器
+			if(t==width)
+			{
+				t=0;
+				x=x0;
+				y++;  
+				break;
+			}
+		}
+	}				
 } 
 //显示一个浮点数(支持负数)
 //注意:这里的坐标是从右到左显示的.
@@ -330,34 +331,34 @@ void app_show_mono_icos(u16 x,u16 y,u8 width,u8 height,u8 *icosbase,u16 color,u1
 //bkcolor:背景色
 void app_show_float(u16 x,u16 y,long long num,u8 flen,u8 clen,u8 font,u16 color,u16 bkcolor)
 {			   
-//	u8 offpos=1;
-//	u8 ilen=0;						//整数部分长度和小数部分的长度
-//	u8 negative=0;					//负数标记
-//	u16 maxlen=(u16)clen*(font/2);	//清除的长度
-//	gui_fill_rectangle(x-maxlen,y,maxlen,font,bkcolor);//清除之前的痕迹
-//	if(num<0) 
-//	{
-//		num=-num;
-//  		negative=1;
-//	}
-//	ilen=app_get_numlen(num,0);	//得到总位数
-//	gui_phy.back_color=bkcolor;
-//	if(flen)
-//	{
-// 		gui_show_num(x-(font/2)*flen,y,flen,color,font,num,0X80);//显示小数部分
-//		gui_show_ptchar(x-(font/2)*(flen+1),y,gui_phy.lcdwidth,gui_phy.lcdheight,0,color,font,'.',0);//显示小数点
-//		offpos=2+flen;
-//	} 
-//	if(ilen<=flen)ilen=1;//至少要有一位整数部分
-// 	else 
-//	{
-//		if(flen)offpos=ilen+1;
-//		else offpos=ilen;
-//		ilen=ilen-flen;	//得到整数部分的长度.
-//	}
-//	num=num/gui_pow(10,flen);//得到整数部分
-//	gui_show_num(x-(font/2)*offpos,y,ilen,color,font,num,0X80);	//填充0显示 
-//	if(negative)gui_show_ptchar(x-(font/2)*(offpos+1),y,gui_phy.lcdwidth,gui_phy.lcdheight,0,color,font,'-',0);//显示符号		 
+	u8 offpos=1;
+	u8 ilen=0;						//整数部分长度和小数部分的长度
+	u8 negative=0;					//负数标记
+	u16 maxlen=(u16)clen*(font/2);	//清除的长度
+	gui_fill_rectangle(x-maxlen,y,maxlen,font,bkcolor);//清除之前的痕迹
+	if(num<0) 
+	{
+		num=-num;
+  		negative=1;
+	}
+	ilen=app_get_numlen(num,0);	//得到总位数
+	gui_phy.back_color=bkcolor;
+	if(flen)
+	{
+ 		gui_show_num(x-(font/2)*flen,y,flen,color,font,num,0X80);//显示小数部分
+		gui_show_ptchar(x-(font/2)*(flen+1),y,gui_phy.lcdwidth,gui_phy.lcdheight,0,color,font,'.',0);//显示小数点
+		offpos=2+flen;
+	} 
+	if(ilen<=flen)ilen=1;//至少要有一位整数部分
+ 	else 
+	{
+		if(flen)offpos=ilen+1;
+		else offpos=ilen;
+		ilen=ilen-flen;	//得到整数部分的长度.
+	}
+	num=num/gui_pow(10,flen);//得到整数部分
+	gui_show_num(x-(font/2)*offpos,y,ilen,color,font,num,0X80);	//填充0显示 
+	if(negative)gui_show_ptchar(x-(font/2)*(offpos+1),y,gui_phy.lcdwidth,gui_phy.lcdheight,0,color,font,'-',0);//显示符号		 
 } 			  
 //文件浏览横条显示
 //topname:浏览的时候要显示的名字	 
@@ -369,9 +370,9 @@ void app_show_float(u16 x,u16 y,long long num,u8 flen,u8 clen,u8 font,u16 color,
 //返回值:无	 						  
 void app_filebrower(u8 *topname,u8 mode)
 {		
-//  	if(mode&0X01)app_gui_tcbar(0,0,lcddev.width,gui_phy.tbheight,0x02);								//下分界线
-//	if(mode&0X02)app_gui_tcbar(0,lcddev.height-gui_phy.tbheight,lcddev.width,gui_phy.tbheight,0x01);//上分界线
-//	if(mode&0X04)gui_show_strmid(0,0,lcddev.width,gui_phy.tbheight,WHITE,gui_phy.tbfsize,topname);	  
+  	if(mode&0X01)app_gui_tcbar(0,0,lcddev.width,gui_phy.tbheight,0x02);								//下分界线
+	if(mode&0X02)app_gui_tcbar(0,lcddev.height-gui_phy.tbheight,lcddev.width,gui_phy.tbheight,0x01);//上分界线
+	if(mode&0X04)gui_show_strmid(0,0,lcddev.width,gui_phy.tbheight,WHITE,gui_phy.tbfsize,topname);	  
 } 
 //在一个区域中间显示数字
 //x,y,width,height:区域
@@ -381,15 +382,15 @@ void app_filebrower(u8 *topname,u8 mode)
 //ptcolor,bkcolor:画笔颜色以及背景色   
 void app_show_nummid(u16 x,u16 y,u16 width,u16 height,u32 num,u8 len,u8 size,u16 ptcolor,u16 bkcolor)
 {
-//	u16 numlen;
-//	u8 xoff,yoff;
-//	numlen=(size/2)*len;//数字长度
-//	if(numlen>width||size>height)return;
-//	xoff=(width-numlen)/2;
-//	yoff=(height-size)/2;
-//	POINT_COLOR=ptcolor;
-//	BACK_COLOR=bkcolor;
-//	LCD_ShowxNum(x+xoff,y+yoff,num,len,size,0X80);//显示这个数字
+	u16 numlen;
+	u8 xoff,yoff;
+	numlen=(size/2)*len;//数字长度
+	if(numlen>width||size>height)return;
+	xoff=(width-numlen)/2;
+	yoff=(height-size)/2;
+	POINT_COLOR=ptcolor;
+	BACK_COLOR=bkcolor;
+	LCD_ShowxNum(x+xoff,y+yoff,num,len,size,0X80);//显示这个数字
 }
 //画一条平滑过渡的彩色线(或矩形)
 //以中间为间隔,两边展开
@@ -397,8 +398,8 @@ void app_show_nummid(u16 x,u16 y,u16 width,u16 height,u32 num,u8 len,u8 size,u16
 //sergb,mrgb:起止颜色和中间颜色
 void app_draw_smooth_line(u16 x,u16 y,u16 width,u16 height,u32 sergb,u32 mrgb)
 {	  
-//	gui_draw_smooth_rectangle(x,y,width/2,height,sergb,mrgb);	   		//前半段渐变
-//	gui_draw_smooth_rectangle(x+width/2,y,width/2,height,mrgb,sergb);   //后半段渐变
+	gui_draw_smooth_rectangle(x,y,width/2,height,sergb,mrgb);	   		//前半段渐变
+	gui_draw_smooth_rectangle(x+width/2,y,width/2,height,mrgb,sergb);   //后半段渐变
 }      
 
 //判断触摸屏当前值是不是在某个区域内
@@ -416,9 +417,9 @@ u8 app_tp_is_in_area(_m_tp_dev *tp,u16 x,u16 y,u16 width,u16 height)
 //icopath:图标路径
 void app_show_items(u16 x,u16 y,u16 itemwidth,u16 itemheight,u8*name,u8*icopath,u16 color,u16 bkcolor)
 {
-//  	gui_fill_rectangle(x,y,itemwidth,itemheight,bkcolor);	//填充背景色
-//	gui_show_ptstr(x+5,y+(itemheight-16)/2,x+itemwidth-10-APP_ITEM_ICO_SIZE-5,y+itemheight,0,color,16,name,1);	//显示条目名字
-//	if(icopath)minibmp_decode(icopath,x+itemwidth-10-APP_ITEM_ICO_SIZE,y+(itemheight-APP_ITEM_ICO_SIZE)/2,APP_ITEM_ICO_SIZE,APP_ITEM_ICO_SIZE,0,0);			//解码APP_ITEM_ICO_SIZE*APP_ITEM_ICO_SIZE的bmp图片
+  	gui_fill_rectangle(x,y,itemwidth,itemheight,bkcolor);	//填充背景色
+	gui_show_ptstr(x+5,y+(itemheight-16)/2,x+itemwidth-10-APP_ITEM_ICO_SIZE-5,y+itemheight,0,color,16,name,1);	//显示条目名字
+	if(icopath)minibmp_decode(icopath,x+itemwidth-10-APP_ITEM_ICO_SIZE,y+(itemheight-APP_ITEM_ICO_SIZE)/2,APP_ITEM_ICO_SIZE,APP_ITEM_ICO_SIZE,0,0);			//解码APP_ITEM_ICO_SIZE*APP_ITEM_ICO_SIZE的bmp图片
 }		 
 //获得当前条目的图标路径
 //mode:0,单选模式;1,多选模式
@@ -454,166 +455,165 @@ u8 * app_get_icopath(u8 mode,u8 *selpath,u8 *unselpath,u8 selx,u8 index)
 //返回值:0,ok;其他,取消或者错误.
 u8 app_items_sel(u16 x,u16 y,u16 width,u16 height,u8 *items[],u8 itemsize,u8 *selx,u8 mode,u8*caption) 
 {
-//	u8 rval=0,res;
-//	u8 selsta=0;	//选中状态为0,
-//					//[7]:标记是否已经记录第一次按下的条目;
-//					//[6:4]:保留
-//	                //[3:0]:第一次按下的条目
-//	u16 i;
+	u8 rval=0,res;
+	u8 selsta=0;	//选中状态为0,
+					//[7]:标记是否已经记录第一次按下的条目;
+					//[6:4]:保留
+	                //[3:0]:第一次按下的条目
+	u16 i;
 
-//	u8 temp;
-//	u16 itemheight=0;		//每个条目的高度
-//	u16 itemwidth=0;		//每个条目的宽度
-//	u8* unselpath=0;		//未选中的图标的路径
-//	u8* selpath=0;			//选中图标的路径
-//	u8* icopath=0;
+	u8 temp;
+	u16 itemheight=0;		//每个条目的高度
+	u16 itemwidth=0;		//每个条目的宽度
+	u8* unselpath=0;		//未选中的图标的路径
+	u8* selpath=0;			//选中图标的路径
+	u8* icopath=0;
 
-// 	_window_obj* twin=0;	//窗体
-// 	_btn_obj * okbtn=0;		//确定按钮
-// 	_btn_obj * cancelbtn=0; //取消按钮
+ 	_window_obj* twin=0;	//窗体
+ 	_btn_obj * okbtn=0;		//确定按钮
+ 	_btn_obj * cancelbtn=0; //取消按钮
 
-//	if(itemsize>8||itemsize<1)return 0xff;	//条目数错误
-//	if(width<150||height<72)return 0xff; 	//尺寸错误
-//	
-//	itemheight=(height-72)/itemsize-1;	//得到每个条目的高度
-//	itemwidth=width-10;					//每个条目的宽度
+	if(itemsize>8||itemsize<1)return 0xff;	//条目数错误
+	if(width<150||height<72)return 0xff; 	//尺寸错误
+	
+	itemheight=(height-72)/itemsize-1;	//得到每个条目的高度
+	itemwidth=width-10;					//每个条目的宽度
 
-// 	twin=window_creat(x,y,width,height,0,1|(1<<5)|((1<<6)&mode),16);//创建窗口
-//	if(twin==NULL)
-//	{
-//		spb_delete();//释放SPB占用的内存
-//		twin=window_creat(x,y,width,height,0,1|(1<<5)|((1<<6)&mode),16);//重新创建窗口
-// 	}
-//  	if(mode&(1<<7))
-//	{
-//   		temp=(width-APP_ITEM_BTN1_WIDTH*2)/3;
-//		okbtn=btn_creat(x+temp,y+height-APP_ITEM_BTN_HEIGHT-5,APP_ITEM_BTN1_WIDTH,APP_ITEM_BTN_HEIGHT,0,0x02);							//创建OK按钮
-//		cancelbtn=btn_creat(x+APP_ITEM_BTN1_WIDTH+temp*2,y+height-APP_ITEM_BTN_HEIGHT-5,APP_ITEM_BTN1_WIDTH,APP_ITEM_BTN_HEIGHT,0,0x02);//创建CANCEL按钮
-//		if(twin==NULL||okbtn==NULL||cancelbtn==NULL)rval=1;
-//		else
-//		{
-//	 		okbtn->caption=(u8*)GUI_OK_CAPTION_TBL[gui_phy.language];//确认
-//			okbtn->bkctbl[0]=0X8452;//边框颜色
-//			okbtn->bkctbl[1]=0XAD97;//第一行的颜色				
-//			okbtn->bkctbl[2]=0XAD97;//上半部分颜色
-//			okbtn->bkctbl[3]=0X8452;//下半部分颜色
-//		}
-//	}else 
-//	{
-//   		temp=(width-APP_ITEM_BTN2_WIDTH)/2;
-//		cancelbtn=btn_creat(x+temp,y+height-APP_ITEM_BTN_HEIGHT-5,APP_ITEM_BTN2_WIDTH,APP_ITEM_BTN_HEIGHT,0,0x02);	//创建CANCEL按钮
-//		if(twin==NULL||cancelbtn==NULL)rval=1;
-//	}
-// 	if(rval==0)//之前的操作正常
-//	{
-// 		twin->caption=caption;
-//		twin->windowbkc=APP_WIN_BACK_COLOR;	     
-// 		cancelbtn->caption=(u8*)GUI_CANCEL_CAPTION_TBL[gui_phy.language];//取消
-// 		cancelbtn->bkctbl[0]=0X8452;//边框颜色
-//		cancelbtn->bkctbl[1]=0XAD97;//第一行的颜色				
-//		cancelbtn->bkctbl[2]=0XAD97;//上半部分颜色
-//		cancelbtn->bkctbl[3]=0X8452;//下半部分颜色
+ 	twin=window_creat(x,y,width,height,0,1|(1<<5)|((1<<6)&mode),16);//创建窗口
+	if(twin==NULL)
+	{
+		spb_delete();//释放SPB占用的内存
+		twin=window_creat(x,y,width,height,0,1|(1<<5)|((1<<6)&mode),16);//重新创建窗口
+ 	}
+  	if(mode&(1<<7))
+	{
+   		temp=(width-APP_ITEM_BTN1_WIDTH*2)/3;
+		okbtn=btn_creat(x+temp,y+height-APP_ITEM_BTN_HEIGHT-5,APP_ITEM_BTN1_WIDTH,APP_ITEM_BTN_HEIGHT,0,0x02);							//创建OK按钮
+		cancelbtn=btn_creat(x+APP_ITEM_BTN1_WIDTH+temp*2,y+height-APP_ITEM_BTN_HEIGHT-5,APP_ITEM_BTN1_WIDTH,APP_ITEM_BTN_HEIGHT,0,0x02);//创建CANCEL按钮
+		if(twin==NULL||okbtn==NULL||cancelbtn==NULL)rval=1;
+		else
+		{
+	 		okbtn->caption=(u8*)GUI_OK_CAPTION_TBL[gui_phy.language];//确认
+			okbtn->bkctbl[0]=0X8452;//边框颜色
+			okbtn->bkctbl[1]=0XAD97;//第一行的颜色				
+			okbtn->bkctbl[2]=0XAD97;//上半部分颜色
+			okbtn->bkctbl[3]=0X8452;//下半部分颜色
+		}
+	}else 
+	{
+   		temp=(width-APP_ITEM_BTN2_WIDTH)/2;
+		cancelbtn=btn_creat(x+temp,y+height-APP_ITEM_BTN_HEIGHT-5,APP_ITEM_BTN2_WIDTH,APP_ITEM_BTN_HEIGHT,0,0x02);	//创建CANCEL按钮
+		if(twin==NULL||cancelbtn==NULL)rval=1;
+	}
+ 	if(rval==0)//之前的操作正常
+	{
+ 		twin->caption=caption;
+		twin->windowbkc=APP_WIN_BACK_COLOR;	     
+ 		cancelbtn->caption=(u8*)GUI_CANCEL_CAPTION_TBL[gui_phy.language];//取消
+ 		cancelbtn->bkctbl[0]=0X8452;//边框颜色
+		cancelbtn->bkctbl[1]=0XAD97;//第一行的颜色				
+		cancelbtn->bkctbl[2]=0XAD97;//上半部分颜色
+		cancelbtn->bkctbl[3]=0X8452;//下半部分颜色
 
-//		if(mode&(1<<4))//需要加载图标
-//		{
-//  			if(mode&(1<<5))//多选模式
-//			{
-//				unselpath=(u8*)APP_CANCEL_PIC;		//未选中的图标的路径
-//				selpath=(u8*)APP_OK_PIC;			//选中图标的路径
-//			}else		   //单选模式
-//			{
-//				unselpath=(u8*)APP_UNSELECT_PIC;	//未选中的图标的路径
-//				selpath=(u8*)APP_SELECT_PIC;		//选中图标的路径
-//			}
-//		}
-//		window_draw(twin);				//画出窗体
-//		btn_draw(cancelbtn);			//画按钮
-//	    if(mode&(1<<7))btn_draw(okbtn);	//画按钮
-//		for(i=0;i<itemsize;i++)
-//		{
-//			icopath=app_get_icopath(mode&(1<<5),selpath,unselpath,*selx,i); //得到图标路径
-//			app_show_items(x+5,y+32+i*(itemheight+1),itemwidth,itemheight,items[i],icopath,BLACK,twin->windowbkc);//显示所有的条目
-//			if((i+1)!=itemsize)app_draw_smooth_line(x+5,y+32+(i+1)*(itemheight+1)-1,itemwidth,1,0Xb1ffc4,0X1600b1);//画彩线
-// 		}
-//		while(rval==0)
-//		{
-//			tp_dev.scan(0);    
-//			in_obj.get_key(&tp_dev,IN_TYPE_TOUCH);	//得到按键键值   
-//			delay_ms(1000/OS_TICKS_PER_SEC);		//延时一个时钟节拍
-//			if(system_task_return){rval=1;break;};	//TPAD返回	
-//			if(mode&(1<<7))
-//			{
-//				res=btn_check(okbtn,&in_obj);		//确认按钮检测
-//				if(res)
-//				{
-//					if((okbtn->sta&0X80)==0)//有有效操作
-//					{
-//						rval=0XFF;
-//						break;//确认按钮
-//					}
-//				}
-//			}   
-//			res=btn_check(cancelbtn,&in_obj);		//取消按钮检测
-//			if(res)
-//			{
-//				if((cancelbtn->sta&0X80)==0)//有有效操作
-//				{
-//					rval=1;
-//					break;//取消按钮	 
-//				}
-//			}
-//			temp=0XFF;//标记量,如果为0XFF,在松开的时候,说明是不在有效区域内的.如果非0XFF,则表示TP松开的时候,是在有效区域内.
-//			for(i=0;i<itemsize;i++)
-//			{
-//				if(tp_dev.sta&TP_PRES_DOWN)//触摸屏被按下
-//				{
-//				 	if(app_tp_is_in_area(&tp_dev,x+5,y+32+i*(itemheight+1),itemwidth,itemheight))//判断某个时刻,触摸屏的值是不是在某个区域内
-//					{ 
-//						if((selsta&0X80)==0)//还没有按下过
-//						{
-//							icopath=app_get_icopath(mode&(1<<5),selpath,unselpath,*selx,i); //得到图标路径
-//							app_show_items(x+5,y+32+i*(itemheight+1),itemwidth,itemheight,items[i],icopath,BLACK,APP_ITEM_SEL_BKCOLOR);//反选条目
-//							selsta=i;		//记录第一次按下的条目
-//							selsta|=0X80;	//标记已经按下过了
-//						}
-//						break;		
-//					}
-//				}else //触摸屏被松开了
-//				{
-//				 	if(app_tp_is_in_area(&tp_dev,x+5,y+32+i*(itemheight+1),itemwidth,itemheight))//判断某个时刻,触摸屏的值是不是在某个区域内
-//					{ 
-//						temp=i;	   
-//						break;
-//					}
-//				}
-//			}
-//			if((selsta&0X80)&&(tp_dev.sta&TP_PRES_DOWN)==0)//有按下过,且按键松开了
-//			{
-//				if((selsta&0X0F)==temp)//松开之前的坐标也是在按下时的区域内.
-//				{
-//					if(mode&(1<<5))//多选模式,执行取反操作
-//					{
-//						if((*selx)&(1<<temp))*selx&=~(1<<temp);
-//						else *selx|=1<<temp;
-//					}else//单选模式
-//					{																					  
-//						app_show_items(x+5,y+32+(*selx)*(itemheight+1),itemwidth,itemheight,items[*selx],unselpath,BLACK,twin->windowbkc);//取消之前选择的条目
-//						*selx=temp;
-//					}
-//				}else temp=selsta&0X0F;//得到当时按下的条目号
-// 				icopath=app_get_icopath(mode&(1<<5),selpath,unselpath,*selx,temp); //得到图标路径
-//				app_show_items(x+5,y+32+temp*(itemheight+1),itemwidth,itemheight,items[temp],icopath,BLACK,twin->windowbkc);//反选条目
-//				selsta=0;//取消
-//			}
-// 		}
-// 	}
-//	window_delete(twin);
-//	btn_delete(okbtn);
-//	btn_delete(cancelbtn);
-//	system_task_return=0;
-//	if(rval==0XFF)return 0;
-//	return rval;
-return 0;
+		if(mode&(1<<4))//需要加载图标
+		{
+  			if(mode&(1<<5))//多选模式
+			{
+				unselpath=(u8*)APP_CANCEL_PIC;		//未选中的图标的路径
+				selpath=(u8*)APP_OK_PIC;			//选中图标的路径
+			}else		   //单选模式
+			{
+				unselpath=(u8*)APP_UNSELECT_PIC;	//未选中的图标的路径
+				selpath=(u8*)APP_SELECT_PIC;		//选中图标的路径
+			}
+		}
+		window_draw(twin);				//画出窗体
+		btn_draw(cancelbtn);			//画按钮
+	    if(mode&(1<<7))btn_draw(okbtn);	//画按钮
+		for(i=0;i<itemsize;i++)
+		{
+			icopath=app_get_icopath(mode&(1<<5),selpath,unselpath,*selx,i); //得到图标路径
+			app_show_items(x+5,y+32+i*(itemheight+1),itemwidth,itemheight,items[i],icopath,BLACK,twin->windowbkc);//显示所有的条目
+			if((i+1)!=itemsize)app_draw_smooth_line(x+5,y+32+(i+1)*(itemheight+1)-1,itemwidth,1,0Xb1ffc4,0X1600b1);//画彩线
+ 		}
+		while(rval==0)
+		{
+			tp_dev.scan(0);    
+			in_obj.get_key(&tp_dev,IN_TYPE_TOUCH);	//得到按键键值   
+			delay_ms(1000/OS_TICKS_PER_SEC);		//延时一个时钟节拍
+			if(system_task_return){rval=1;break;};	//TPAD返回	
+			if(mode&(1<<7))
+			{
+				res=btn_check(okbtn,&in_obj);		//确认按钮检测
+				if(res)
+				{
+					if((okbtn->sta&0X80)==0)//有有效操作
+					{
+						rval=0XFF;
+						break;//确认按钮
+					}
+				}
+			}   
+			res=btn_check(cancelbtn,&in_obj);		//取消按钮检测
+			if(res)
+			{
+				if((cancelbtn->sta&0X80)==0)//有有效操作
+				{
+					rval=1;
+					break;//取消按钮	 
+				}
+			}
+			temp=0XFF;//标记量,如果为0XFF,在松开的时候,说明是不在有效区域内的.如果非0XFF,则表示TP松开的时候,是在有效区域内.
+			for(i=0;i<itemsize;i++)
+			{
+				if(tp_dev.sta&TP_PRES_DOWN)//触摸屏被按下
+				{
+				 	if(app_tp_is_in_area(&tp_dev,x+5,y+32+i*(itemheight+1),itemwidth,itemheight))//判断某个时刻,触摸屏的值是不是在某个区域内
+					{ 
+						if((selsta&0X80)==0)//还没有按下过
+						{
+							icopath=app_get_icopath(mode&(1<<5),selpath,unselpath,*selx,i); //得到图标路径
+							app_show_items(x+5,y+32+i*(itemheight+1),itemwidth,itemheight,items[i],icopath,BLACK,APP_ITEM_SEL_BKCOLOR);//反选条目
+							selsta=i;		//记录第一次按下的条目
+							selsta|=0X80;	//标记已经按下过了
+						}
+						break;		
+					}
+				}else //触摸屏被松开了
+				{
+				 	if(app_tp_is_in_area(&tp_dev,x+5,y+32+i*(itemheight+1),itemwidth,itemheight))//判断某个时刻,触摸屏的值是不是在某个区域内
+					{ 
+						temp=i;	   
+						break;
+					}
+				}
+			}
+			if((selsta&0X80)&&(tp_dev.sta&TP_PRES_DOWN)==0)//有按下过,且按键松开了
+			{
+				if((selsta&0X0F)==temp)//松开之前的坐标也是在按下时的区域内.
+				{
+					if(mode&(1<<5))//多选模式,执行取反操作
+					{
+						if((*selx)&(1<<temp))*selx&=~(1<<temp);
+						else *selx|=1<<temp;
+					}else//单选模式
+					{																					  
+						app_show_items(x+5,y+32+(*selx)*(itemheight+1),itemwidth,itemheight,items[*selx],unselpath,BLACK,twin->windowbkc);//取消之前选择的条目
+						*selx=temp;
+					}
+				}else temp=selsta&0X0F;//得到当时按下的条目号
+ 				icopath=app_get_icopath(mode&(1<<5),selpath,unselpath,*selx,temp); //得到图标路径
+				app_show_items(x+5,y+32+temp*(itemheight+1),itemwidth,itemheight,items[temp],icopath,BLACK,twin->windowbkc);//反选条目
+				selsta=0;//取消
+			}
+ 		}
+ 	}
+	window_delete(twin);
+	btn_delete(okbtn);
+	btn_delete(cancelbtn);
+	system_task_return=0;
+	if(rval==0XFF)return 0;
+	return rval;
 } 
   
 //新建选择框
@@ -626,85 +626,84 @@ return 0;
 //     [6:0]:0,表示无错误;非零,错误代码.
 u8 app_listbox_select(u8 *sel,u8 *top,u8 * caption,u8 *items[],u8 itemsize)
 {
-//	u8  res;
-//	u8 rval=0;			//返回值	  
-//  	u16 i;	    						   
-// 
-// 	_btn_obj* rbtn=0;			//返回按钮控件
-// 	_btn_obj* okbtn=0;			//确认按钮控件
-//	_listbox_obj * tlistbox;	//listbox 
-//	
-//	if(*sel>=itemsize||*top>=itemsize)return 2;//参数错误/参数非法
-// 	app_filebrower(caption,0X07);				//显示标题  
-//   	tlistbox=listbox_creat(0,gui_phy.tbheight,lcddev.width,lcddev.height-gui_phy.tbheight*2,1,gui_phy.tbfsize);//创建一个filelistbox
-//	if(tlistbox==NULL)rval=1;					//申请内存失败.
-//	else	//添加条目
-//	{
-//		for(i=0;i<itemsize;i++)
-//		{
-//			res=listbox_addlist(tlistbox,items[i]);
-//			if(res)
-//			{
-//				rval=1;
-//				break;
-//			}
-//		}
-//	}
-//	if(rval==0)//成功添加了条目
-//	{
-//		tlistbox->scbv->topitem=*top;
-//		tlistbox->selindex=*sel;
-//		listbox_draw_listbox(tlistbox);
-//		rbtn=btn_creat(lcddev.width-2*gui_phy.tbfsize-8-1,lcddev.height-gui_phy.tbheight,2*gui_phy.tbfsize+8,gui_phy.tbheight-1,0,0x03);//创建文字按钮
-// 		okbtn=btn_creat(0,lcddev.height-gui_phy.tbheight,2*gui_phy.tbfsize+8,gui_phy.tbheight-1,0,0x03);//创建确认文字按钮
-//		if(rbtn==NULL||okbtn==NULL)rval=1;		//没有足够内存够分配
-//		else
-//		{
-//		 	rbtn->caption=(u8*)GUI_BACK_CAPTION_TBL[gui_phy.language];	//名字
-//			rbtn->font=gui_phy.tbfsize;//设置新的字体大小	 	 
-//			rbtn->bcfdcolor=WHITE;	//按下时的颜色
-//			rbtn->bcfucolor=WHITE;	//松开时的颜色
-//			btn_draw(rbtn);//画按钮
-//	
-//			
-//		 	okbtn->caption=(u8*)GUI_OK_CAPTION_TBL[gui_phy.language];	//名字
-//		 	okbtn->font=gui_phy.tbfsize;//设置新的字体大小	 
-//			okbtn->bcfdcolor=WHITE;	//按下时的颜色
-//			okbtn->bcfucolor=WHITE;	//松开时的颜色
-//			btn_draw(okbtn);//画按钮
-//		}	   
-// 	}  
-//   	while(rval==0)
-//	{
-//		tp_dev.scan(0);    
-//		in_obj.get_key(&tp_dev,IN_TYPE_TOUCH);	//得到按键键值   
-//		delay_ms(1000/OS_TICKS_PER_SEC);		//延时一个时钟节拍
-// 		if(system_task_return)break;			//TPAD返回
-//		res=btn_check(rbtn,&in_obj);		    //返回按钮检测
-//		if(res)if(((rbtn->sta&0X80)==0))break;	//退出 
-//		res=btn_check(okbtn,&in_obj);//确认按钮检测
-//		if(res)
-//		{
-//			if(((okbtn->sta&0X80)==0))//按钮状态改变了
-//			{ 
-//				*top=tlistbox->scbv->topitem;//记录退出时选择的条目
-//				*sel=tlistbox->selindex;
-//				rval|=1<<7;//标记双击按下了								 				   			   
-//  			}	 
-//		}   
-//		listbox_check(tlistbox,&in_obj);	//扫描 
-//		if(tlistbox->dbclick==0X80)//双击了
-//		{	  
-//			*top=tlistbox->scbv->topitem;//记录退出时选择的条目
-//			*sel=tlistbox->selindex;
-//			rval|=1<<7;//标记双击按下了								 				   			   
-//		}
-//	}	
-//	listbox_delete(tlistbox);		//删除listbox
-//	btn_delete(okbtn);				//删除按钮	  	 
-//	btn_delete(rbtn);				//删除按钮 
-//	return rval; 
-return 0;
+	u8  res;
+	u8 rval=0;			//返回值	  
+  	u16 i;	    						   
+ 
+ 	_btn_obj* rbtn=0;			//返回按钮控件
+ 	_btn_obj* okbtn=0;			//确认按钮控件
+	_listbox_obj * tlistbox;	//listbox 
+	
+	if(*sel>=itemsize||*top>=itemsize)return 2;//参数错误/参数非法
+ 	app_filebrower(caption,0X07);				//显示标题  
+   	tlistbox=listbox_creat(0,gui_phy.tbheight,lcddev.width,lcddev.height-gui_phy.tbheight*2,1,gui_phy.tbfsize);//创建一个filelistbox
+	if(tlistbox==NULL)rval=1;					//申请内存失败.
+	else	//添加条目
+	{
+		for(i=0;i<itemsize;i++)
+		{
+			res=listbox_addlist(tlistbox,items[i]);
+			if(res)
+			{
+				rval=1;
+				break;
+			}
+		}
+	}
+	if(rval==0)//成功添加了条目
+	{
+		tlistbox->scbv->topitem=*top;
+		tlistbox->selindex=*sel;
+		listbox_draw_listbox(tlistbox);
+		rbtn=btn_creat(lcddev.width-2*gui_phy.tbfsize-8-1,lcddev.height-gui_phy.tbheight,2*gui_phy.tbfsize+8,gui_phy.tbheight-1,0,0x03);//创建文字按钮
+ 		okbtn=btn_creat(0,lcddev.height-gui_phy.tbheight,2*gui_phy.tbfsize+8,gui_phy.tbheight-1,0,0x03);//创建确认文字按钮
+		if(rbtn==NULL||okbtn==NULL)rval=1;		//没有足够内存够分配
+		else
+		{
+		 	rbtn->caption=(u8*)GUI_BACK_CAPTION_TBL[gui_phy.language];	//名字
+			rbtn->font=gui_phy.tbfsize;//设置新的字体大小	 	 
+			rbtn->bcfdcolor=WHITE;	//按下时的颜色
+			rbtn->bcfucolor=WHITE;	//松开时的颜色
+			btn_draw(rbtn);//画按钮
+	
+			
+		 	okbtn->caption=(u8*)GUI_OK_CAPTION_TBL[gui_phy.language];	//名字
+		 	okbtn->font=gui_phy.tbfsize;//设置新的字体大小	 
+			okbtn->bcfdcolor=WHITE;	//按下时的颜色
+			okbtn->bcfucolor=WHITE;	//松开时的颜色
+			btn_draw(okbtn);//画按钮
+		}	   
+ 	}  
+   	while(rval==0)
+	{
+		tp_dev.scan(0);    
+		in_obj.get_key(&tp_dev,IN_TYPE_TOUCH);	//得到按键键值   
+		delay_ms(1000/OS_TICKS_PER_SEC);		//延时一个时钟节拍
+ 		if(system_task_return)break;			//TPAD返回
+		res=btn_check(rbtn,&in_obj);		    //返回按钮检测
+		if(res)if(((rbtn->sta&0X80)==0))break;	//退出 
+		res=btn_check(okbtn,&in_obj);//确认按钮检测
+		if(res)
+		{
+			if(((okbtn->sta&0X80)==0))//按钮状态改变了
+			{ 
+				*top=tlistbox->scbv->topitem;//记录退出时选择的条目
+				*sel=tlistbox->selindex;
+				rval|=1<<7;//标记双击按下了								 				   			   
+  			}	 
+		}   
+		listbox_check(tlistbox,&in_obj);	//扫描 
+		if(tlistbox->dbclick==0X80)//双击了
+		{	  
+			*top=tlistbox->scbv->topitem;//记录退出时选择的条目
+			*sel=tlistbox->selindex;
+			rval|=1<<7;//标记双击按下了								 				   			   
+		}
+	}	
+	listbox_delete(tlistbox);		//删除listbox
+	btn_delete(okbtn);				//删除按钮	  	 
+	btn_delete(rbtn);				//删除按钮 
+	return rval; 
 }
 
 //LWIP Web Server支持所需文件
@@ -740,24 +739,23 @@ void app_system_file_chgdisk(u8 *des,u8 *diskx,u8 *src)
 //      1,内存错误
 u8 app_file_check(u8* diskx,u8 *fname)
 {
-//	FIL *f_check;
-//	u8 *path;
-//	u8 res=0;
-//	f_check=(FIL *)gui_memin_malloc(sizeof(FIL));	//开辟FIL字节的内存区域 
-//	path=gui_memin_malloc(200);						//为path申请内存 
-//	if(!f_check||!path)//申请失败
-//	{
-//		gui_memin_free(f_check);
-//		gui_memin_free(path);
-//		return 1;
-//	}
-//	app_system_file_chgdisk(path,diskx,fname);		//修改路径
-//	res=f_open(f_check,(const TCHAR*)path,FA_READ);	//只读方式打开文件 
-//	f_close(f_check);								//关闭文件   
-//	gui_memin_free(f_check);
-//	gui_memin_free(path);
-//	return res;
-	return 0;
+	FIL *f_check;
+	u8 *path;
+	u8 res=0;
+	f_check=(FIL *)gui_memin_malloc(sizeof(FIL));	//开辟FIL字节的内存区域 
+	path=gui_memin_malloc(200);						//为path申请内存 
+	if(!f_check||!path)//申请失败
+	{
+		gui_memin_free(f_check);
+		gui_memin_free(path);
+		return 1;
+	}
+	app_system_file_chgdisk(path,diskx,fname);		//修改路径
+	res=f_open(f_check,(const TCHAR*)path,FA_READ);	//只读方式打开文件 
+	f_close(f_check);								//关闭文件   
+	gui_memin_free(f_check);
+	gui_memin_free(path);
+	return res;
 }
 //系统总共需要的图标/图片/系统文件有193个  
 //总大小:10,313,328 字节(9.83MB)
@@ -944,7 +942,6 @@ u8 app_system_file_check(u8* diskx)
 //		break;    
 //	}  
 //	return rval;  
-return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1004,57 +1001,56 @@ void app_boot_cpdmsg_set(u16 x,u16 y,u8 fsize)
 //    其他,错误,0XFF强制退出了
 u8 app_system_update(u8(*fcpymsg)(u8*pname,u8 pct,u8 mode),u8* src)
 {
-//	u32 totsize=0;
-//	u32 cpdsize=0;
-//	u8 res=0;
-//	u8 *p_app;
-//	u8 *p_spb; 
-//	u8 *p_lwip;   
-//	u8 rval=0;
-//	p_app=gui_memin_malloc(100);
-//	p_spb=gui_memin_malloc(100);
-//	p_lwip=gui_memin_malloc(100);  
-//	if(p_lwip==NULL)
-//	{
-//		gui_memin_free(p_app);
-//		gui_memin_free(p_spb); 
-//		return 1;//内存申请失败
-//	}
-//	sprintf((char*)p_app,"%s%s",src,APP_SYSTEM_APPPATH);
-//	sprintf((char*)p_spb,"%s%s",src,APP_SYSTEM_SPBPATH);
-//	sprintf((char*)p_lwip,"%s%s",src,APP_SYSTEM_LWIPPATH);  
-//	totsize+=exf_fdsize(p_app);//得到4个文件夹的总大小
-//	totsize+=exf_fdsize(p_spb);
-//	totsize+=exf_fdsize(p_lwip); 
-//	printf("totsize:%d\r\n",totsize);
-//	f_mkdir((const TCHAR *)APP_SYSTEM_DSTPATH);//强制创建目标文件夹
-// 	res=exf_fdcopy(fcpymsg,p_app,(u8*)APP_SYSTEM_DSTPATH,&totsize,&cpdsize,1);
-//	if(res)
-//	{
-//		if(res!=0xff)rval=1;				//第一阶段复制出错
-//		else rval=0XFF;						//强制退出
-//	}else									//第一阶段OK,启动第二阶段
-//	{
-//		res=exf_fdcopy(fcpymsg,p_spb,(u8*)APP_SYSTEM_DSTPATH,&totsize,&cpdsize,1);
-//		if(res)
-//		{
-//			if(res!=0xff)rval=2;			//第二阶段复制出错
-//			else rval=0XFF;					//强制退出
-//		}else								//第二阶段OK,启动第三阶段
-//		{		
-//			res=exf_fdcopy(fcpymsg,p_lwip,(u8*)APP_SYSTEM_DSTPATH,&totsize,&cpdsize,1);
-//			if(res)
-//			{
-//				if(res!=0xff)rval=3;		//第三阶段复制出错
-//				else rval=0XFF;				//强制退出
-//			}else rval=0;					//成功了。  		 
-//		}
-//	}
-//	gui_memin_free(p_app);
-//	gui_memin_free(p_spb);
-//	gui_memin_free(p_lwip);  
-//	return rval;
-return 0;
+	u32 totsize=0;
+	u32 cpdsize=0;
+	u8 res=0;
+	u8 *p_app;
+	u8 *p_spb; 
+	u8 *p_lwip;   
+	u8 rval=0;
+	p_app=gui_memin_malloc(100);
+	p_spb=gui_memin_malloc(100);
+	p_lwip=gui_memin_malloc(100);  
+	if(p_lwip==NULL)
+	{
+		gui_memin_free(p_app);
+		gui_memin_free(p_spb); 
+		return 1;//内存申请失败
+	}
+	sprintf((char*)p_app,"%s%s",src,APP_SYSTEM_APPPATH);
+	sprintf((char*)p_spb,"%s%s",src,APP_SYSTEM_SPBPATH);
+	sprintf((char*)p_lwip,"%s%s",src,APP_SYSTEM_LWIPPATH);  
+	totsize+=exf_fdsize(p_app);//得到4个文件夹的总大小
+	totsize+=exf_fdsize(p_spb);
+	totsize+=exf_fdsize(p_lwip); 
+	printf("totsize:%d\r\n",totsize);
+	f_mkdir((const TCHAR *)APP_SYSTEM_DSTPATH);//强制创建目标文件夹
+ 	res=exf_fdcopy(fcpymsg,p_app,(u8*)APP_SYSTEM_DSTPATH,&totsize,&cpdsize,1);
+	if(res)
+	{
+		if(res!=0xff)rval=1;				//第一阶段复制出错
+		else rval=0XFF;						//强制退出
+	}else									//第一阶段OK,启动第二阶段
+	{
+		res=exf_fdcopy(fcpymsg,p_spb,(u8*)APP_SYSTEM_DSTPATH,&totsize,&cpdsize,1);
+		if(res)
+		{
+			if(res!=0xff)rval=2;			//第二阶段复制出错
+			else rval=0XFF;					//强制退出
+		}else								//第二阶段OK,启动第三阶段
+		{		
+			res=exf_fdcopy(fcpymsg,p_lwip,(u8*)APP_SYSTEM_DSTPATH,&totsize,&cpdsize,1);
+			if(res)
+			{
+				if(res!=0xff)rval=3;		//第三阶段复制出错
+				else rval=0XFF;				//强制退出
+			}else rval=0;					//成功了。  		 
+		}
+	}
+	gui_memin_free(p_app);
+	gui_memin_free(p_spb);
+	gui_memin_free(p_lwip);  
+	return rval;
 }
 //得到STM32的序列号
 //sn0,sn1,sn2:3个固有序列号
@@ -1067,9 +1063,9 @@ void app_getstm32_sn(u32 *sn0,u32 *sn1,u32 *sn2)
 //打印SN
 void app_usmart_getsn(void)
 {
-//	u32 sn0,sn1,sn2;
-//	app_getstm32_sn(&sn0,&sn1,&sn2);
-//	printf("\r\nSerial Number:%X%X%X\r\n",sn0,sn1,sn2);
+	u32 sn0,sn1,sn2;
+	app_getstm32_sn(&sn0,&sn1,&sn2);
+	printf("\r\nSerial Number:%X%X%X\r\n",sn0,sn1,sn2);
 }
 //得到版本信息
 //buf:版本缓存区(最少需要6个字节,如保存:V1.00)
@@ -1101,145 +1097,144 @@ void app_get_version(u8*buf,u32 ver,u8 len)
 //包括系统设置,闹钟数据,WM8978数据等
 u8 app_system_parameter_init(void)
 { 
-//	u8 i;
-//	sysset_read_para(&systemset);		//读取系统设置信息 
-//	wm8978_read_para(&wm8978set);		//读取WM8978设置数据
-//  	calendar_read_para(&alarm);			//读取闹钟信息  
-//	if(systemset.saveflag!=0X0A||systemset.syslanguage>2)//之前没有保存过/语言信息错误
-//	{
-//		systemset.syslanguage=0;		//默认为简体中文
-// 		systemset.lcdbklight=100;		//背光默认最亮
-//		systemset.picmode=0;			//图片顺序播放
-//		systemset.audiomode=0;			//音乐播放默认是按顺序播放
-//		systemset.videomode=0;			//视频播放默认是按顺序播放 
-//		systemset.saveflag=0X0A;  		//设置保存标记
-//		sysset_save_para(&systemset);	//保存系统设置信息 
-// 	} 
-//	if(wm8978set.saveflag!=0X0A)  		//之前没有保存过
-//	{
-//		wm8978set.mvol=50;				//音量:50
-//		for(i=0;i<5;i++)wm8978set.cfreq[i]=0;//中心频率都设置为代号0 
-//		wm8978set.d3=0;					//3d效果关闭
-//		for(i=0;i<5;i++)wm8978set.freqval[i]=12;//全部设置位0dB增益 
-// 		wm8978set.speakersw=1;  		//设置喇叭开启
-// 		wm8978set.saveflag=0X0A;  		//设置保存标记
-//		wm8978_save_para(&wm8978set);	//保存WM8978的设置信息 
-// 	}
-//	if(alarm.saveflag!=0X0A)  			//之前没有保存过
-//	{
-//		alarm.weekmask=0X3E;			//闹钟响铃掩码为周1~5闹铃
-//		alarm.ringsta=3;				//闹铃状态及铃声标志为3
-//		alarm.hour=6;					//闹铃时间设置为6:00
-//		alarm.min=0;					  
-// 		alarm.saveflag=0X0A;  			//设置保存标记
-//		calendar_save_para(&alarm);		//保存闹钟设置信息 
-// 	} 
-//  	gui_phy.language=systemset.syslanguage;	//设置语言
-//	app_wm8978_setall();				//设置WM8978参数
-//	app_wm8978_volset(0);				//暂时关闭输出
+	u8 i;
+	sysset_read_para(&systemset);		//读取系统设置信息 
+	wm8978_read_para(&wm8978set);		//读取WM8978设置数据
+  	calendar_read_para(&alarm);			//读取闹钟信息  
+	if(systemset.saveflag!=0X0A||systemset.syslanguage>2)//之前没有保存过/语言信息错误
+	{
+		systemset.syslanguage=0;		//默认为简体中文
+ 		systemset.lcdbklight=100;		//背光默认最亮
+		systemset.picmode=0;			//图片顺序播放
+		systemset.audiomode=0;			//音乐播放默认是按顺序播放
+		systemset.videomode=0;			//视频播放默认是按顺序播放 
+		systemset.saveflag=0X0A;  		//设置保存标记
+		sysset_save_para(&systemset);	//保存系统设置信息 
+ 	} 
+	if(wm8978set.saveflag!=0X0A)  		//之前没有保存过
+	{
+		wm8978set.mvol=50;				//音量:50
+		for(i=0;i<5;i++)wm8978set.cfreq[i]=0;//中心频率都设置为代号0 
+		wm8978set.d3=0;					//3d效果关闭
+		for(i=0;i<5;i++)wm8978set.freqval[i]=12;//全部设置位0dB增益 
+ 		wm8978set.speakersw=1;  		//设置喇叭开启
+ 		wm8978set.saveflag=0X0A;  		//设置保存标记
+		wm8978_save_para(&wm8978set);	//保存WM8978的设置信息 
+ 	}
+	if(alarm.saveflag!=0X0A)  			//之前没有保存过
+	{
+		alarm.weekmask=0X3E;			//闹钟响铃掩码为周1~5闹铃
+		alarm.ringsta=3;				//闹铃状态及铃声标志为3
+		alarm.hour=6;					//闹铃时间设置为6:00
+		alarm.min=0;					  
+ 		alarm.saveflag=0X0A;  			//设置保存标记
+		calendar_save_para(&alarm);		//保存闹钟设置信息 
+ 	} 
+  	gui_phy.language=systemset.syslanguage;	//设置语言
+	app_wm8978_setall();				//设置WM8978参数
+	app_wm8978_volset(0);				//暂时关闭输出
 //	TIM3_CH2_PWM_Init(100,9600-1);		//初始化TIM3_CH2 PWM输出,作为LCD的背光控制
-// 	if(systemset.lcdbklight==0)app_lcd_auto_bklight();	//自动背光
-//	else if(lcddev.id==0X1963)LCD_SSD_BackLightSet(systemset.lcdbklight);
+ 	if(systemset.lcdbklight==0)app_lcd_auto_bklight();	//自动背光
+	else if(lcddev.id==0X1963)LCD_SSD_BackLightSet(systemset.lcdbklight);
 //	else LCD_BLPWM_VAL=systemset.lcdbklight;			//手动背光
-//	calendar_alarm_init((_alarm_obj*)&alarm,&calendar);	//初始化闹钟
-//	return 0;	
-return 0;
+	calendar_alarm_init((_alarm_obj*)&alarm,&calendar);	//初始化闹钟
+	return 0;	
 } 
 //LCD背光自动控制
 void app_lcd_auto_bklight(void)
 {
-//	u16 ir,ps,als; 
+	u16 ir,ps,als; 
 //	AP3216C_ReadData(&ir,&ps,&als);
-//	if(ps>700)//接近传感器,关闭屏幕背光
-//	{
-//		if(lcddev.id==0X1963)LCD_SSD_BackLightSet(0);
+	if(ps>700)//接近传感器,关闭屏幕背光
+	{
+		if(lcddev.id==0X1963)LCD_SSD_BackLightSet(0);
 //		else LCD_BLPWM_VAL=0;		
-//	}else
-//	{
-//		als/=20;//缩小20倍
-//		if(als>70)als=70;
-//		if(lcddev.id==0X1963)LCD_SSD_BackLightSet(30+als);
+	}else
+	{
+		als/=20;//缩小20倍
+		if(als>70)als=70;
+		if(lcddev.id==0X1963)LCD_SSD_BackLightSet(30+als);
 //		else LCD_BLPWM_VAL=30+als;
-//	} 
+	} 
 }
 //WM8978音量设置
 //vol:音量值
-//void app_wm8978_volset(u8 vol)
-//{
-//	if(vol>63)vol=63;
-//	if(wm8978set.speakersw)WM8978_SPKvol_Set(vol);//开启喇叭
-//	else WM8978_SPKvol_Set(0);	//关闭喇叭
-//	WM8978_HPvol_Set(vol,vol);
-//}
+void app_wm8978_volset(u8 vol)
+{
+	if(vol>63)vol=63;
+	if(wm8978set.speakersw)WM8978_SPKvol_Set(vol);//开启喇叭
+	else WM8978_SPKvol_Set(0);	//关闭喇叭
+	WM8978_HPvol_Set(vol,vol);
+}
 //WM8978 EQ设置
 //eqx:频段编号,0~4,对应EQ1~5
-//void app_wm8978_eqset(_wm8978_obj *wmset,u8 eqx)
-//{
-//	switch(eqx)
-//	{
-//		case 0://EQ1设置
-//			WM8978_EQ1_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
-//			break;
-//		case 1:
-//			WM8978_EQ2_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
-//			break;
-//		case 2:
-//			WM8978_EQ3_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
-//			break;
-//		case 3:
-//			WM8978_EQ4_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
-//			break;
-//		case 4:
-//			WM8978_EQ5_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
-//			break;
-//	}
-//}
+void app_wm8978_eqset(_wm8978_obj *wmset,u8 eqx)
+{
+	switch(eqx)
+	{
+		case 0://EQ1设置
+			WM8978_EQ1_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
+			break;
+		case 1:
+			WM8978_EQ2_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
+			break;
+		case 2:
+			WM8978_EQ3_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
+			break;
+		case 3:
+			WM8978_EQ4_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
+			break;
+		case 4:
+			WM8978_EQ5_Set(wmset->cfreq[eqx],wmset->freqval[eqx]);
+			break;
+	}
+}
 //设置所有WM8978参数(音频输出部分)
-//void app_wm8978_setall(void)
-//{
-//	u8 i=0;
-//	app_wm8978_volset(wm8978set.mvol);
-//	for(i=0;i<5;i++)
-//	{ 
-//		app_wm8978_eqset(&wm8978set,i);
-//	}
-//	WM8978_3D_Set(wm8978set.d3);
-//}
+void app_wm8978_setall(void)
+{
+	u8 i=0;
+	app_wm8978_volset(wm8978set.mvol);
+	for(i=0;i<5;i++)
+	{ 
+		app_wm8978_eqset(&wm8978set,i);
+	}
+	WM8978_3D_Set(wm8978set.d3);
+}
 //恢复默认设置
 void app_set_default(void)
 {
-//	u8 i;
-//	//系统设置参数,恢复默认设置
-//	systemset.syslanguage=0;		//默认为简体中文
-//	systemset.lcdbklight=100;		//背光默认为最亮
-//	systemset.picmode=0;			//图片顺序播放
-//	systemset.audiomode=0;			//音乐播放默认是按顺序播放
-//	systemset.videomode=0;			//视频播放默认是按顺序播放 
-//	systemset.saveflag=0X0A;  		//设置保存标记
-//	sysset_save_para(&systemset);	//保存系统设置信息  
-//	
-//	//WM8978设置参数,恢复默认设置
-//	wm8978set.mvol=50;				//音量:50
-//	for(i=0;i<5;i++)wm8978set.cfreq[i]=0;//中心频率都设置为代号0 
-//	wm8978set.d3=0;					//3d效果关闭
-//	for(i=0;i<5;i++)wm8978set.freqval[i]=12;//全部设置位0dB增益 
-//	wm8978set.speakersw=1;  		//喇叭开启
-//	wm8978set.saveflag=0X0A;  		//设置保存标记
-//	wm8978_save_para(&wm8978set);	//保存WM8978的设置信息 
+	u8 i;
+	//系统设置参数,恢复默认设置
+	systemset.syslanguage=0;		//默认为简体中文
+	systemset.lcdbklight=100;		//背光默认为最亮
+	systemset.picmode=0;			//图片顺序播放
+	systemset.audiomode=0;			//音乐播放默认是按顺序播放
+	systemset.videomode=0;			//视频播放默认是按顺序播放 
+	systemset.saveflag=0X0A;  		//设置保存标记
+	sysset_save_para(&systemset);	//保存系统设置信息  
+	
+	//WM8978设置参数,恢复默认设置
+	wm8978set.mvol=50;				//音量:50
+	for(i=0;i<5;i++)wm8978set.cfreq[i]=0;//中心频率都设置为代号0 
+	wm8978set.d3=0;					//3d效果关闭
+	for(i=0;i<5;i++)wm8978set.freqval[i]=12;//全部设置位0dB增益 
+	wm8978set.speakersw=1;  		//喇叭开启
+	wm8978set.saveflag=0X0A;  		//设置保存标记
+	wm8978_save_para(&wm8978set);	//保存WM8978的设置信息 
 
-//	//闹铃参数,恢复默认设置
-//	alarm.weekmask=0X3E;			//闹钟响铃掩码为周1~5闹铃
-//	alarm.ringsta=3;				//闹铃状态及铃声标志为3
-//	alarm.hour=6;					//闹铃时间设置为6:00
-//	alarm.min=0;					  
-//	alarm.saveflag=0X0A;  			//设置保存标记
-//	calendar_save_para(&alarm);		//保存闹钟设置信息 
-//	
-//	gui_phy.language=systemset.syslanguage;//设置语言
-//	app_wm8978_setall();			//音量全部重新设置
-//	if(lcddev.id==0X1963)LCD_SSD_BackLightSet(systemset.lcdbklight);
+	//闹铃参数,恢复默认设置
+	alarm.weekmask=0X3E;			//闹钟响铃掩码为周1~5闹铃
+	alarm.ringsta=3;				//闹铃状态及铃声标志为3
+	alarm.hour=6;					//闹铃时间设置为6:00
+	alarm.min=0;					  
+	alarm.saveflag=0X0A;  			//设置保存标记
+	calendar_save_para(&alarm);		//保存闹钟设置信息 
+	
+	gui_phy.language=systemset.syslanguage;//设置语言
+	app_wm8978_setall();			//音量全部重新设置
+	if(lcddev.id==0X1963)LCD_SSD_BackLightSet(systemset.lcdbklight);
 //	else LCD_BLPWM_VAL=systemset.lcdbklight;//设置背光亮度  
-//	calendar_alarm_init((_alarm_obj*)&alarm,&calendar);//初始化闹钟
+	calendar_alarm_init((_alarm_obj*)&alarm,&calendar);//初始化闹钟
 }
 
 

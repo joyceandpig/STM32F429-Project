@@ -29,6 +29,8 @@
 #include "RTC.h"
 #include "common.h"
 #include "calendar.h" 
+#include "settings.h"
+
 
 
 
@@ -252,6 +254,34 @@ void picture_task(void *pdata)
 		Sleep(100);
 	}
 }
+enum 
+{
+	ebook_app = 0,
+	picviewer_app,
+	audio_app,
+	video_app,
+	calendar_app,
+	sysset_app,
+	notepad_app,
+	exe_app,
+	paint_app,
+	camera_app,
+	recorder_app,
+	usb_app,
+	net_app,
+	calc_app,
+	qr_app,
+	webcam_app,
+	frec_app,
+	gyro_app,
+	grad_app,
+	key_app,
+	led_app,
+	
+	phone_app = SPB_ICOS_NUM,
+	AppCenter = SPB_ICOS_NUM + 1,
+	msm_app   = SPB_ICOS_NUM + 2,
+};
 vu8 system_task_return;		//任务强制返回标志.
 //主线程
 void main_thread(void *pdata)
@@ -279,7 +309,7 @@ void main_thread(void *pdata)
 // 			case audio_app		:audio_play();		break;//音乐播放 
 // 			case video_app		:video_play();		break;//视频播放
 //			case calendar_app	:calendar_play();	break;//时钟 
-// 			case sysset_app		:sysset_play();		break;//系统设置
+ 			case sysset_app		:sysset_play();		break;//系统设置
 //			case notepad_app	:notepad_play();	break;//记事本	
 //			case exe_app		:exe_play();		break;//运行器
 //			case paint_app		:paint_play();		break;//手写画笔

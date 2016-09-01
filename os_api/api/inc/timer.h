@@ -34,7 +34,7 @@ int timer_free(timer_t tmr);
 void sleep(uint32_t ms);
 
 
-unsigned int os_time_get(void);
+//unsigned int os_time_get(void);
 
 unsigned int ms2ticks(unsigned int ms);
 
