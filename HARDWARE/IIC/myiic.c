@@ -78,3 +78,4 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *hi2c)
 		HAL_GPIO_Init(I2Cx_SDA_GPIO_PORT, &GPIO_InitStruct);	
 	}
 }
+

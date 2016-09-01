@@ -1,6 +1,6 @@
 #include "calendar.h" 	      						  
 #include "stdio.h"
-//#include "settings.h" 
+#include "settings.h" 
 #include "mpu9250.h"
 //#include "ds18b20.h"
 #include "24cxx.h"
@@ -8,7 +8,7 @@
 #include "rtc.h"
 //#include "camera.h" 
 //#include "pcf8574.h"
-//#include "wm8978.h"
+#include "wm8978.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -136,7 +136,7 @@ void calendar_date_refresh(void)
 //alarm:闹钟信息 
 void calendar_read_para(_alarm_obj * alarm)
 {
-//	AT24CXX_Read(SYSTEM_PARA_SAVE_BASE+sizeof(_system_setings)+sizeof(_wm8978_obj),(u8*)alarm,sizeof(_alarm_obj));
+	AT24CXX_Read(SYSTEM_PARA_SAVE_BASE+sizeof(_system_setings)+sizeof(_wm8978_obj),(u8*)alarm,sizeof(_alarm_obj));
 }
 //写入日历闹钟信息
 //alarm:闹钟信息 
@@ -145,7 +145,7 @@ void calendar_save_para(_alarm_obj * alarm)
   	OS_CPU_SR cpu_sr=0;
 	alarm->ringsta&=0X7F;	//清空最高位
 	OS_ENTER_CRITICAL();	//进入临界区(无法被中断打断) 
-//	AT24CXX_Write(SYSTEM_PARA_SAVE_BASE+sizeof(_system_setings)+sizeof(_wm8978_obj),(u8*)alarm,sizeof(_alarm_obj));
+	AT24CXX_Write(SYSTEM_PARA_SAVE_BASE+sizeof(_system_setings)+sizeof(_wm8978_obj),(u8*)alarm,sizeof(_alarm_obj));
 	OS_EXIT_CRITICAL();		//退出临界区(可以被中断打断)
 } 
 

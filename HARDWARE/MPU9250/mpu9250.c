@@ -305,7 +305,6 @@ u8 MPU_Read_Byte(u8 addr,u8 reg)
 	return Res;	
 }
 
-
 #if 1
 #include "sys.h"
 #include "delay.h"

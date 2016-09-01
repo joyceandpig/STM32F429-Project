@@ -21,7 +21,31 @@
 #include <stm32f4xx.h>		
 /////////////end/////////////    
 #include "sys.h"
-#include "timer.h"
+#include "timer.h" 
+//#include "delay.h"  
+//#include "usart.h"   
+//#include "led.h"	
+//#include "lcd.h"
+//#include "key.h"  
+
+//#include "24cxx.h"   
+//#include "w25qxx.h" 
+//#include "usmart.h" 
+//#include "ov5640.h"	
+//#include "sdram.h"   
+//#include "rtc.h"  
+//#include "touch.h"
+//#include "nand.h"
+//#include "ftl.h"
+
+//#include "ff.h"  
+//#include "exfuns.h"    
+//#include "text.h"	
+//#include "piclib.h"	
+//#include "string.h"	
+//#include "math.h"	
+//#include "gui.h"
+
 
 #define TRUE 1
 #define FAULT 0

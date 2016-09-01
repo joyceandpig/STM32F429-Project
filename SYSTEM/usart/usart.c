@@ -221,7 +221,7 @@ void u3_printf(char* fmt,...)
 	i=strlen((const char*)USART3_TX_BUF);//此次发送数据的长度
 	for(j=0;j<i;j++)//循环发送数据
 	{
-		while(!__HAL_UART_GET_FLAG(&USART3_Handler,UART_FLAG_TC));		//循环发送,直到发送完毕 
+		while(__HAL_UART_GET_FLAG(&USART3_Handler,UART_FLAG_TC));		//循环发送,直到发送完毕 
 		__HAL_USART_SET_DAT_TO_DR(&USART3_Handler,USART3_TX_BUF[j]);
 	}
 	#endif

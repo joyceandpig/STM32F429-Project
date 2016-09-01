@@ -237,6 +237,7 @@ DRESULT res;
 	}else res=RES_ERROR;//其他的不支持
     return res;
 } 
+
 //获得时间
 //User defined function to give a current time to fatfs module      */
 //31-25: Year(0-127 org.1980), 24-21: Month(1-12), 20-16: Day(1-31) */                                                                                                                                                                                                                                          

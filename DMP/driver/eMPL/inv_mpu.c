@@ -3338,7 +3338,7 @@ u8 run_self_test(void)
 		/* Test passed. We can trust the gyro data here, so let's push it down
 		* to the DMP.
 		*/
-        unsigned short accel_sens;
+    unsigned short accel_sens;
 		float gyro_sens;
 
 		mpu_get_gyro_sens(&gyro_sens);

@@ -27,9 +27,15 @@
 #include "piclib.h"
 #include "gui.h"
 #include "RTC.h"
+#include "key.h"
+
 #include "common.h"
 #include "calendar.h" 
 #include "settings.h"
+#include "ebook.h"
+#include "ledplay.h"
+#include "gradienter.h"
+#include "audioplay.h"
 
 
 
@@ -100,6 +106,7 @@ void main_thread(void *pdata);
 //LED线程
 void led_task(void *pdata);
 void usb_Task(void *pdata);
+void key_thread(void *pdata);
 int main(void)
 {
    HAL_Init();                     //初始化HAL库  
@@ -115,6 +122,7 @@ int main(void)
 	LED_Init();                     //初始化LED
 	SDRAM_Init();                   //初始化SDRAM
 	LCD_Init();                     //初始化LCD
+	KEY_Init();
 	AT24CXX_Init();				    //初始化IIC
 	W25QXX_Init();				    //W25QXX初始化	
 	tp_dev.init();				    //初始化触摸屏
@@ -151,15 +159,19 @@ int main(void)
 	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测NandFlash错误
 	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存
 	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
-	Sleep(2000);
+//	Sleep(2000);
 	
 	f_mount(fs[0],"0:",1); 		//挂载SD卡  
 	f_mount(fs[1],"1:",1); 		//挂载SPI FLASH. 
 	f_mount(fs[2],"2:",1); 		//挂载NAND FLASH. 
 	
+	gui_phy.memdevflag|=1<<2;	//设置NAND FLASH在位.
+	gui_phy.memdevflag|=1<<1;	//设置SPI FLASH在位.
+	
 	OSInit();                       //UCOS初始化
 	thread_create(usb_Task, 0, TASK_USB_PRIO, 0, TASK_USB_STACK_SIZE, "usb_task");
-	thread_create(main_thread, 0, TASK_MAIN_PRIO, 0, TASK_MAIN_STACK_SIZE, "main_thread");	
+	thread_create(main_thread, 0, TASK_MAIN_PRIO, 0, TASK_MAIN_STACK_SIZE, "main_thread");
+	thread_create(key_thread, 0, TASK_KEY_PRIO, 0, TASK_KEY_STACK_SIZE, "key_thread");
 	OSStart(); //开始任务
 	while(1);					
 }
@@ -184,6 +196,20 @@ void led_task(void *pdata)
 		}
 	}									 
 }
+void key_thread(void *pdata)
+{
+	u8 t;
+	
+	while(1)
+	{
+		t = KEY_Scan(0);
+		if(t == 1)
+		{
+			system_task_return = 1;
+		}
+	Sleep(5);
+	}									 
+}
 void ShowPicture(void);
 void MPU_Test(void);
 void usb_Task(void *pdata)
@@ -196,7 +222,7 @@ void usb_Task(void *pdata)
 	pdata=pdata;
 
  	u_printf(DBG,"USB Connecting...");	//提示正在建立连接 	
-//	MPU_Test();		    
+//	MPU_Test();		
 	while(1)
 	{
     Sleep(100);				  
@@ -283,6 +309,8 @@ enum
 	msm_app   = SPB_ICOS_NUM + 2,
 };
 vu8 system_task_return;		//任务强制返回标志.
+vu8 ledplay_ds0_sta=0;		//ledplay任务,DS0的控制状态
+extern OS_EVENT * audiombox;	//音频播放任务邮箱
 //主线程
 void main_thread(void *pdata)
 {
@@ -292,6 +320,7 @@ void main_thread(void *pdata)
 	u16 tcnt=0;
 	
 	OSStatInit();  //开启统计任务
+	audiombox=OSMboxCreate((void*) 0);	//创建邮箱
 	thread_create(led_task, 0, TASK_LED_PRIO, 0, TASK_LED_STACK_SIZE, "led_task");
 	thread_create(picture_task, 0, TASK_PICTURE_PRIO, 0, TASK_PICTURE_STACK_SIZE, "picture_task");
 	
@@ -304,31 +333,31 @@ void main_thread(void *pdata)
 		system_task_return=0;//清退出标志 
 		switch(selx)//发生了双击事件
 		{    
-//			case ebook_app		:ebook_play();		break;//电子图书 
+			case ebook_app		:ebook_play();		break;//电子图书 
 // 			case picviewer_app	:picviewer_play();	break;//数码相框  
-// 			case audio_app		:audio_play();		break;//音乐播放 
+ 			case audio_app		:audio_play();		break;//音乐播放 
 // 			case video_app		:video_play();		break;//视频播放
-//			case calendar_app	:calendar_play();	break;//时钟 
+			case calendar_app	:calendar_play();	break;//时钟 
  			case sysset_app		:sysset_play();		break;//系统设置
-//			case notepad_app	:notepad_play();	break;//记事本	
+			case notepad_app	:notepad_play();	break;//记事本	
 //			case exe_app		:exe_play();		break;//运行器
-//			case paint_app		:paint_play();		break;//手写画笔
+			case paint_app		:paint_play();		break;//手写画笔
 // 			case camera_app		:camera_play();		break;//摄像头
 //			case recorder_app	:recorder_play();	break;//录音机
 // 			case usb_app		:usb_play();		break;//USB连接
 // 	    case net_app		:net_play();		break;//网络测试
-//			case calc_app		:calc_play();		break;//计算器   
+			case calc_app		:calc_play();		break;//计算器   
 //			case qr_app			:qr_play();			break;//二维码
 // 			case webcam_app		:webcam_play();		break;//网络摄像头
 //			case frec_app		:frec_play();		break;//人脸识别
-//			case gyro_app		:gyro_play();		break;//9轴传感器
-//			case grad_app		:grad_play();		break;//水平仪
-//			case key_app		:key_play();		break;//按键测试
-//			case led_app		:led_play();		break;//led测试
+			case gyro_app		:gyro_play();		break;//9轴传感器
+			case grad_app		:grad_play();		break;//水平仪
+			case key_app		:key_play();		break;//按键测试
+			case led_app		:led_play();		break;//led测试
 
-//			case phone_app:phone_play();break;	//电话功能
-//			case AppCenter:app_play();break;	//APP 
-// 			case msm_app:sms_play();break;	//短信功能
+			case phone_app:phone_play();break;	//电话功能
+			case AppCenter:app_play();break;	//APP 
+ 			case msm_app:sms_play();break;	//短信功能
 		} 
 		
 		if(selx!=0XFF)spb_load_mui();//显示主界面

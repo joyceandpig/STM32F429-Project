@@ -3,3 +3,4 @@
 2、移植了gui，并成功运行显示，同时修改了usart的结构（usart的初始化和中断处理均在usart函数中执行）
 3、移植了RTC和Calendar,但是在RTC_GetTime函数中，使用库操作方式时读取的hour、min、sec值均不变化，目前暂时先采用可以使用的寄存器方式
 4、移植system setting功能，包含各种系统设置，但没有加入timer移植
+5、移植了ebook、音乐、时钟、记事本、手写画笔、计算器、9D、水平仪、按键、LED。但音乐和水平仪有一定问题
