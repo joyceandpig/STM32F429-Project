@@ -26,6 +26,11 @@
 #include "spb.h"
 #include "piclib.h"
 #include "gui.h"
+#include "RTC.h"
+#include "common.h"
+#include "calendar.h" 
+
+
 
 USB_OTG_CORE_HANDLE USB_OTG_dev;
 extern vu8 USB_STATUS_REG;		//USB状态
@@ -115,10 +120,24 @@ int main(void)
 	my_mem_init(SRAMEX);		//初始化外部内存池
 	my_mem_init(SRAMCCM);		//初始化CCM内存池 
 	
-	TP_Init();
+ 
 	gui_init();
 	piclib_init();				//piclib初始化
 	slcd_dma_init();
+	exfuns_init();				//FATFS 申请内存
+	
+	printf("RTC Check...");			   
+ 	if(RTC_Init())
+	{
+		printf("RTC ERROR!\r\n"); //RTC检测
+	}
+	else 
+	{
+		calendar_get_time(&calendar);//得到当前时间
+		calendar_get_date(&calendar);//得到当前日期
+		printf("RTC OK!\r\n");;			   
+	}
+
 
 	font_init(0);//初始化字库	 0检查  1强制更新
 	POINT_COLOR = RED;
@@ -130,7 +149,11 @@ int main(void)
 	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测NandFlash错误
 	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存
 	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
-	Sleep(5000);
+	Sleep(2000);
+	
+	f_mount(fs[0],"0:",1); 		//挂载SD卡  
+	f_mount(fs[1],"1:",1); 		//挂载SPI FLASH. 
+	f_mount(fs[2],"2:",1); 		//挂载NAND FLASH. 
 	
 	OSInit();                       //UCOS初始化
 	thread_create(usb_Task, 0, TASK_USB_PRIO, 0, TASK_USB_STACK_SIZE, "usb_task");
@@ -171,7 +194,7 @@ void usb_Task(void *pdata)
 	pdata=pdata;
 
  	u_printf(DBG,"USB Connecting...");	//提示正在建立连接 	
-	MPU_Test();		    
+//	MPU_Test();		    
 	while(1)
 	{
     Sleep(100);				  
@@ -229,7 +252,7 @@ void picture_task(void *pdata)
 		Sleep(100);
 	}
 }
-//vu8 system_task_return;		//任务强制返回标志.
+vu8 system_task_return;		//任务强制返回标志.
 //主线程
 void main_thread(void *pdata)
 {
@@ -248,7 +271,7 @@ void main_thread(void *pdata)
 	while(1)
 	{
 		selx=spb_move_chk(); 
-//		system_task_return=0;//清退出标志 
+		system_task_return=0;//清退出标志 
 		switch(selx)//发生了双击事件
 		{    
 //			case ebook_app		:ebook_play();		break;//电子图书 
@@ -263,7 +286,7 @@ void main_thread(void *pdata)
 // 			case camera_app		:camera_play();		break;//摄像头
 //			case recorder_app	:recorder_play();	break;//录音机
 // 			case usb_app		:usb_play();		break;//USB连接
-// 	    	case net_app		:net_play();		break;//网络测试
+// 	    case net_app		:net_play();		break;//网络测试
 //			case calc_app		:calc_play();		break;//计算器   
 //			case qr_app			:qr_play();			break;//二维码
 // 			case webcam_app		:webcam_play();		break;//网络摄像头

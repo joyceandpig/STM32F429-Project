@@ -89,7 +89,7 @@ void uart1_init(u32 bound)
 }
 #endif
 #ifdef USART1_EN
-void usart3_init(u32 bound)
+void uart3_init(u32 bound)
 {  	 
 //	float temp;
 //	u16 mantissa;

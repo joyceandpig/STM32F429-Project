@@ -164,8 +164,8 @@ void window_draw(_window_obj * windowx)
 }
 
 //此定义在main.c函数里面,如果不需要tpad返回,直接去掉.
-//extern volatile u8 system_task_return;		//任务强制返回标志.
-volatile u8 system_task_return;		//任务强制返回标志.
+extern volatile u8 system_task_return;		//任务强制返回标志.
+//volatile u8 system_task_return;		//任务强制返回标志.
 
 #define MSG_BOX_BTN1_WIDTH 			60
 #define MSG_BOX_BTN2_WIDTH 			100

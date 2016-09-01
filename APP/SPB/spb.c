@@ -6,7 +6,7 @@
 #include "malloc.h"
 #include "text.h"
 #include "common.h"
-//#include "calendar.h"
+#include "calendar.h"
 #include "gsm.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -283,12 +283,12 @@ u8 spb_init(void)
 	spbdev.pos=spbdev.spbahwidth;//默认是第1页开始位置
 	return 0;
 } 
-////删除SPB
-//void spb_delete(void)
-//{
-//	memset((void*)&spbdev,0,sizeof(spbdev));
-//	gui_memex_free(sramlcdbuf);
-//}
+//删除SPB
+void spb_delete(void)
+{
+	memset((void*)&spbdev,0,sizeof(spbdev));
+	gui_memex_free(sramlcdbuf);
+}
 //装载主界面icos
 //返回值:0,操作成功
 //    其他,错误代码
@@ -398,9 +398,17 @@ void spb_stabar_msg_show(u8 clr)
 	if(OSCPUUsage>99)temp=99;//最多显示到99%
 	gui_show_num(24+64+2+20+20+2+32,(spbdev.stabarheight-16)/2,2,WHITE,16,temp,0);//显示CPU使用率
 	//显示时间
-//	calendar_get_time(&calendar);
-//	gui_show_num(lcddev.width-42,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.hour,0X80);	//显示时钟
-//	gui_show_num(lcddev.width-2-16,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.min,0X80);//显示分钟	
+	calendar_get_time(&calendar);
+	calendar_get_date(&calendar);
+//	printf("sec:%d\r\n",calendar.sec);
+	gui_show_num(lcddev.width-60,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.hour,0X80);	//显示时钟
+	gui_show_num(lcddev.width-42,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.min,0X80);//显示分钟	
+	gui_show_num(lcddev.width-2-16,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.sec,0X80);	//显示秒
+	
+	gui_show_num(lcddev.width-158,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.w_year,0X80);//显示年
+	gui_show_num(lcddev.width-134,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.w_month,0X80);	//显示月
+	gui_show_num(lcddev.width-110,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.w_date,0X80);//显示日
+	gui_show_num(lcddev.width-86,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.week,0X80);//显示星期
 }
 extern u8*const sysset_remindmsg_tbl[2][GUI_LANGUAGE_NUM];
 //加载SPB主界面UI

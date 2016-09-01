@@ -18,9 +18,12 @@
 #include "ucos_ii.h"
 #include "os_cpu.h"
 #include "os_cfg.h"
+#include <stm32f4xx.h>		
+/////////////end/////////////    
+#include "sys.h"
 
-#include <stm32f4xx.h>	    
 
+extern volatile u8 system_task_return;		//任务强制返回标志.
 #endif
 
 

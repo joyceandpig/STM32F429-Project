@@ -240,7 +240,10 @@ u8 minibmp_decode(u8 *filename,u16 x,u16 y,u16 width,u16 height,u16 acolor,u8 mo
 		
 #if BMP_USE_MALLOC == 1	//使用malloc	
 	databuf=(u8*)pic_memalloc(readlen);		//开辟readlen字节的内存区域
-	if(databuf==NULL)return PIC_MEM_ERR;		//内存申请失败.
+	if(databuf==NULL)
+	{
+		return PIC_MEM_ERR;		//内存申请失败.
+	}
 	f_bmp=(FIL *)pic_memalloc(sizeof(FIL));	//开辟FIL字节的内存区域 
 	if(f_bmp==NULL)								//内存申请失败.
 	{		 
@@ -251,7 +254,7 @@ u8 minibmp_decode(u8 *filename,u16 x,u16 y,u16 width,u16 height,u16 acolor,u8 mo
 	databuf=bmpreadbuf;
 	f_bmp=&f_bfile;
 #endif
-	res=f_open(f_bmp,(const TCHAR*)filename,FA_READ);//打开文件	 						  
+	res=f_open(f_bmp,(const TCHAR*)filename,FA_READ);//打开文件	 		
 	if(res==0)//打开成功.
 	{ 
 		f_read(f_bmp,databuf,sizeof(BITMAPINFO),(UINT*)&br);//读出BITMAPINFO信息 

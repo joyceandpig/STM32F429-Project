@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx,OS_UCOS,DEBUG,USE_USB_OTG_FS,MPL_LOG_NDEBUG=1,EMPL,MPU9250,EMPL_TARGET_STM32F4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\HARDWARE\DMA;..\APP\SPB;..\APP\COMMON;..\GUI;..\HARDWARE\GSM</IncludePath>
+              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\HARDWARE\DMA;..\APP\SPB;..\APP\COMMON;..\GUI;..\HARDWARE\GSM;..\HARDWARE\RTC;..\APP\CALENDAR</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -650,6 +650,16 @@
               <FileType>1</FileType>
               <FilePath>..\HALLIB\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_nand.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HALLIB\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rtc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HALLIB\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -780,6 +790,11 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\GSM\gsm.c</FilePath>
             </File>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\RTC\rtc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -794,6 +809,11 @@
               <FileName>spb.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\SPB\spb.c</FilePath>
+            </File>
+            <File>
+              <FileName>calendar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\CALENDAR\calendar.c</FilePath>
             </File>
           </Files>
         </Group>
