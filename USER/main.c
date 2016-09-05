@@ -188,11 +188,11 @@ void led_task(void *pdata)
 		usmart_scan();
 		t++;
 		Sleep(5);
-		if(t==8)LED1=1;	//LED0灭
+//		if(t==8)LED1=1;	//LED0灭
 		if(t==100)		//LED0亮
 		{
 			t=0;
-			LED1=0;
+//			LED1=0;
 		}
 	}									 
 }
@@ -230,12 +230,12 @@ void usb_Task(void *pdata)
 		{	 						   		  	   
 			if(USB_STATUS_REG&0x01)//正在写		  
 			{
-				LED1=0;
+//				LED1=0;
 				u_printf(DBG,"USB Writing...");//提示USB正在写入数据    
 			}
 			if(USB_STATUS_REG&0x02)//正在读
 			{
-				LED1=0;
+//				LED1=0;
 				u_printf(DBG,"USB Reading...");//提示USB正在读出数据		 
 			}	 										  
 			if(USB_STATUS_REG&0x04)
@@ -256,8 +256,8 @@ void usb_Task(void *pdata)
 		if(tct==200)
 		{
 			tct=0;
-			LED1=1;
-			LED0=!LED0;//提示系统在运行
+//			LED1=1;
+//			LED0=!LED0;//提示系统在运行
 			if(USB_STATUS_REG&0x10)
 			{
 				offline_cnt=0;//USB连接了,则清除offline计数器
@@ -334,13 +334,13 @@ void main_thread(void *pdata)
 		switch(selx)//发生了双击事件
 		{    
 			case ebook_app		:ebook_play();		break;//电子图书 
-// 			case picviewer_app	:picviewer_play();	break;//数码相框  
+ 			case picviewer_app	:picviewer_play();	break;//数码相框  
  			case audio_app		:audio_play();		break;//音乐播放 
 // 			case video_app		:video_play();		break;//视频播放
 			case calendar_app	:calendar_play();	break;//时钟 
  			case sysset_app		:sysset_play();		break;//系统设置
 			case notepad_app	:notepad_play();	break;//记事本	
-//			case exe_app		:exe_play();		break;//运行器
+			case exe_app		:exe_play();		break;//运行器
 			case paint_app		:paint_play();		break;//手写画笔
 // 			case camera_app		:camera_play();		break;//摄像头
 //			case recorder_app	:recorder_play();	break;//录音机
@@ -495,7 +495,7 @@ void ShowPicture(void)
 		{
 			key=0;		//扫描按键
 			if(t>250)key=1;			//模拟一次按下KEY0    
-			if((t%20)==0)LED0=!LED0;//LED0闪烁,提示程序正在运行.
+//			if((t%20)==0)LED0=!LED0;//LED0闪烁,提示程序正在运行.
 			if(key==3)		//上一张
 			{
 				if(curindex)curindex--;

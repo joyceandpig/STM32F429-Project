@@ -46,12 +46,12 @@ void TP_Write_Byte(u8 num)
 	u8 count=0;   
 	for(count=0;count<8;count++)  
 	{ 	  
-		if(num&0x80)TDIN=1;  
-		else TDIN=0;   
+		if(num&0x80)TDIN_SET();  
+		else TDIN_CLEAR();   
 		num<<=1;    
-		TCLK=0; 
+		TCLK_CLEAR(); 
 		delay_us(1);
-		TCLK=1;		//上升沿有效	        
+		TCLK_SET();		//上升沿有效	        
 	}		 			    
 } 		 
 //SPI读数据 
@@ -62,26 +62,26 @@ u16 TP_Read_AD(u8 CMD)
 { 	 
 	u8 count=0; 	  
 	u16 Num=0; 
-	TCLK=0;		    //先拉低时钟 	 
-	TDIN=0; 	    //拉低数据线
-	TCS=0; 		    //选中触摸屏IC
+	TCLK_CLEAR();		    //先拉低时钟 	 
+	TDIN_CLEAR(); 	    //拉低数据线
+	TCS_CLEAR(); 		    //选中触摸屏IC
 	TP_Write_Byte(CMD);//发送命令字
 	delay_us(6);    //ADS7846的转换时间最长为6us
-	TCLK=0; 	     	    
+	TCLK_CLEAR(); 	     	    
 	delay_us(1);    	   
-	TCLK=1;		    //给1个时钟，清除BUSY
+	TCLK_SET();		    //给1个时钟，清除BUSY
 	delay_us(1);    
-	TCLK=0; 	     	    
+	TCLK_CLEAR(); 	     	    
 	for(count=0;count<16;count++)//读出16位数据,只有高12位有效 
 	{ 				  
 		Num<<=1; 	 
-		TCLK=0;	    //下降沿有效  	    	   
+		TCLK_CLEAR();	    //下降沿有效  	    	   
 		delay_us(1);    
- 		TCLK=1;
- 		if(DOUT)Num++; 		 
+ 		TCLK_SET();
+ 		if(DOUT())Num++; 		 
 	}  	
 	Num>>=4;   	    //只有高12位有效.
-	TCS=1;		    //释放片选	 
+	TCS_SET();		    //释放片选	 
 	return(Num);   
 }
 //读取一个坐标值(x或者y)
@@ -187,7 +187,7 @@ void TP_Draw_Big_Point(u16 x,u16 y,u16 color)
 //0,触屏无触摸;1,触屏有触摸
 u8 TP_Scan(u8 tp)
 {			   
-	if(PEN==0)//有按键按下
+	if(PEN()==0)//有按键按下
 	{
 		if(tp)TP_Read_XY2(&tp_dev.x[0],&tp_dev.y[0]);//读取物理坐标
 		else if(TP_Read_XY2(&tp_dev.x[0],&tp_dev.y[0]))//读取屏幕坐标

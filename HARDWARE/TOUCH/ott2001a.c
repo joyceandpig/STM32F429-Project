@@ -82,25 +82,26 @@ u8 OTT2001A_Init(void)
  	u8 regval=0; 
     GPIO_InitTypeDef GPIO_Initure;
  
-    __HAL_RCC_GPIOH_CLK_ENABLE();			//开启GPIOH时钟
-    __HAL_RCC_GPIOI_CLK_ENABLE();			//开启GPIOI时钟
-                
+//    __HAL_RCC_GPIOH_CLK_ENABLE();			//开启GPIOH时钟
+//    __HAL_RCC_GPIOI_CLK_ENABLE();			//开启GPIOI时钟
+	OTT_RST_GPIO_PORT_CLK_ENABLE();
+  OTT_INT_GPIO_PORT_CLK_ENABLE();            
     //PH7
-    GPIO_Initure.Pin=GPIO_PIN_7;            //PH7
+    GPIO_Initure.Pin=OTT_INT_GPIO_PIN;            //PH7
     GPIO_Initure.Mode=GPIO_MODE_INPUT;      //输入
     GPIO_Initure.Pull=GPIO_PULLUP;          //上拉
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;     //高速
-    HAL_GPIO_Init(GPIOH,&GPIO_Initure);     //初始化
+    HAL_GPIO_Init(OTT_INT_GPIO_PORT,&GPIO_Initure);     //初始化
             
     //PI8
-    GPIO_Initure.Pin=GPIO_PIN_8;            //PI8
+    GPIO_Initure.Pin=OTT_RST_GPIO_PIN;            //PI8
     GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;  //推挽输出
-    HAL_GPIO_Init(GPIOI,&GPIO_Initure);     //初始化
+    HAL_GPIO_Init(OTT_RST_GPIO_PORT,&GPIO_Initure);     //初始化
     
 	CT_IIC_Init();      	//初始化电容屏的I2C总线  
-	OTT_RST=0;				//复位
+	OTT_RST_CLEAR();				//复位
 	delay_ms(100);
- 	OTT_RST=1;				//释放复位		    
+ 	OTT_RST_SET();				//释放复位		    
 	delay_ms(100); 
 	OTT2001A_SensorControl(1);	//打开传感器 
 	OTT2001A_RD_Reg(OTT_CTRL_REG,&regval,1);//读取传感器运行寄存器的值来判断I2C通信是否正常

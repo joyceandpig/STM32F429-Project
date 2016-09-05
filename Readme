@@ -4,3 +4,4 @@
 3、移植了RTC和Calendar,但是在RTC_GetTime函数中，使用库操作方式时读取的hour、min、sec值均不变化，目前暂时先采用可以使用的寄存器方式
 4、移植system setting功能，包含各种系统设置，但没有加入timer移植
 5、移植了ebook、音乐、时钟、记事本、手写画笔、计算器、9D、水平仪、按键、LED。但音乐和水平仪有一定问题
+6、修改工程中使用到原sys.h中端口控制的代码为宏形式，包括lcd.h、ctiic.h、ft5206.h、gt9147.h、ott2001a.h、touch.h、w25qxx.h、nand.h、rtc.h、ov5604.h、sccb.h、ds18b20.h。但修改后工程运行有问题：无法读取字库，无法操作usb盘等

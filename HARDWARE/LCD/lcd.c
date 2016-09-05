@@ -488,7 +488,7 @@ void HAL_SRAM_MspInit(SRAM_HandleTypeDef *hsram)
 void LCD_Init(void)
 { 	  
     GPIO_InitTypeDef GPIO_Initure;
-	FMC_NORSRAM_TimingTypeDef FSMC_ReadWriteTim;
+		FMC_NORSRAM_TimingTypeDef FSMC_ReadWriteTim;
     FMC_NORSRAM_TimingTypeDef FSMC_WriteTim;
     
     lcddev.id=LTDC_PanelID_Read();	//检查是否有RGB屏接入
@@ -498,12 +498,12 @@ void LCD_Init(void)
 	}
     else
     {    
-        __HAL_RCC_GPIOB_CLK_ENABLE();			//开启GPIOB时钟
-        GPIO_Initure.Pin=GPIO_PIN_5;            //PB5,背光控制
+        LCD_LED_PORT_CLK_ENABLE();			//开启GPIOB时钟
+        GPIO_Initure.Pin=LCD_LED_PIN;            //PB5,背光控制
         GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;  //推挽输出
         GPIO_Initure.Pull=GPIO_PULLUP;          //上拉
         GPIO_Initure.Speed=GPIO_SPEED_HIGH;     //高速
-        HAL_GPIO_Init(GPIOB,&GPIO_Initure); 
+        HAL_GPIO_Init(LCD_LED_PORT,&GPIO_Initure); 
         
         SRAM_Handler.Instance=FMC_NORSRAM_DEVICE;        //BANK1
         SRAM_Handler.Extended=FMC_NORSRAM_EXTENDED_DEVICE;       
@@ -1839,7 +1839,7 @@ void LCD_Init(void)
         FMC_NORSRAM_Extended_Timing_Init(SRAM_Handler.Extended,&FSMC_WriteTim,SRAM_Handler.Init.NSBank,SRAM_Handler.Init.ExtendedMode);
 	}   	
 	LCD_Display_Dir(0);		//默认为竖屏
-	LCD_LED=1;				//点亮背光
+	LCD_LED_LIGHT_OPEN;				//点亮背光
 	LCD_Clear(WHITE);
 }  
 //清屏函数

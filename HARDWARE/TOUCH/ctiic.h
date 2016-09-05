@@ -2,6 +2,7 @@
 #define __MYCT_IIC_H
 #include "mytypes.h"  
 #include "sys.h"
+#include "stm32f4xx_hal.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -17,13 +18,42 @@
 //无
 ////////////////////////////////////////////////////////////////////////////////// 	
 
+/* Definition for DS18B20_GPIO clock resources */
+#define CT_IIC_GPIO_SDA_PIN_NUM           		 3
+#define CT_IIC_GPIO_SCL_PORT               		 GPIOH
+#define CT_IIC_GPIO_SCL_PIN               		 GPIO_PIN_6
+
+
+
+#define CT_IIC_GPIO_SDA_PORT              		 GPIOI
+#define CT_IIC_GPIO_SDA_PIN               		 GPIO_PIN_3
+#define CT_IIC_GPIO_SDA_READ_PIN               GPIO_PIN_3
+
+#define CT_IIC_GPIO_SDA_CLK_ENABLE()           __HAL_RCC_GPIOI_CLK_ENABLE()
+#define CT_IIC_GPIO_SCL_CLK_ENABLE()           __HAL_RCC_GPIOH_CLK_ENABLE()
+
+#define CT_IIC_GPIO_MODER_CLEAR(_PORT_,_PIN_)    (_PORT_->MODER &= ~(3<<(_PIN_*2)))
+#define CT_IIC_GPIO_MODER_SET_IN(_PORT_,_PIN_)   (_PORT_->MODER |=  (0<<(_PIN_*2)))
+#define CT_IIC_GPIO_MODER_SET_OUT(_PORT_,_PIN_)  (_PORT_->MODER |=  (1<<(_PIN_*2)))
+
 //IO方向设置
-#define CT_SDA_IN()  {GPIOI->MODER&=~(3<<(3*2));GPIOI->MODER|=0<<3*2;}	//PI3输入模式
-#define CT_SDA_OUT() {GPIOI->MODER&=~(3<<(3*2));GPIOI->MODER|=1<<3*2;} 	//PI3输出模式
-//IO操作函数	 
-#define CT_IIC_SCL  PHout(6)  //SCL
-#define CT_IIC_SDA  PIout(3)  //SDA	 
-#define CT_READ_SDA PIin(3)   //输入SDA 
+#define CT_SDA_IN()  do{CT_IIC_GPIO_MODER_CLEAR(CT_IIC_GPIO_SDA_PORT, CT_IIC_GPIO_SDA_PIN_NUM);\
+												CT_IIC_GPIO_MODER_SET_IN(CT_IIC_GPIO_SDA_PORT, CT_IIC_GPIO_SDA_PIN_NUM);\
+												}while(0);	//PI3输入模式
+#define CT_SDA_OUT() do{CT_IIC_GPIO_MODER_CLEAR(CT_IIC_GPIO_SDA_PORT, CT_IIC_GPIO_SDA_PIN_NUM);\
+												CT_IIC_GPIO_MODER_SET_OUT(CT_IIC_GPIO_SDA_PORT, CT_IIC_GPIO_SDA_PIN_NUM);\
+												}while(0); 	//PI3输出模式
+
+////IO操作函数											   
+#define	CT_IIC_SCL_SET     HAL_GPIO_WritePin(CT_IIC_GPIO_SCL_PORT, CT_IIC_GPIO_SCL_PIN, GPIO_PIN_SET) //SCL	 
+#define	CT_IIC_SCL_CLEAR   HAL_GPIO_WritePin(CT_IIC_GPIO_SCL_PORT, CT_IIC_GPIO_SCL_PIN, GPIO_PIN_RESET) //SCL
+
+#define	CT_IIC_SDA_SET     HAL_GPIO_WritePin(CT_IIC_GPIO_SDA_PORT, CT_IIC_GPIO_SDA_PIN, GPIO_PIN_SET) //SDA	  
+#define	CT_IIC_SDA_CLEAR   HAL_GPIO_WritePin(CT_IIC_GPIO_SDA_PORT, CT_IIC_GPIO_SDA_PIN, GPIO_PIN_RESET) //SDA	 
+#define	CT_IIC_SDA(_STA_)   HAL_GPIO_WritePin(CT_IIC_GPIO_SDA_PORT, CT_IIC_GPIO_SDA_PIN, _STA_) //SDA	
+												
+#define	CT_READ_SDA_STA    HAL_GPIO_ReadPin(CT_IIC_GPIO_SDA_PORT, CT_IIC_GPIO_SDA_READ_PIN) //输入SDA 	
+
  
 
 //IIC所有操作函数

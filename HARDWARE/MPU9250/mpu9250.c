@@ -411,7 +411,7 @@ void MPU_Test(void)
 	{   
 		LCD_ShowString(170,0,200,16,16,"MPU9250 error! ");
  		delay_ms(200);
-		LED0=!LED0;//DS0闪烁 
+//		LED0=!LED0;//DS0闪烁 
 	}
 	LCD_ShowString(170,0,200,16,16,"F429 Develop Kit.");
 
@@ -468,7 +468,7 @@ void MPU_Test(void)
 				LCD_ShowNum(30+48+8,16+16*4,temp/10,3,16);		//显示整数部分	    
 				LCD_ShowNum(30+48+40,16+16*4,temp%10,1,16);		//显示小数部分  
 				t=0;
-				LED0=!LED0;//DS0闪烁 
+//				LED0=!LED0;//DS0闪烁 
 		 	}
 		 }
         t++;

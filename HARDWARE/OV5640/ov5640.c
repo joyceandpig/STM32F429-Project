@@ -79,11 +79,11 @@ u8 OV5640_Init(void)
   	RCC->AHB1ENR|=1<<0;		//使能外设PORTA时钟    
 // 	GPIO_Set(GPIOA,PIN15,GPIO_MODE_OUT,GPIO_OTYPE_PP,GPIO_SPEED_50M,GPIO_PUPD_PU);	//PA15推挽输出
 	//PCF8574_Init();			//初始化PCF8574
-	OV5640_RST=0;			//必须先拉低OV5640的RST脚,再上电
+	OV5640_RST_CLEAR();			//必须先拉低OV5640的RST脚,再上电
 	delay_ms(20); 
 	OV5640_PWDN_Set(0);		//POWER ON
 	delay_ms(5);  
-	OV5640_RST=1;			//结束复位 
+	OV5640_RST_SET();			//结束复位 
 	delay_ms(20);      
   	SCCB_Init();			//初始化SCCB 的IO口 
 	delay_ms(5); 

@@ -242,7 +242,7 @@ void RTC_WKUP_IRQHandler(void)
 //RTC WAKE UP中断处理
 void HAL_RTCEx_WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 {
-    LED1=!LED1;
+//    LED1=!LED1;
 }
 
 u8 const table_week[12]={0,3,3,6,1,4,6,2,5,0,3,5}; //月修正数据表	  

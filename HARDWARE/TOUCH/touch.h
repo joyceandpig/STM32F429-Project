@@ -5,6 +5,8 @@
 #include "ott2001a.h"	    
 #include "gt9147.h"	    
 #include "ft5206.h"	    
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_gpio.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -57,11 +59,40 @@ typedef struct
 extern _m_tp_dev tp_dev;	 	//触屏控制器在touch.c里面定义
 
 //电阻屏芯片连接引脚	   
-#define PEN     PHin(7)    //T_PEN
-#define DOUT    PGin(3)    //T_MISO
-#define TDIN    PIout(3)   //T_MOSI
-#define TCLK    PHout(6)   //T_SCK
-#define TCS     PIout(8)   //T_CS  
+
+#define TOUCH_PEN_GPIO_PIN_NUM           		 7
+#define TOUCH_DOUT_GPIO_PIN_NUM           	 3
+#define TOUCH_TDIN_GPIO_PIN_NUM           	 3
+#define TOUCH_TCLK_GPIO_PIN_NUM           	 6
+#define TOUCH_TCS_GPIO_PIN_NUM           		 8
+
+#define TOUCH_DIN_CS_GPIO_PORT               		 GPIOI
+#define TOUCH_PEN_CLK_GPIO_PORT               		 GPIOH
+#define TOUCH_DOUT_GPIO_PORT               		 GPIOG
+
+#define TOUCH_GPIO_PORT_DIN_CS()           __HAL_RCC_GPIOI_CLK_ENABLE()
+#define TOUCH_GPIO_PORT_PEN_CLK()           __HAL_RCC_GPIOH_CLK_ENABLE()
+#define TOUCH_GPIO_PORT_DOUT()           __HAL_RCC_GPIOG_CLK_ENABLE()
+
+////IO操作函数											   
+#define	TDIN_SET()     HAL_GPIO_WritePin(TOUCH_DIN_CS_GPIO_PORT, TOUCH_TDIN_GPIO_PIN_NUM, GPIO_PIN_SET) //SCL	 
+#define	TDIN_CLEAR()   HAL_GPIO_WritePin(TOUCH_DIN_CS_GPIO_PORT, TOUCH_TDIN_GPIO_PIN_NUM, GPIO_PIN_RESET) //SCL
+
+#define	TCLK_SET()     HAL_GPIO_WritePin(TOUCH_PEN_CLK_GPIO_PORT, TOUCH_TCLK_GPIO_PIN_NUM, GPIO_PIN_SET) //SCL	 
+#define	TCLK_CLEAR()   HAL_GPIO_WritePin(TOUCH_PEN_CLK_GPIO_PORT, TOUCH_TCLK_GPIO_PIN_NUM, GPIO_PIN_RESET) //SCL
+
+#define	TCS_SET()     HAL_GPIO_WritePin(TOUCH_DIN_CS_GPIO_PORT, TOUCH_TCS_GPIO_PIN_NUM, GPIO_PIN_SET) //SCL	 
+#define	TCS_CLEAR()   HAL_GPIO_WritePin(TOUCH_DIN_CS_GPIO_PORT, TOUCH_TCS_GPIO_PIN_NUM, GPIO_PIN_RESET) //SCL
+
+#define	PEN()     	HAL_GPIO_ReadPin(TOUCH_PEN_CLK_GPIO_PORT, TOUCH_PEN_GPIO_PIN_NUM) //SDA	  
+#define	DOUT()     HAL_GPIO_ReadPin(TOUCH_DOUT_GPIO_PORT, TOUCH_DOUT_GPIO_PIN_NUM) //SDA	
+
+//#define PEN     PHin(7)    //T_PEN
+//#define DOUT    PGin(3)    //T_MISO
+
+//#define TDIN    PIout(3)   //T_MOSI
+//#define TCLK    PHout(6)   //T_SCK
+//#define TCS     PIout(8)   //T_CS  
    
 //电阻屏函数
 void TP_Write_Byte(u8 num);						//向控制芯片写入一个数据

@@ -32,12 +32,12 @@ void SCCB_Init(void)
 //在激活状态下,SDA和SCL均为低电平
 void SCCB_Start(void)
 {
-    SCCB_SDA=1;     //数据线高电平	   
-    SCCB_SCL=1;	    //在时钟线高的时候数据线由高至低
+    SCCB_SDA_SET();     //数据线高电平	   
+    SCCB_SCL_SET();	    //在时钟线高的时候数据线由高至低
     SCCB_Delay();  
-    SCCB_SDA=0;
+    SCCB_SDA_CLEAR();
     SCCB_Delay();	 
-    SCCB_SCL=0;	    //数据线恢复低电平，单操作函数必要	  
+    SCCB_SCL_CLEAR();	    //数据线恢复低电平，单操作函数必要	  
 }
 
 //SCCB停止信号
@@ -45,23 +45,23 @@ void SCCB_Start(void)
 //空闲状况下,SDA,SCL均为高电平
 void SCCB_Stop(void)
 {
-    SCCB_SDA=0;
+    SCCB_SDA_CLEAR();
     SCCB_Delay();	 
-    SCCB_SCL=1;	
+    SCCB_SCL_SET();	    
     SCCB_Delay();
-    SCCB_SDA=1;	
+    SCCB_SDA_SET();    
     SCCB_Delay();
 }  
 //产生NA信号
 void SCCB_No_Ack(void)
 {
 	SCCB_Delay();
-	SCCB_SDA=1;	
-	SCCB_SCL=1;	
+  SCCB_SDA_SET();    
+    SCCB_SCL_SET();    
 	SCCB_Delay();
-	SCCB_SCL=0;	
+    SCCB_SCL_CLEAR();    
 	SCCB_Delay();
-	SCCB_SDA=0;	
+    SCCB_SDA_CLEAR();    
 	SCCB_Delay();
 }
 //SCCB,写入一个字节
@@ -71,21 +71,21 @@ u8 SCCB_WR_Byte(u8 dat)
 	u8 j,res;	 
 	for(j=0;j<8;j++) //循环8次发送数据
 	{
-		if(dat&0x80)SCCB_SDA=1;	
-		else SCCB_SDA=0;
+		if(dat&0x80)SCCB_SDA_SET();
+		else SCCB_SDA_CLEAR();
 		dat<<=1;
 		SCCB_Delay();
-		SCCB_SCL=1;	
+		SCCB_SCL_SET();
 		SCCB_Delay();
-		SCCB_SCL=0;		   
+		SCCB_SCL_CLEAR();		   
 	}			 
 	SCCB_SDA_IN();		//设置SDA为输入 
 	SCCB_Delay();
-	SCCB_SCL=1;			//接收第九位,以判断是否发送成功
+	SCCB_SCL_SET();			//接收第九位,以判断是否发送成功
 	SCCB_Delay();
-	if(SCCB_READ_SDA)res=1;  //SDA=1发送失败，返回1
+	if(SCCB_READ_SDA_STA())res=1;  //SDA=1发送失败，返回1
 	else res=0;         //SDA=0发送成功，返回0
-	SCCB_SCL=0;		 
+	SCCB_SCL_CLEAR();		 
 	SCCB_SDA_OUT();		//设置SDA为输出    
 	return res;  
 }	 
@@ -99,11 +99,11 @@ u8 SCCB_RD_Byte(void)
 	for(j=8;j>0;j--) 	//循环8次接收数据
 	{		     	  
 		SCCB_Delay();
-		SCCB_SCL=1;
+		SCCB_SCL_SET();
 		temp=temp<<1;
-		if(SCCB_READ_SDA)temp++;   
+		if(SCCB_READ_SDA_STA())temp++;   
 		SCCB_Delay();
-		SCCB_SCL=0;
+		SCCB_SCL_CLEAR();
 	}	
 	SCCB_SDA_OUT();		//设置SDA为输出    
 	return temp;

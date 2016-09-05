@@ -1,4 +1,4 @@
- #include "picviewer.h"
+#include "picviewer.h"
 #include "piclib.h"
 #include "settings.h"
 //////////////////////////////////////////////////////////////////////////////////	 
@@ -61,7 +61,7 @@ u8 picviewer_play(void)
 		rbtn->bcfucolor=WHITE;	//松开时的颜色
 		btn_draw(rbtn);//画按钮
 	}
-	LED1=1;//关闭LED1
+//	LED1=1;//关闭LED1
 	while(rval==0)//主循环
 	{
 		tp_dev.scan(0);    
@@ -137,11 +137,11 @@ u8 picviewer_play(void)
 						if(picsta==1)
 						{
 							picsta=2;
-							LED1=0;	 	//表示暂停
+//							LED1=0;	 	//表示暂停
 						}else 
 						{
 							picsta=1;
-							LED1=1;	   	//暂停结束
+//							LED1=1;	   	//暂停结束
 						} 
 					}else if(key==3)
 					{
@@ -163,7 +163,7 @@ u8 picviewer_play(void)
 			if(system_task_return)picsta=0;//TPAD返回
 			if(picsta==0)//回到文件浏览状态之前的处理
 			{
-				LED1=1;	   				//关闭LED1
+//				LED1=1;	   				//关闭LED1
 				flistbox->dbclick=0;	//设置非文件浏览状态
 				app_filebrower((u8*)APP_MFUNS_CAPTION_TBL[1][gui_phy.language],0X07);//选择目标文件,并得到目标数量
  				btn_draw(rbtn);			//画按钮
@@ -173,7 +173,7 @@ u8 picviewer_play(void)
 			}
 		}
 	}	
-	LED1=1;//关闭LED1
+//	LED1=1;//关闭LED1
 	filelistbox_delete(flistbox);	//删除filelist 	  
 	btn_delete(rbtn);				//删除按钮	 
 	gui_memin_free(picinfo);	  

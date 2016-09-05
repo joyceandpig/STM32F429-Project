@@ -116,24 +116,26 @@ u8 GT9147_Init(void)
 	u8 temp[5]; 
     GPIO_InitTypeDef GPIO_Initure;
     
-    __HAL_RCC_GPIOH_CLK_ENABLE();			//开启GPIOH时钟
-    __HAL_RCC_GPIOI_CLK_ENABLE();			//开启GPIOI时钟
-                
+//    __HAL_RCC_GPIOH_CLK_ENABLE();			//开启GPIOH时钟
+//    __HAL_RCC_GPIOI_CLK_ENABLE();			//开启GPIOI时钟
+	GT_RST_GPIO_PORT_CLK_ENABLE();
+  GT_INT_GPIO_PORT_CLK_ENABLE();           
     //PH7
-    GPIO_Initure.Pin=GPIO_PIN_7;            //PH7
+    GPIO_Initure.Pin=GT_INT_GPIO_PIN_NUM;            //PH7
     GPIO_Initure.Mode=GPIO_MODE_INPUT;      //输入
     GPIO_Initure.Pull=GPIO_PULLUP;          //上拉
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;     //高速
-    HAL_GPIO_Init(GPIOH,&GPIO_Initure);     //初始化
+    HAL_GPIO_Init(GT_INT_GPIO_PORT,&GPIO_Initure);     //初始化
             
     //PI8
-    GPIO_Initure.Pin=GPIO_PIN_8;            //PI8
+    GPIO_Initure.Pin=GT_RST_GPIO_PIN_NUM;            //PI8
     GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;  //推挽输出
-    HAL_GPIO_Init(GPIOI,&GPIO_Initure);     //初始化
+    HAL_GPIO_Init(GT_RST_GPIO_PORT,&GPIO_Initure);     //初始化
+	
 	CT_IIC_Init();      	//初始化电容屏的I2C总线  
-	GT_RST=0;				//复位
+	GT_RST_CLEAR();				//复位
 	delay_ms(10);
- 	GT_RST=1;				//释放复位		    
+ 	GT_RST_SET();				//释放复位		    
 	delay_ms(10); 
     GPIO_Initure.Pin=GPIO_PIN_7;            //PH7
     GPIO_Initure.Mode=GPIO_MODE_INPUT;      //输入

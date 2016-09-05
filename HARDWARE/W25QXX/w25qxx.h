@@ -2,6 +2,8 @@
 #define __W25QXX_H
 #include "mytypes.h"
 #include "sys.h"
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_gpio.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板 
@@ -32,9 +34,18 @@
 #define W25Q128	0XEF17
 #define W25Q256 0XEF18
 
-extern u16 W25QXX_TYPE;					//定义W25QXX芯片型号		   
+extern u16 W25QXX_TYPE;					//定义W25QXX芯片型号		
 
-#define	W25QXX_CS 			PFout(6)	//W25QXX的片选信号
+#define W25QXX_CS_GPIO_PIN_NUM           		 6
+#define W25QXX_CS_GPIO_PIN           		 GPIO_PIN_6
+#define W25QXX_CS_GPIO_PORT               		 GPIOF
+#define W25QXX_CS_GPIO_PORT_CLK_ENBALE()        __HAL_RCC_GPIOF_CLK_ENABLE()
+////IO操作函数											   
+#define	W25QXX_CS_SET()     HAL_GPIO_WritePin(W25QXX_CS_GPIO_PORT, W25QXX_CS_GPIO_PIN_NUM, GPIO_PIN_SET) //SCL	 
+#define	W25QXX_CS_CLEAR()   HAL_GPIO_WritePin(W25QXX_CS_GPIO_PORT, W25QXX_CS_GPIO_PIN_NUM, GPIO_PIN_RESET) //SCL
+
+//#define	W25QXX_CS 			PFout(6)	//W25QXX的片选信号
+
 #define W25QXX_USE_MALLOC	1			//定义是否使用动态内存管理
 
 ////////////////////////////////////////////////////////////////////////////////// 

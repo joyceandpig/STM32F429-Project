@@ -46,7 +46,12 @@ typedef struct
 
 extern nand_attriute nand_dev;				//nand重要参数结构体 
 
-#define NAND_RB  				 PDin(6)	//NAND Flash的闲/忙引脚 
+#define NAND_RB_GPIO_PIN_NUM           6
+
+#define NAND_RB_PORT               		 GPIOD
+#define	NAND_RB    HAL_GPIO_ReadPin(NAND_RB_PORT, NAND_RB_GPIO_PIN_NUM) //输入SDA 
+
+//#define NAND_RB  				 PDin(6)	//NAND Flash的闲/忙引脚 
 
 
 

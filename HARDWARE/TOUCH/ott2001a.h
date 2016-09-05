@@ -2,6 +2,8 @@
 #define __OTT2001A_H	
 #include "mytypes.h"  
 #include "sys.h"
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_gpio.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -14,11 +16,27 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2014-2024
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
+#define OTT_RST_GPIO_PIN_NUM           		 8
+#define OTT_INT_GPIO_PIN_NUM           		 7
 
+#define OTT_RST_GPIO_PIN           		 GPIO_PIN_8
+#define OTT_INT_GPIO_PIN           		 GPIO_PIN_7
 
-//IO操作函数	
-#define OTT_RST PIout(8) //OTT2001A复位引脚
-#define OTT_INT PHin(7)  //OTT2001A断引脚		
+#define OTT_RST_GPIO_PORT               		 GPIOI
+#define OTT_INT_GPIO_PORT               		 GPIOH
+
+#define OTT_RST_GPIO_PORT_CLK_ENABLE()           __HAL_RCC_GPIOI_CLK_ENABLE()
+#define OTT_INT_GPIO_PORT_CLK_ENABLE()           __HAL_RCC_GPIOH_CLK_ENABLE()
+
+////IO操作函数											   
+#define	OTT_RST_SET()     HAL_GPIO_WritePin(OTT_RST_GPIO_PORT, OTT_RST_GPIO_PIN_NUM, GPIO_PIN_SET) //SCL	 
+#define	OTT_RST_CLEAR()   HAL_GPIO_WritePin(OTT_RST_GPIO_PORT, OTT_RST_GPIO_PIN_NUM, GPIO_PIN_RESET) //SCL
+
+#define	OTT_INT()     HAL_GPIO_ReadPin(OTT_INT_GPIO_PORT, OTT_INT_GPIO_PIN_NUM) //SDA	  
+
+////IO操作函数	
+//#define OTT_RST PIout(8) //OTT2001A复位引脚
+//#define OTT_INT PHin(7)  //OTT2001A断引脚		
   
 //通过OTT_SET_REG指令,可以查询到这个信息 
 //注意,这里的X,Y和屏幕的坐标系刚好是反的.

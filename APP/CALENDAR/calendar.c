@@ -2,7 +2,7 @@
 #include "stdio.h"
 #include "settings.h" 
 #include "mpu9250.h"
-//#include "ds18b20.h"
+#include "ds18b20.h"
 #include "24cxx.h"
 #include "math.h"
 #include "rtc.h"
@@ -24,6 +24,9 @@
 //修改信息
 //无
 ////////////////////////////////////////////////////////////////////////////////// 	   
+#define CALENDAR_ALARM_SET_ENABLE(HANDLE)  (HANDLE->ringsta |= (1<<7))
+#define CALENDAR_ALARM_SET_DISABLE(HANDLE) (HANDLE->ringsta &= ~(1<<7))
+#define CALENDAR_ALARM_GET_STATUS(HANDLE)  (HANDLE->ringsta>>7 | 0x01) 
  
 _alarm_obj alarm;		//闹钟结构体
 _calendar_obj calendar;	//日历结构体
@@ -74,10 +77,12 @@ void calendar_alarm_init(_alarm_obj *alarmx,_calendar_obj *calendarx)
 	calendar_get_date(calendarx);	//获取当前日期信息
 	if(calendarx->week==7)temp=1<<0;
 	else temp=1<<calendarx->week; 
+	
 	if(alarmx->weekmask&temp)		//需要闹铃
 	{ 
 		RTC_Set_AlarmA(calendarx->week,alarmx->hour,alarmx->min,0);//设置闹铃时间		
-	}   
+	} 
+  
 } 
 //闹钟响闹铃
 //type:闹铃类型	   
@@ -127,7 +132,7 @@ void calendar_date_refresh(void)
 	LCD_ShowxNum(offx+69,OTHER_TOPY+9,calendar.w_date,2,16,0X80);      //显示日	  
 	//显示周几?
 	POINT_COLOR=RED;
-    weekn=calendar.week;
+  weekn=calendar.week;
 	Show_Str(5+offx,OTHER_TOPY+35,lcddev.width,lcddev.height,(u8 *)calendar_week_table[gui_phy.language][weekn],16,0); //显示周几?	
 													 
 }
@@ -138,12 +143,15 @@ void calendar_read_para(_alarm_obj * alarm)
 {
 	AT24CXX_Read(SYSTEM_PARA_SAVE_BASE+sizeof(_system_setings)+sizeof(_wm8978_obj),(u8*)alarm,sizeof(_alarm_obj));
 }
+
+
 //写入日历闹钟信息
 //alarm:闹钟信息 
 void calendar_save_para(_alarm_obj * alarm)
 {
-  	OS_CPU_SR cpu_sr=0;
-	alarm->ringsta&=0X7F;	//清空最高位
+  OS_CPU_SR cpu_sr=0;
+//	alarm->ringsta&=0X7F;	//清空最高位
+	CALENDAR_ALARM_SET_DISABLE(alarm);
 	OS_ENTER_CRITICAL();	//进入临界区(无法被中断打断) 
 	AT24CXX_Write(SYSTEM_PARA_SAVE_BASE+sizeof(_system_setings)+sizeof(_wm8978_obj),(u8*)alarm,sizeof(_alarm_obj));
 	OS_EXIT_CRITICAL();		//退出临界区(可以被中断打断)
@@ -172,8 +180,8 @@ u8 calendar_alarm_msg(u16 x,u16 y)
 //		sw_sdcard_mode();//切换为SD卡模式
 	}
 	OSTaskSuspend(6); //挂起主任务
-   	twin=window_creat(x,y,200,160,0,1|1<<5|1<<6,16);//创建窗口,读取背景色
-   	okbtn=btn_creat(x+20,y+120,70,30,0,0x02);		//创建按钮
+  twin=window_creat(x,y,200,160,0,1|1<<5|1<<6,16);//创建窗口,读取背景色
+  okbtn=btn_creat(x+20,y+120,70,30,0,0x02);		//创建按钮
  	rbtn=btn_creat(x+20+70+20,y+120,70,30,0,0x02);	//创建按钮
  	falarm=(FIL *)gui_memin_malloc(sizeof(FIL));	//开辟FIL字节的内存区域 
 	if(twin==NULL||rbtn==NULL||okbtn==NULL||falarm==NULL)rval=1; 
@@ -247,6 +255,7 @@ u8 calendar_alarm_msg(u16 x,u16 y)
 		}	 
 	}
 	alarm.ringsta&=~(1<<7);	//取消闹铃
+//	CALENDAR_ALARM_SET_DISABLE(&alarm);
 	if(rval==0XFF)			//稍后再响
 	{
 		alarm.min+=5; 		//推迟5分钟
@@ -440,7 +449,7 @@ u8 calendar_play(void)
 		POINT_COLOR=GBLUE;
 		Show_Str(48,60,lcddev.width,lcddev.height,(u8*)calendar_loading_str[gui_phy.language][0],16,0x01); //显示进入信息	    
 //		PCF8574_ReadBit(EX_IO);//读取一次PCF8574,释放INT脚
-//		if(DS18B20_Init())
+		if(DS18B20_Init())
 		{
 			Show_Str(48,76,lcddev.width,lcddev.height,(u8*)calendar_loading_str[gui_phy.language][1],16,0x01);  
 			delay_ms(500);
@@ -478,7 +487,7 @@ u8 calendar_play(void)
 			if(t%2==0)//等待2秒钟
 			{		 
   				if(TEMP_SEN_TYPE)temperate=MPU_Get_Temperature()/10;//得到MPU6050采集到的温度,0.1℃
-//				else temperate=DS18B20_Get_Temp();//得到18b20温度
+				else temperate=DS18B20_Get_Temp();//得到18b20温度
 				if(temperate<0)//温度为负数的时候，红色显示
 				{
 					POINT_COLOR=RED;

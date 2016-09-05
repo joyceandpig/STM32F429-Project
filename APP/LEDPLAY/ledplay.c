@@ -113,7 +113,7 @@ u8 led_play(void)
 				{  
 					gui_fill_circle(cds0x,cds0y,cr,RED);    
 				}
-				LED0=ds0sta;
+//				LED0=ds0sta;
 				ledplay_ds0_sta=!ds0sta;
 			}			
 			res=btn_check(ds1btn,&in_obj);   
@@ -128,14 +128,14 @@ u8 led_play(void)
 				{ 
 					gui_fill_circle(cds1x,cds1y,cr,GREEN); 
 				}
-				LED1=ds1sta;
+//				LED1=ds1sta;
 			}	 
 			if(system_task_return)break;		//TPAD·µ»Ø  
 			delay_ms(10);
 		}   
 	}
 	ledplay_ds0_sta=0;
-	LED0=LED1=1;		//¹Ø±ÕLED
+//	LED0=LED1=1;		//¹Ø±ÕLED
 	btn_delete(ds0btn);	//É¾³ý°´Å¥
 	btn_delete(ds1btn);	//É¾³ý°´Å¥ 
 	return rval;

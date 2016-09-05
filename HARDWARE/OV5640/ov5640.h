@@ -2,6 +2,8 @@
 #define _OV5640_H
 #include "sys.h"
 #include "sccb.h"
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_gpio.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -21,13 +23,23 @@
 //1，修改ov5640_uxga_init_reg_tbl数组名字为：ov5640_init_reg_tbl
 //2，修改相关注释
 ////////////////////////////////////////////////////////////////////////////////// 
+#define OV5640_RST_GPIO_PIN_NUM           		 15
+
+#define OV5640_RST_GPIO_PORT               		 GPIOA
+#define OV5640_RST_GPIO_PIN           		 GPIO_PIN15
+
+#define OV5640_RST_GPIO_PORT_CLK_ENABLE()           __HAL_RCC_GPIOA_CLK_ENABLE()
+
+////IO操作函数											   
+#define	OV5640_RST_SET()     HAL_GPIO_WritePin(OV5640_RST_GPIO_PORT, OV5640_RST_GPIO_PIN_NUM, GPIO_PIN_SET) //SCL	 
+#define	OV5640_RST_CLEAR()   HAL_GPIO_WritePin(OV5640_RST_GPIO_PORT, OV5640_RST_GPIO_PIN_NUM, GPIO_PIN_RESET) //SCL
 
 //#define OV5640_PWDN  	PGout(9)			//POWER DOWN控制信号,由PCF8574_P2控制 
-#define OV5640_RST  	PAout(15)			//复位控制信号 
+//#define OV5640_RST  	PAout(15)			//复位控制信号 
+
 ////////////////////////////////////////////////////////////////////////////////// 
 #define OV5640_ID               0X5640  	//OV5640的芯片ID
  
-
 #define OV5640_ADDR        		0X78		//OV5640的IIC地址
  
 //OV5640相关寄存器定义  

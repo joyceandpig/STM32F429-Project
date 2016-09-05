@@ -1,4 +1,5 @@
 #include "exeplay.h"
+#include "stm32f4xx_hal_rtc.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -19,6 +20,7 @@
 dummyfun jump2app;		
 //代码存放地址
 extern u8 mem2base[MEM2_MAX_SIZE];	
+RTC_HandleTypeDef RTC_BKP_Handler;
 
 //执行BIN文件前的提示
 u8*const exeplay_remindmsg_tbl[GUI_LANGUAGE_NUM]=
@@ -43,18 +45,20 @@ u8*const exeplay_apperrmsg_tbl[GUI_LANGUAGE_NUM]=
 //写入标志值
 //val:标志值
 void exeplay_write_appmask(u16 val)
-{
-	RCC->APB1ENR|=1<<28;		//使能电源接口时钟
-	PWR->CR|=1<<8;				//后备区域访问使能(RTC+SRAM)
-  	RTC_Write_BKR(1,val);
+{	
+	__HAL_RCC_PWR_CLK_ENABLE();//使能电源时钟PWR
+	HAL_PWR_EnableBkUpAccess();//取消备份区域写保护
+	
+	HAL_RTCEx_BKUPWrite(&RTC_BKP_Handler,RTC_BKP_DR0,val);//标记已经初始化过了
 }
 //在主函数最开始的时候被调用.
 //检测是否有app程序需要执行.如果是,则直接执行.
 void exeplay_app_check(void)
 {
-	if(RTC_Read_BKR(1)==0X5050)//检查BKP1,如果为0X5050,则说明需要执行app代码
+	if(HAL_RTCEx_BKUPRead(&RTC_BKP_Handler,RTC_BKP_DR0)!=0X5050)//检查BKP1,如果为0X5050,则说明需要执行app代码
 	{
 		exeplay_write_appmask(0X0000);	//写入0,防止复位后再次执行app代码.
+		
 		SDRAM_Init();					//初始化SDRAM,因为需要从外部sram拷贝数据到内部sram
 		mymemcpy((u8*)EXEPLAY_APP_BASE,(u8*)EXEPLAY_SRC_BASE,EXEPLAY_APP_SIZE);//拷贝EXEPLAY_APP_SIZE字节 
 		jump2app=(dummyfun)*(vu32*)(EXEPLAY_APP_BASE+4);	//用户代码区第二个字为程序开始地址(复位地址)		
@@ -148,7 +152,8 @@ u8 exe_play(void)
 						if(res==1)//按下了确认键
 						{
 							exeplay_write_appmask(0X5050);	//写入标志字,标志有app需要运行
-							Sys_Soft_Reset();				//产生一次软复位
+//							Sys_Soft_Reset();				//产生一次软复位
+							sys_reset();
 						}
 					}else//非法APP文件 
 					{

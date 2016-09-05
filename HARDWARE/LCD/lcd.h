@@ -38,7 +38,120 @@ extern u32  BACK_COLOR; //背景颜色.默认为白色
 //////////////////////////////////////////////////////////////////////////////////	 
 //-----------------MCU屏 LCD端口定义---------------- 
 //LCD背光	PB5	
-#define LCD_LED     PBout(5)   	    
+#define LCD_LED_PORT   GPIOB
+#define LCD_LED_PIN    GPIO_PIN_5
+
+//LCD背光	操作
+#define LCD_LED_LIGHT_OPEN  HAL_GPIO_WritePin(LCD_LED_PORT, LCD_LED_PIN, GPIO_PIN_SET)
+#define LCD_LED_LIGHT_CLOSE HAL_GPIO_WritePin(LCD_LED_PORT, LCD_LED_PIN, GPIO_PIN_SET)
+
+//LCD PORT AND PIN RCC INIT
+#define LCD_G_PORT_CLK_ENABLE  __HAL_RCC_GPIOG_CLK_ENABLE
+#define LCD_I_PORT_CLK_ENABLE  __HAL_RCC_GPIOI_CLK_ENABLE
+#define LCD_H_PORT_CLK_ENABLE  __HAL_RCC_GPIOH_CLK_ENABLE
+#define LCD_B_PORT_CLK_ENABLE  __HAL_RCC_GPIOB_CLK_ENABLE
+#define LCD_LED_PORT_CLK_ENABLE  __HAL_RCC_GPIOB_CLK_ENABLE
+
+//LCD引脚对应端口
+#define LCD_G_PORT    GPIOG
+#define LCD_H_PORT    GPIOH
+#define LCD_I_PORT    GPIOI
+#define LCD_B_PORT    GPIOB
+
+//LCD引脚配置
+#define LCD_R3       GPIO_PIN_9//H
+#define LCD_R4       GPIO_PIN_10//H
+#define LCD_R5       GPIO_PIN_11//H
+#define LCD_R6       GPIO_PIN_12//H
+#define LCD_R7       GPIO_PIN_6//G
+
+#define LCD_G2       GPIO_PIN_13//H
+#define LCD_G3       GPIO_PIN_14//H
+#define LCD_G4       GPIO_PIN_15//H
+#define LCD_G5       GPIO_PIN_0//I
+#define LCD_G6       GPIO_PIN_1//I
+#define LCD_G7       GPIO_PIN_2//I
+
+#define LCD_B3       GPIO_PIN_11//G
+#define LCD_B4       GPIO_PIN_4//I
+#define LCD_B5       GPIO_PIN_5//I
+#define LCD_B6       GPIO_PIN_6//I
+#define LCD_B7       GPIO_PIN_7//I
+
+#define LCD_CLK      GPIO_PIN_7//G
+#define LCD_HSYNC    GPIO_PIN_9//I
+#define LCD_VSYNC    GPIO_PIN_10//I
+#define LCD_DE       GPIO_PIN_10//F
+#define LCD_BL       GPIO_PIN_5//B
+
+//TOUCH 端口 配置
+#define LCD_TOUCH_PORT_G GPIOG
+#define LCD_TOUCH_PORT_H GPIOH
+#define LCD_TOUCH_PORT_I GPIOI
+
+//TOUCH pin 配置
+#define LCD_T_CS      GPIO_PIN_8//I
+#define LCD_T_MOSI    GPIO_PIN_3//I
+#define LCD_T_MISO    GPIO_PIN_3//G
+#define LCD_T_SCK     GPIO_PIN_6//H
+#define LCD_T_PEN     GPIO_PIN_7//H
+
+//LTDC配置
+#define LTDC_PIN      GPIO_PIN_10
+#define LTDC_PORT     GPIOF
+
+////SRAM 端口 配置
+#define SRAM_C_PORT    GPIOC
+#define SRAM_D_PORT    GPIOD
+#define SRAM_E_PORT    GPIOI
+#define SRAM_F_PORT    GPIOF
+#define SRAM_G_PORT    GPIOG
+
+////SRAM 引脚 配置
+#define SRAM_DQ0_FMC_D0      GPIO_PIN_0  //E
+#define SRAM_DQ0_FMC_D1      GPIO_PIN_1  //E
+#define SRAM_DQ0_FMC_D2      GPIO_PIN_0   //D
+#define SRAM_DQ0_FMC_D3      GPIO_PIN_1   //D
+#define SRAM_DQ0_FMC_D4      GPIO_PIN_7   //E
+#define SRAM_DQ0_FMC_D5      GPIO_PIN_8   //E
+#define SRAM_DQ0_FMC_D6      GPIO_PIN_9   //E
+#define SRAM_DQ0_FMC_D7      GPIO_PIN_10   //E
+#define SRAM_DQ0_FMC_D8      GPIO_PIN_11   //E
+#define SRAM_DQ0_FMC_D9     	GPIO_PIN_12   //E
+#define SRAM_DQ0_FMC_D10     GPIO_PIN_13   //E
+#define SRAM_DQ0_FMC_D11      GPIO_PIN_14   //E
+#define SRAM_DQ0_FMC_D12     GPIO_PIN_15  //E
+#define SRAM_DQ0_FMC_D13     GPIO_PIN_8   //D
+#define SRAM_DQ0_FMC_D14     GPIO_PIN_9   //D
+#define SRAM_DQ0_FMC_D15     GPIO_PIN_10   //D
+
+#define SRAM_A0_FMC_A0  GPIO_PIN_0//F
+#define SRAM_A0_FMC_A1  GPIO_PIN_1//F
+#define SRAM_A0_FMC_A2   GPIO_PIN_2//F
+#define SRAM_A0_FMC_A3   GPIO_PIN_3//F
+#define SRAM_A0_FMC_A4   GPIO_PIN_4//F
+#define SRAM_A0_FMC_A5    GPIO_PIN_5//F
+#define SRAM_A0_FMC_A6   GPIO_PIN_12//F
+#define SRAM_A0_FMC_A7   GPIO_PIN_13//F
+#define SRAM_A0_FMC_A8   GPIO_PIN_14//F
+#define SRAM_A0_FMC_A9    GPIO_PIN_15//F
+#define SRAM_A0_FMC_A10     GPIO_PIN_0//G
+#define SRAM_A0_FMC_A11     GPIO_PIN_1//G
+#define SRAM_A0_FMC_A12     GPIO_PIN_2//G
+
+#define SRAM_WE_FMC_SDNWE       GPIO_PIN_0//C
+#define SRAM_CAS_FMC_SDNCAS    GPIO_PIN_15//G
+#define SRAM_RAS_FMSSDNRAS     GPIO_PIN_11//F
+#define SRAM_CS_FMC_SDNE0         GPIO_PIN_2//C
+
+#define SRAM_BA0_FMC_BA0      GPIO_PIN_4//G
+#define SRAM_BA1_FMC_BA1      GPIO_PIN_5//G
+#define SRAM_CKE_FMC_SDCKE0   GPIO_PIN_3//C
+#define SRAM_CLK_FMC_SDCLK    GPIO_PIN_8//G
+#define SRAM_LDQM_FMC_NBL0   GPIO_PIN_0//E
+#define SRAM_UDQM_FMC_NBL1   GPIO_PIN_1//E
+
+
 //LCD地址结构体
 typedef struct
 {

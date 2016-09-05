@@ -119,6 +119,7 @@ u32 LTDC_Read_Point(u16 x,u16 y)
 //color:要填充的颜色
 //有时候需要频繁的调用填充函数，所以为了速度，填充函数采用寄存器版本，
 //不过下面有对应的库函数版本的代码。
+#if 1
 void LTDC_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u32 color)
 { 
 	u32 psx,psy,pex,pey;	//以LCD面板为基准的坐标系,不随横竖屏变化而变化
@@ -154,49 +155,50 @@ void LTDC_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u32 color)
 	} 
 	DMA2D->IFCR|=DMA2D_FLAG_TC;		//清除传输完成标志 		
 }
+#else 
 //在指定区域内填充单个颜色
 //(sx,sy),(ex,ey):填充矩形对角坐标,区域大小为:(ex-sx+1)*(ey-sy+1)   
 //color:要填充的颜色
-//void LTDC_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u32 color)
-//{
-//	u32 psx,psy,pex,pey;	//以LCD面板为基准的坐标系,不随横竖屏变化而变化
-//	u32 timeout=0; 
-//	u16 offline;
-//	u32 addr;  
-//    if(ex>=lcdltdc.width)ex=lcdltdc.width-1;
-//	if(ey>=lcdltdc.height)ey=lcdltdc.height-1;
-//	//坐标系转换
-//	if(lcdltdc.dir)	//横屏
-//	{
-//		psx=sx;psy=sy;
-//		pex=ex;pey=ey;
-//	}else			//竖屏
-//	{
-//		psx=sy;psy=lcdltdc.pheight-ex-1;
-//		pex=ey;pey=lcdltdc.pheight-sx-1;
-//	}
-//	offline=lcdltdc.pwidth-(pex-psx+1);
-//	addr=((u32)ltdc_framebuf[lcdltdc.activelayer]+lcdltdc.pixsize*(lcdltdc.pwidth*psy+psx));
-//    if(LCD_PIXFORMAT==LCD_PIXEL_FORMAT_RGB565)  //如果是RGB565格式的话需要进行颜色转换，将16bit转换为32bit的
-//    {
-//        color=((color&0X0000F800)<<8)|((color&0X000007E0)<<5)|((color&0X0000001F)<<3);
-//    }
-//	//配置DMA2D的模式
-//	DMA2D_Handler.Instance=DMA2D;
-//	DMA2D_Handler.Init.Mode=DMA2D_R2M;			//内存到存储器模式
-//	DMA2D_Handler.Init.ColorMode=LCD_PIXFORMAT;	//设置颜色格式
-//	DMA2D_Handler.Init.OutputOffset=offline;		//输出偏移 
-//	HAL_DMA2D_Init(&DMA2D_Handler);              //初始化DMA2D
-//    HAL_DMA2D_ConfigLayer(&DMA2D_Handler,lcdltdc.activelayer); //层配置
-//    HAL_DMA2D_Start(&DMA2D_Handler,color,(u32)addr,pex-psx+1,pey-psy+1);//开启传输
-//    HAL_DMA2D_PollForTransfer(&DMA2D_Handler,1000);//传输数据
-//    while((__HAL_DMA2D_GET_FLAG(&DMA2D_Handler,DMA2D_FLAG_TC)==0)&&(timeout<0X5000))//等待DMA2D完成
-//    {
-//        timeout++;
-//    }
-//    __HAL_DMA2D_CLEAR_FLAG(&DMA2D_Handler,DMA2D_FLAG_TC);       //清除传输完成标志
-//}
-
+void LTDC_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u32 color)
+{
+	u32 psx,psy,pex,pey;	//以LCD面板为基准的坐标系,不随横竖屏变化而变化
+	u32 timeout=0; 
+	u16 offline;
+	u32 addr;  
+    if(ex>=lcdltdc.width)ex=lcdltdc.width-1;
+	if(ey>=lcdltdc.height)ey=lcdltdc.height-1;
+	//坐标系转换
+	if(lcdltdc.dir)	//横屏
+	{
+		psx=sx;psy=sy;
+		pex=ex;pey=ey;
+	}else			//竖屏
+	{
+		psx=sy;psy=lcdltdc.pheight-ex-1;
+		pex=ey;pey=lcdltdc.pheight-sx-1;
+	}
+	offline=lcdltdc.pwidth-(pex-psx+1);
+	addr=((u32)ltdc_framebuf[lcdltdc.activelayer]+lcdltdc.pixsize*(lcdltdc.pwidth*psy+psx));
+    if(LCD_PIXFORMAT==LCD_PIXEL_FORMAT_RGB565)  //如果是RGB565格式的话需要进行颜色转换，将16bit转换为32bit的
+    {
+        color=((color&0X0000F800)<<8)|((color&0X000007E0)<<5)|((color&0X0000001F)<<3);
+    }
+	//配置DMA2D的模式
+	DMA2D_Handler.Instance=DMA2D;
+	DMA2D_Handler.Init.Mode=DMA2D_R2M;			//内存到存储器模式
+	DMA2D_Handler.Init.ColorMode=LCD_PIXFORMAT;	//设置颜色格式
+	DMA2D_Handler.Init.OutputOffset=offline;		//输出偏移 
+	HAL_DMA2D_Init(&DMA2D_Handler);              //初始化DMA2D
+	HAL_DMA2D_ConfigLayer(&DMA2D_Handler,lcdltdc.activelayer); //层配置
+	HAL_DMA2D_Start(&DMA2D_Handler,color,(u32)addr,pex-psx+1,pey-psy+1);//开启传输
+	HAL_DMA2D_PollForTransfer(&DMA2D_Handler,1000);//传输数据
+	while((__HAL_DMA2D_GET_FLAG(&DMA2D_Handler,DMA2D_FLAG_TC)==0)&&(timeout<0X5000))//等待DMA2D完成
+	{
+			timeout++;
+	}
+	__HAL_DMA2D_CLEAR_FLAG(&DMA2D_Handler,DMA2D_FLAG_TC);       //清除传输完成标志
+}
+#endif
 //在指定区域内填充指定颜色块,DMA2D填充	
 //此函数仅支持u16,RGB565格式的颜色数组填充.
 //(sx,sy),(ex,ey):填充矩形对角坐标,区域大小为:(ex-sx+1)*(ey-sy+1)  
@@ -264,15 +266,15 @@ u8 LTDC_Clk_Set(u32 pllsain,u32 pllsair,u32 pllsaidivr)
 	RCC_PeriphCLKInitTypeDef PeriphClkIniture;
 	
 	//LTDC输出像素时钟，需要根据自己所使用的LCD数据手册来配置！
-    PeriphClkIniture.PeriphClockSelection=RCC_PERIPHCLK_LTDC;	//LTDC时钟 	
+  PeriphClkIniture.PeriphClockSelection=RCC_PERIPHCLK_LTDC;	//LTDC时钟 	
 	PeriphClkIniture.PLLSAI.PLLSAIN=pllsain;    
 	PeriphClkIniture.PLLSAI.PLLSAIR=pllsair;  
 	PeriphClkIniture.PLLSAIDivR=pllsaidivr;
-	if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkIniture)==HAL_OK)    //配置像素时钟
-    {
-        return 0;   //成功
-    }
-    else return 1;  //失败    
+	if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkIniture)==HAL_OK){    //配置像素时钟
+		return 0;   //成功
+	}else{
+		return 1;  //失败 
+	}		
 }
 
 //LTDC,层颜窗口设置,窗口以LCD面板坐标系为基准
@@ -331,23 +333,25 @@ void LTDC_Layer_Parameter_Config(u8 layerx,u32 bufaddr,u8 pixformat,u8 alpha,u8 
 //返回值:LCD ID:0,非法;其他值,ID;
 u16 LTDC_PanelID_Read(void)
 {
-	u8 idx=0;
+		u8 idx=0;
     GPIO_InitTypeDef GPIO_Initure;
-    __HAL_RCC_GPIOG_CLK_ENABLE();       //使能GPIOG时钟
-	__HAL_RCC_GPIOI_CLK_ENABLE();       //使能GPIOI时钟
+	
+
+		LCD_G_PORT_CLK_ENABLE();       //使能GPIOG时钟
+		LCD_I_PORT_CLK_ENABLE();       //使能GPIOI时钟
     
-    GPIO_Initure.Pin=GPIO_PIN_6;        //PG6
+    GPIO_Initure.Pin=LCD_R7;        //PG6
     GPIO_Initure.Mode=GPIO_MODE_INPUT;  //输入
     GPIO_Initure.Pull=GPIO_PULLUP;      //上拉
     GPIO_Initure.Speed=GPIO_SPEED_HIGH; //高速
-    HAL_GPIO_Init(GPIOG,&GPIO_Initure); //初始化
+    HAL_GPIO_Init(LCD_G_PORT,&GPIO_Initure); //初始化
     
-    GPIO_Initure.Pin=GPIO_PIN_2|GPIO_PIN_7; //PI2,7
-    HAL_GPIO_Init(GPIOI,&GPIO_Initure);     //初始化
+    GPIO_Initure.Pin=LCD_G7|LCD_B7; //PI2,7
+    HAL_GPIO_Init(LCD_I_PORT,&GPIO_Initure);     //初始化
     
-    idx=(u8)HAL_GPIO_ReadPin(GPIOG,GPIO_PIN_6); //读取M0
-    idx|=(u8)HAL_GPIO_ReadPin(GPIOI,GPIO_PIN_2)<<1;//读取M1
-    idx|=(u8)HAL_GPIO_ReadPin(GPIOI,GPIO_PIN_7)<<2;//读取M2
+    idx=(u8)HAL_GPIO_ReadPin(LCD_G_PORT,LCD_R7); //读取M0
+    idx|=(u8)HAL_GPIO_ReadPin(LCD_I_PORT,LCD_G7)<<1;//读取M1
+    idx|=(u8)HAL_GPIO_ReadPin(LCD_I_PORT,LCD_B7)<<2;//读取M2
 	if(idx==0)return 0X4342;	    //4.3寸屏,480*272分辨率
 	else if(idx==1)return 0X7084;	//7寸屏,800*480分辨率
 	else if(idx==2)return 0X7016;	//7寸屏,1024*600分辨率
@@ -453,8 +457,8 @@ void LTDC_Init(void)
 	
  	LTDC_Display_Dir(0);			//默认竖屏
 	LTDC_Select_Layer(0); 			//选择第1层
-    LCD_LED=1;         		        //点亮背光
-    LTDC_Clear(0XFFFFFFFF);			//清屏
+  LCD_LED_LIGHT_OPEN;         		        //点亮背光
+  LTDC_Clear(0XFFFFFFFF);			//清屏
 }
 
 //LTDC底层IO初始化和时钟使能
@@ -473,32 +477,32 @@ void HAL_LTDC_MspInit(LTDC_HandleTypeDef* hltdc)
     __HAL_RCC_GPIOI_CLK_ENABLE();               //使能GPIOI时钟
     
     //初始化PB5，背光引脚
-    GPIO_Initure.Pin=GPIO_PIN_5;                //PB5推挽输出，控制背光
+    GPIO_Initure.Pin=LCD_LED_PIN;                //PB5推挽输出，控制背光
     GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;      //推挽输出
     GPIO_Initure.Pull=GPIO_PULLUP;              //上拉        
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;         //高速
-    HAL_GPIO_Init(GPIOB,&GPIO_Initure);
+    HAL_GPIO_Init(LCD_LED_PORT,&GPIO_Initure);
     
     //初始化PF10
-    GPIO_Initure.Pin=GPIO_PIN_10; 
+    GPIO_Initure.Pin=LTDC_PIN; 
     GPIO_Initure.Mode=GPIO_MODE_AF_PP;          //复用
     GPIO_Initure.Pull=GPIO_NOPULL;              
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;         //高速
     GPIO_Initure.Alternate=GPIO_AF14_LTDC;      //复用为LTDC
-    HAL_GPIO_Init(GPIOF,&GPIO_Initure);
+    HAL_GPIO_Init(LTDC_PORT,&GPIO_Initure);
     
     //初始化PG6,7,11
-    GPIO_Initure.Pin=GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_11;
-    HAL_GPIO_Init(GPIOG,&GPIO_Initure);
+    GPIO_Initure.Pin=LCD_R7|LCD_CLK|LCD_B3;
+    HAL_GPIO_Init(LCD_G_PORT,&GPIO_Initure);
     
     //初始化PH9,10,11,12,13,14,15
-    GPIO_Initure.Pin=GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11|\
-                     GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
-    HAL_GPIO_Init(GPIOH,&GPIO_Initure);
+    GPIO_Initure.Pin=LCD_R3|LCD_R4|LCD_R5|\
+                     LCD_R6|LCD_G2|LCD_G3|LCD_G4;
+    HAL_GPIO_Init(LCD_H_PORT,&GPIO_Initure);
     
     //初始化PI0,1,2,4,5,6,7,9,10
-    GPIO_Initure.Pin=GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5|\
-                     GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_9|GPIO_PIN_10;
-    HAL_GPIO_Init(GPIOI,&GPIO_Initure); 
+    GPIO_Initure.Pin=LCD_G5|LCD_G6|LCD_G6|LCD_B4|LCD_B5|\
+                     LCD_B6|LCD_B7|LCD_HSYNC|LCD_VSYNC;
+    HAL_GPIO_Init(LCD_I_PORT,&GPIO_Initure); 
 }
 

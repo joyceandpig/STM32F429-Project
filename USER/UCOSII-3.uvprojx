@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx,OS_UCOS,DEBUG,USE_USB_OTG_FS,MPL_LOG_NDEBUG=1,EMPL,MPU9250,EMPL_TARGET_STM32F4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\HARDWARE\DMA;..\APP\SPB;..\APP\COMMON;..\GUI;..\HARDWARE\GSM;..\HARDWARE\RTC;..\APP\CALENDAR;..\APP\SYSTEM SETTING;..\HARDWARE\WM8978;..\APP\EBOOK;..\APP\APPPLAY;..\APP\PHONEPLAY;..\APP\SMSPLAY;..\T9INPUT;..\ATKFREC;..\ATKNCR;..\ATKQR;..\APP\LEDPLAY;..\APP\GRADIENTER;..\APP\GYROSCOPE;..\USB\USB_APP;..\USB\STM32_USB_HOST_Library\Core\inc;..\USB\STM32_USB_HOST_Library\Class\HID\inc;..\USB\STM32_USB_HOST_Library\Class\MSC\inc;..\HARDWARE\OV5640;..\HARDWARE\DCMI;..\HARDWARE\EXTI;..\APP\lyric;..\HARDWARE\SAI;..\AUDIOCODEC\mp3;..\AUDIOCODEC\mp3\helix;..\AUDIOCODEC\flac;..\AUDIOCODEC\flac\flacdec;..\AUDIOCODEC\ape;..\AUDIOCODEC\ape\apedec;..\AUDIOCODEC\wav;..\APP\audio;..\MJPEG\JPEG;..\MJPEG</IncludePath>
+              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\HARDWARE\DMA;..\APP\SPB;..\APP\COMMON;..\GUI;..\HARDWARE\GSM;..\HARDWARE\RTC;..\APP\CALENDAR;..\APP\SYSTEM SETTING;..\HARDWARE\WM8978;..\APP\EBOOK;..\APP\APPPLAY;..\APP\PHONEPLAY;..\APP\SMSPLAY;..\T9INPUT;..\ATKFREC;..\ATKNCR;..\ATKQR;..\APP\LEDPLAY;..\APP\GRADIENTER;..\APP\GYROSCOPE;..\USB\USB_APP;..\USB\STM32_USB_HOST_Library\Core\inc;..\USB\STM32_USB_HOST_Library\Class\HID\inc;..\USB\STM32_USB_HOST_Library\Class\MSC\inc;..\HARDWARE\OV5640;..\HARDWARE\DCMI;..\HARDWARE\EXTI;..\APP\lyric;..\HARDWARE\SAI;..\AUDIOCODEC\mp3;..\AUDIOCODEC\mp3\helix;..\AUDIOCODEC\flac;..\AUDIOCODEC\flac\flacdec;..\AUDIOCODEC\ape;..\AUDIOCODEC\ape\apedec;..\AUDIOCODEC\wav;..\APP\audio;..\MJPEG\JPEG;..\MJPEG;..\HARDWARE\DS18B20</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -660,6 +660,16 @@
               <FileType>1</FileType>
               <FilePath>..\HALLIB\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_sai.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HALLIB\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sai.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_sai_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HALLIB\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sai_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -815,6 +825,11 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\SAI\sai.c</FilePath>
             </File>
+            <File>
+              <FileName>ds18b20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\DS18B20\ds18b20.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -958,6 +973,16 @@
               <FileName>keyplay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\key\keyplay.c</FilePath>
+            </File>
+            <File>
+              <FileName>picviewer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\picviewer\picviewer.c</FilePath>
+            </File>
+            <File>
+              <FileName>exeplay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\exe\exeplay.c</FilePath>
             </File>
           </Files>
         </Group>
