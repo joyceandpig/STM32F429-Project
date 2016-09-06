@@ -26,6 +26,9 @@
 #define FT_RST_GPIO_PIN_NUM           		 8
 #define FT_INT_GPIO_PIN_NUM           		 7
 
+#define FT_RST_GPIO_PIN           		 GPIO_PIN_8
+#define FT_INT_GPIO_PIN           		 GPIO_PIN_7
+
 #define FT_RST_GPIO_PORT               		 GPIOI
 #define FT_INT_GPIO_PORT               		 GPIOH
 
@@ -33,10 +36,10 @@
 #define FT_INT_GPIO_PORT_CLK_ENABLE()           __HAL_RCC_GPIOH_CLK_ENABLE()
 
 ////IO操作函数											   
-#define	FT_RST_SET()     HAL_GPIO_WritePin(FT_RST_GPIO_PORT, FT_RST_GPIO_PIN_NUM, GPIO_PIN_SET) //SCL	 
-#define	FT_RST_CLEAR()   HAL_GPIO_WritePin(FT_RST_GPIO_PORT, FT_RST_GPIO_PIN_NUM, GPIO_PIN_RESET) //SCL
+#define	FT_RST_SET()     HAL_GPIO_WritePin(FT_RST_GPIO_PORT, FT_RST_GPIO_PIN, GPIO_PIN_SET) //SCL	 
+#define	FT_RST_CLEAR()   HAL_GPIO_WritePin(FT_RST_GPIO_PORT, FT_RST_GPIO_PIN, GPIO_PIN_RESET) //SCL
 
-#define	FT_INT()     HAL_GPIO_ReadPin(FT_INT_GPIO_PORT, FT_INT_GPIO_PIN_NUM) //SDA	  
+#define	FT_INT()     HAL_GPIO_ReadPin(FT_INT_GPIO_PORT, FT_INT_GPIO_PIN) //SDA	  
 
 //#define FT_RST  PIout(8)//FT5206复位引脚
 //#define FT_INT  PHin(7) //FT5206断引脚	

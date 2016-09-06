@@ -5,7 +5,8 @@
 */
 ///////////////////////////////////////////////////////////////////////////////////
 #include "mytypes.h"  
-
+#include "stm32f4xx.h"
+#include "stm32f4xx_hal.h"
 
 void Stm32_Clock_Init(u32 plln,u32 pllm,u32 pllp,u32 pllq);//时钟系统配置
 //以下为汇编函数

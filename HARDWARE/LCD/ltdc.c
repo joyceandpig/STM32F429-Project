@@ -501,7 +501,7 @@ void HAL_LTDC_MspInit(LTDC_HandleTypeDef* hltdc)
     HAL_GPIO_Init(LCD_H_PORT,&GPIO_Initure);
     
     //≥ı ºªØPI0,1,2,4,5,6,7,9,10
-    GPIO_Initure.Pin=LCD_G5|LCD_G6|LCD_G6|LCD_B4|LCD_B5|\
+    GPIO_Initure.Pin=LCD_G5|LCD_G6|LCD_G7|LCD_B4|LCD_B5|\
                      LCD_B6|LCD_B7|LCD_HSYNC|LCD_VSYNC;
     HAL_GPIO_Init(LCD_I_PORT,&GPIO_Initure); 
 }

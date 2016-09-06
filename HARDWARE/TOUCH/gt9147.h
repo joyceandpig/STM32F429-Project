@@ -19,6 +19,9 @@
 #define GT_RST_GPIO_PIN_NUM           		 8
 #define GT_INT_GPIO_PIN_NUM           		 7
 
+#define GT_RST_GPIO_PIN           		 GPIO_PIN_8
+#define GT_INT_GPIO_PIN           		 GPIO_PIN_7
+
 #define GT_RST_GPIO_PORT               		 GPIOI
 #define GT_INT_GPIO_PORT               		 GPIOH
 
@@ -26,10 +29,10 @@
 #define GT_INT_GPIO_PORT_CLK_ENABLE()           __HAL_RCC_GPIOH_CLK_ENABLE()
 
 ////IO操作函数											   
-#define	GT_RST_SET()     HAL_GPIO_WritePin(GT_RST_GPIO_PORT, GT_RST_GPIO_PIN_NUM, GPIO_PIN_SET) //SCL	 
-#define	GT_RST_CLEAR()   HAL_GPIO_WritePin(GT_RST_GPIO_PORT, GT_RST_GPIO_PIN_NUM, GPIO_PIN_RESET) //SCL
+#define	GT_RST_SET()     HAL_GPIO_WritePin(GT_RST_GPIO_PORT, GT_RST_GPIO_PIN, GPIO_PIN_SET) //SCL	 
+#define	GT_RST_CLEAR()   HAL_GPIO_WritePin(GT_RST_GPIO_PORT, GT_RST_GPIO_PIN, GPIO_PIN_RESET) //SCL
 
-#define	GT_INT()     HAL_GPIO_ReadPin(GT_INT_GPIO_PORT, GT_INT_GPIO_PIN_NUM) //SDA	  
+#define	GT_INT()     HAL_GPIO_ReadPin(GT_INT_GPIO_PORT, GT_INT_GPIO_PIN) //SDA	  
 
 ////IO操作函数	 
 //#define GT_RST  PIout(8) //GT9147复位引脚

@@ -1,5 +1,5 @@
 #include "ledplay.h" 
-//#include "gradienter.h" 
+#include "gradienter.h" 
 #include "led.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -114,6 +114,7 @@ u8 led_play(void)
 					gui_fill_circle(cds0x,cds0y,cr,RED);    
 				}
 //				LED0=ds0sta;
+				LED0_SET_STA(ds0sta);
 				ledplay_ds0_sta=!ds0sta;
 			}			
 			res=btn_check(ds1btn,&in_obj);   
@@ -129,6 +130,7 @@ u8 led_play(void)
 					gui_fill_circle(cds1x,cds1y,cr,GREEN); 
 				}
 //				LED1=ds1sta;
+				LED1_SET_STA(ds1sta);
 			}	 
 			if(system_task_return)break;		//TPAD返回  
 			delay_ms(10);
@@ -136,6 +138,8 @@ u8 led_play(void)
 	}
 	ledplay_ds0_sta=0;
 //	LED0=LED1=1;		//关闭LED
+	LED0_OFF();
+	LED1_OFF();
 	btn_delete(ds0btn);	//删除按钮
 	btn_delete(ds1btn);	//删除按钮 
 	return rval;
