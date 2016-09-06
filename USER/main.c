@@ -28,6 +28,7 @@
 #include "gui.h"
 #include "RTC.h"
 #include "key.h"
+#include "mpu9250.h"
 
 #include "common.h"
 #include "calendar.h" 
@@ -38,7 +39,34 @@
 #include "audioplay.h"
 
 
-
+enum 
+{
+	ebook_app = 0,
+	picviewer_app,
+	audio_app,
+	video_app,
+	calendar_app,
+	sysset_app,
+	notepad_app,
+	exe_app,
+	paint_app,
+	camera_app,
+	recorder_app,
+	usb_app,
+	net_app,
+	calc_app,
+	qr_app,
+	webcam_app,
+	frec_app,
+	gyro_app,
+	grad_app,
+	key_app,
+	led_app,
+	
+	phone_app = SPB_ICOS_NUM,
+	AppCenter = SPB_ICOS_NUM + 1,
+	msm_app   = SPB_ICOS_NUM + 2,
+};
 
 USB_OTG_CORE_HANDLE USB_OTG_dev;
 extern vu8 USB_STATUS_REG;		//USB状态
@@ -130,7 +158,8 @@ int main(void)
 	my_mem_init(SRAMEX);		//初始化外部内存池
 	my_mem_init(SRAMCCM);		//初始化CCM内存池 
 	
- 
+	printf("mpu9250 Check...");
+	MPU9250_Init();
 	gui_init();
 	piclib_init();				//piclib初始化
 	slcd_dma_init();
@@ -188,11 +217,11 @@ void led_task(void *pdata)
 		usmart_scan();
 		t++;
 		Sleep(5);
-//		if(t==8)LED1=1;	//LED0灭
+		if(t==8)LED1_OFF();	//LED0灭
 		if(t==100)		//LED0亮
 		{
 			t=0;
-//			LED1=0;
+			LED1_ON();
 		}
 	}									 
 }
@@ -230,12 +259,12 @@ void usb_Task(void *pdata)
 		{	 						   		  	   
 			if(USB_STATUS_REG&0x01)//正在写		  
 			{
-//				LED1=0;
+				LED1_ON();
 				u_printf(DBG,"USB Writing...");//提示USB正在写入数据    
 			}
 			if(USB_STATUS_REG&0x02)//正在读
 			{
-//				LED1=0;
+				LED1_ON();
 				u_printf(DBG,"USB Reading...");//提示USB正在读出数据		 
 			}	 										  
 			if(USB_STATUS_REG&0x04)
@@ -253,11 +282,11 @@ void usb_Task(void *pdata)
 			Divece_STA=bDeviceState;
 		}
 		tct++;
-		if(tct==200)
+		if(tct==10)
 		{
 			tct=0;
-//			LED1=1;
-//			LED0=!LED0;//提示系统在运行
+			LED1_OFF();
+			LED0_STA_TURN();//提示系统在运;
 			if(USB_STATUS_REG&0x10)
 			{
 				offline_cnt=0;//USB连接了,则清除offline计数器
@@ -280,34 +309,7 @@ void picture_task(void *pdata)
 		Sleep(100);
 	}
 }
-enum 
-{
-	ebook_app = 0,
-	picviewer_app,
-	audio_app,
-	video_app,
-	calendar_app,
-	sysset_app,
-	notepad_app,
-	exe_app,
-	paint_app,
-	camera_app,
-	recorder_app,
-	usb_app,
-	net_app,
-	calc_app,
-	qr_app,
-	webcam_app,
-	frec_app,
-	gyro_app,
-	grad_app,
-	key_app,
-	led_app,
-	
-	phone_app = SPB_ICOS_NUM,
-	AppCenter = SPB_ICOS_NUM + 1,
-	msm_app   = SPB_ICOS_NUM + 2,
-};
+
 vu8 system_task_return;		//任务强制返回标志.
 vu8 ledplay_ds0_sta=0;		//ledplay任务,DS0的控制状态
 extern OS_EVENT * audiombox;	//音频播放任务邮箱
@@ -340,7 +342,7 @@ void main_thread(void *pdata)
 			case calendar_app	:calendar_play();	break;//时钟 
  			case sysset_app		:sysset_play();		break;//系统设置
 			case notepad_app	:notepad_play();	break;//记事本	
-			case exe_app		:exe_play();		break;//运行器
+			case exe_app			:exe_play();		break;//运行器
 			case paint_app		:paint_play();		break;//手写画笔
 // 			case camera_app		:camera_play();		break;//摄像头
 //			case recorder_app	:recorder_play();	break;//录音机

@@ -9,15 +9,6 @@
 #include "stm32f4xx_hal_dma.h"
 
 
-#define __HAL_DMA_Stream_SET_CR(__HANDLE__, __VAL__)   ((uint32_t)((__HANDLE__)->Instance)->CR   |= (__VAL__))
-#define __HAL_DMA_Stream_SET_NDTR(__HANDLE__, __VAL__) ((uint32_t)((__HANDLE__)->Instance)->NDTR |= (__VAL__))
-#define __HAL_DMA_Stream_SET_PAR(__HANDLE__, __VAL__)  ((uint32_t)((__HANDLE__)->Instance)->PAR  |= (__VAL__))
-#define __HAL_DMA_Stream_SET_M0AR(__HANDLE__, __VAL__) ((uint32_t)((__HANDLE__)->Instance)->M0AR |= (__VAL__))
-#define __HAL_DMA_Stream_SET_M1AR(__HANDLE__, __VAL__) ((uint32_t)((__HANDLE__)->Instance)->M1AR |= (__VAL__))
-#define __HAL_DMA_Stream_SET_FCR(__HANDLE__, __VAL__)  ((uint32_t)((__HANDLE__)->Instance)->FCR  |= (__VAL__))
-
-
-
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板

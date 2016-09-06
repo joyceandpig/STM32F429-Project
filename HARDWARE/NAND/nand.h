@@ -22,7 +22,37 @@
 //1,去掉NAND_SEC_SIZE宏定义，由NAND_ECC_SECTOR_SIZE替代
 //2,去掉nand_dev结构体里面的secbuf指针，用不到
 ////////////////////////////////////////////////////////////////////////////////// 	
- 
+#define NAND_FMC_PORT_CLK_ENABLE()				__HAL_RCC_FMC_CLK_ENABLE()
+#define NAND_D_PORT_CLK_ENABLE()          __HAL_RCC_GPIOD_CLK_ENABLE()
+#define NAND_E_PORT_CLK_ENABLE()					__HAL_RCC_GPIOE_CLK_ENABLE()
+#define NAND_G_PORT_CLK_ENABLE()					__HAL_RCC_GPIOG_CLK_ENABLE()		
+		
+#define NAND_IO0_FMC_D0        GPIO_PIN_14//D
+#define NAND_IO1_FMC_D1        GPIO_PIN_15//D
+#define NAND_IO2_FMC_D2        GPIO_PIN_0//D
+#define NAND_IO3_FMC_D3        GPIO_PIN_1//D
+#define NAND_IO4_FMC_D4        GPIO_PIN_7//E
+#define NAND_IO5_FMC_D5        GPIO_PIN_8//E
+#define NAND_IO6_FMC_D6        GPIO_PIN_9//E
+#define NAND_IO7_FMC_D7        GPIO_PIN_10//E
+
+#define NAND_CLE_FMC_A16_CLE        GPIO_PIN_11//D
+#define NAND_ALE_FMC_A17_CLE        GPIO_PIN_12//D
+#define NAND_WE_FMC_NWE        GPIO_PIN_5//D
+#define NAND_RE_FMC_NOE        GPIO_PIN_4//D
+#define NAND_CE_FMC_NCE3        GPIO_PIN_9//G
+#define NAND_RB_FMC_NWAIT        GPIO_PIN_6//D   //NAND Flash的闲/忙引脚 
+
+#define NAND_D_PORT    GPIOD
+#define NAND_E_PORT    GPIOE
+#define NAND_G_PORT    GPIOG
+
+#define NAND_RB_PORT               		 GPIOD
+#define	NAND_RB    										 HAL_GPIO_ReadPin(NAND_RB_PORT, NAND_RB_FMC_NWAIT) //NAND Flash的闲/忙引脚 
+
+//#define NAND_RB  				 PDin(6)	//NAND Flash的闲/忙引脚 
+
+
 #define NAND_MAX_PAGE_SIZE			4096		//定义NAND FLASH的最大的PAGE大小（不包括SPARE区），默认4096字节
 #define NAND_ECC_SECTOR_SIZE		512			//执行ECC计算的单元大小，默认512字节
 
@@ -46,15 +76,6 @@ typedef struct
 
 extern nand_attriute nand_dev;				//nand重要参数结构体 
 
-#define NAND_RB_GPIO_PIN_NUM           6
-#define NAND_RB_GPIO_PIN               GPIO_PIN_6
-
-#define NAND_RB_PORT               		 GPIOD
-#define	NAND_RB    HAL_GPIO_ReadPin(NAND_RB_PORT, NAND_RB_GPIO_PIN) //输入SDA 
-
-//#define NAND_RB  				 PDin(6)	//NAND Flash的闲/忙引脚 
-
-
 
 #define NAND_ADDRESS			0X80000000	//nand flash的访问地址,接NCE3,地址为:0X8000 0000
 #define NAND_CMD				1<<16		//发送命令
@@ -62,7 +83,7 @@ extern nand_attriute nand_dev;				//nand重要参数结构体
 
 //NAND FLASH命令
 #define NAND_READID         	0X90    	//读ID指令
-#define NAND_FEATURE			0XEF    	//设置特性指令
+#define NAND_FEATURE					0XEF    	//设置特性指令
 #define NAND_RESET          	0XFF    	//复位NAND
 #define NAND_READSTA        	0X70   	 	//读状态
 #define NAND_AREA_A         	0X00   
@@ -78,10 +99,10 @@ extern nand_attriute nand_dev;				//nand重要参数结构体
 
 //NAND FLASH状态
 #define NSTA_READY       	   	0X40		//nand已经准备好
-#define NSTA_ERROR				0X01		//nand错误
+#define NSTA_ERROR						0X01		//nand错误
 #define NSTA_TIMEOUT        	0X02		//超时
-#define NSTA_ECC1BITERR       	0X03		//ECC 1bit错误
-#define NSTA_ECC2BITERR       	0X04		//ECC 2bit以上错误
+#define NSTA_ECC1BITERR       0X03		//ECC 1bit错误
+#define NSTA_ECC2BITERR       0X04		//ECC 2bit以上错误
 
 
 //NAND FLASH型号和对应的ID号

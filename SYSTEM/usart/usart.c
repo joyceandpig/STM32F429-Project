@@ -1,9 +1,5 @@
 #include "usart.h"
 
-///////////////////////////////宏定义操作////////////////////////////////////////
-#define __HAL_USART_SET_DAT_TO_DR(__HANDLE__, __VAL__) (((__HANDLE__)->Instance->DR) == (__VAL__))
-
-
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////// 
@@ -88,7 +84,7 @@ void uart1_init(u32 bound)
 	HAL_UART_Receive_IT(&USART1_Handler,&aRxBuffer,1);	//串口中断接收1个字节，同时会自动开启中断
 }
 #endif
-#ifdef USART1_EN
+#ifdef USART3_EN
 void uart3_init(u32 bound)
 {  	 
 //	float temp;
@@ -116,14 +112,14 @@ void uart3_init(u32 bound)
 //	USART3_RX_STA=0;				//清零 
 	
 	//UART 初始化设置
-	USART3_Handler.Instance=USART3;					    //USART1
+	USART3_Handler.Instance=USART3;					    //USART3
 	USART3_Handler.Init.BaudRate=bound;				    //波特率
 	USART3_Handler.Init.WordLength=UART_WORDLENGTH_8B;   //字长为8位数据格式
 	USART3_Handler.Init.StopBits=UART_STOPBITS_1;	    //一个停止位
 	USART3_Handler.Init.Parity=UART_PARITY_NONE;		    //无奇偶校验位
 	USART3_Handler.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //无硬件流控
 	USART3_Handler.Init.Mode=UART_MODE_TX_RX;		    //收发模式
-	HAL_UART_Init(&USART3_Handler);					    //HAL_UART_Init()会使能UART1
+	HAL_UART_Init(&USART3_Handler);					    //HAL_UART_Init()会使能UART3
 	HAL_UART_Receive_IT(&USART3_Handler,USART3_RX_BUF,1);	//串口中断接收1个字节，同时会自动开启中断
 }
 #endif
@@ -140,18 +136,18 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 	
 	if(huart->Instance==USART1)//如果是串口1，进行串口1 MSP初始化
 	{
-		__HAL_RCC_GPIOA_CLK_ENABLE();			//使能GPIOA时钟
-		__HAL_RCC_USART1_CLK_ENABLE();			//使能USART1时钟
+		USART1_GPIO_PORT_CLK_ENABLE();			//使能GPIOA时钟
+		USART1_RCC_CLK_ENABLE();			//使能USART1时钟
 	
-		GPIO_Initure.Pin=GPIO_PIN_9;			//PA9
+		GPIO_Initure.Pin=USART1_TX_GPIO_PIN;			//PA9
 		GPIO_Initure.Mode=GPIO_MODE_AF_PP;		//复用推挽输出
 		GPIO_Initure.Pull=GPIO_PULLUP;			//上拉
 		GPIO_Initure.Speed=GPIO_SPEED_FAST;		//高速
 		GPIO_Initure.Alternate=GPIO_AF7_USART1;	//复用为USART1
 		HAL_GPIO_Init(GPIOA,&GPIO_Initure);	   	//初始化PA9
 
-		GPIO_Initure.Pin=GPIO_PIN_10;			//PA10
-		HAL_GPIO_Init(GPIOA,&GPIO_Initure);	   	//初始化PA10
+		GPIO_Initure.Pin=USART1_RX_GPIO_PIN;			//PA10
+		HAL_GPIO_Init(USART1_GPIO_PORT,&GPIO_Initure);	   	//初始化PA10
 		
 #if USART1_IRQn_EN
 		HAL_NVIC_EnableIRQ(USART1_IRQn);				//使能USART1中断通道
@@ -160,18 +156,18 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 	}
 	else if(huart->Instance==USART3)//如果是串口3，进行串口3 MSP初始化
 	{
-		__HAL_RCC_GPIOB_CLK_ENABLE();			//使能GPIOB时钟
-		__HAL_RCC_USART3_CLK_ENABLE();			//使能USART3时钟
+		USART3_GPIO_PORT_CLK_ENABLE();			//使能GPIOB时钟
+		USART3_RCC_CLK_ENABLE();			//使能USART3时钟
 	
-		GPIO_Initure.Pin=GPIO_PIN_10;			//PB10
+		GPIO_Initure.Pin=USART3_TX_GPIO_PIN;			//PB10
 		GPIO_Initure.Mode=GPIO_MODE_AF_PP;		//复用推挽输出
 		GPIO_Initure.Pull=GPIO_PULLUP;			//上拉
 		GPIO_Initure.Speed=GPIO_SPEED_FAST;		//高速
 		GPIO_Initure.Alternate=GPIO_AF7_USART3;	//复用为USART3
-		HAL_GPIO_Init(GPIOB,&GPIO_Initure);	   	//初始化PB10
+		HAL_GPIO_Init(USART3_GPIO_PORT,&GPIO_Initure);	   	//初始化PB10
 
-		GPIO_Initure.Pin=GPIO_PIN_11;			//PB11
-		HAL_GPIO_Init(GPIOB,&GPIO_Initure);	   	//初始化PB11
+		GPIO_Initure.Pin=USART3_RX_GPIO_PIN;			//PB11
+		HAL_GPIO_Init(USART3_GPIO_PORT,&GPIO_Initure);	   	//初始化PB11
 		
 #if USART1_IRQn_EN
 		HAL_NVIC_EnableIRQ(USART3_IRQn);				//使能USART1中断通道
@@ -239,7 +235,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		USMART_Recv_Process(aRxBuffer);//处理上一次接收到的数据
 		HAL_UART_Receive_IT(&USART1_Handler,&aRxBuffer,1);//中断接收1个字节
 	}
-	else if(huart->Instance==USART3)//如果是串口1
+	else if(huart->Instance==USART3)//如果是串口3
 	{//中断接收完成		
 		USMART_Recv_Process(USART3_RX_BUF[0]);//处理上一次接收到的数据
 		HAL_UART_Receive_IT(&USART3_Handler,USART3_RX_BUF,1);//中断接收1个字节

@@ -100,56 +100,7 @@ extern u32  BACK_COLOR; //背景颜色.默认为白色
 #define LTDC_PIN      GPIO_PIN_10//F
 #define LTDC_PORT     GPIOF
 
-////SRAM 端口 配置
-#define SRAM_C_PORT    GPIOC
-#define SRAM_D_PORT    GPIOD
-#define SRAM_E_PORT    GPIOI
-#define SRAM_F_PORT    GPIOF
-#define SRAM_G_PORT    GPIOG
 
-////SRAM 引脚 配置
-#define SRAM_DQ0_FMC_D0      GPIO_PIN_0  //E
-#define SRAM_DQ0_FMC_D1      GPIO_PIN_1  //E
-#define SRAM_DQ0_FMC_D2      GPIO_PIN_0   //D
-#define SRAM_DQ0_FMC_D3      GPIO_PIN_1   //D
-#define SRAM_DQ0_FMC_D4      GPIO_PIN_7   //E
-#define SRAM_DQ0_FMC_D5      GPIO_PIN_8   //E
-#define SRAM_DQ0_FMC_D6      GPIO_PIN_9   //E
-#define SRAM_DQ0_FMC_D7      GPIO_PIN_10   //E
-#define SRAM_DQ0_FMC_D8      GPIO_PIN_11   //E
-#define SRAM_DQ0_FMC_D9     	GPIO_PIN_12   //E
-#define SRAM_DQ0_FMC_D10     GPIO_PIN_13   //E
-#define SRAM_DQ0_FMC_D11      GPIO_PIN_14   //E
-#define SRAM_DQ0_FMC_D12     GPIO_PIN_15  //E
-#define SRAM_DQ0_FMC_D13     GPIO_PIN_8   //D
-#define SRAM_DQ0_FMC_D14     GPIO_PIN_9   //D
-#define SRAM_DQ0_FMC_D15     GPIO_PIN_10   //D
-
-#define SRAM_A0_FMC_A0  GPIO_PIN_0//F
-#define SRAM_A0_FMC_A1  GPIO_PIN_1//F
-#define SRAM_A0_FMC_A2   GPIO_PIN_2//F
-#define SRAM_A0_FMC_A3   GPIO_PIN_3//F
-#define SRAM_A0_FMC_A4   GPIO_PIN_4//F
-#define SRAM_A0_FMC_A5    GPIO_PIN_5//F
-#define SRAM_A0_FMC_A6   GPIO_PIN_12//F
-#define SRAM_A0_FMC_A7   GPIO_PIN_13//F
-#define SRAM_A0_FMC_A8   GPIO_PIN_14//F
-#define SRAM_A0_FMC_A9    GPIO_PIN_15//F
-#define SRAM_A0_FMC_A10     GPIO_PIN_0//G
-#define SRAM_A0_FMC_A11     GPIO_PIN_1//G
-#define SRAM_A0_FMC_A12     GPIO_PIN_2//G
-
-#define SRAM_WE_FMC_SDNWE       GPIO_PIN_0//C
-#define SRAM_CAS_FMC_SDNCAS    GPIO_PIN_15//G
-#define SRAM_RAS_FMSSDNRAS     GPIO_PIN_11//F
-#define SRAM_CS_FMC_SDNE0         GPIO_PIN_2//C
-
-#define SRAM_BA0_FMC_BA0      GPIO_PIN_4//G
-#define SRAM_BA1_FMC_BA1      GPIO_PIN_5//G
-#define SRAM_CKE_FMC_SDCKE0   GPIO_PIN_3//C
-#define SRAM_CLK_FMC_SDCLK    GPIO_PIN_8//G
-#define SRAM_LDQM_FMC_NBL0   GPIO_PIN_0//E
-#define SRAM_UDQM_FMC_NBL1   GPIO_PIN_1//E
 
 
 //LCD地址结构体

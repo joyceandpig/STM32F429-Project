@@ -82,35 +82,35 @@ void HAL_NAND_MspInit(NAND_HandleTypeDef *hnand)
 {
     GPIO_InitTypeDef GPIO_Initure;
     
-    __HAL_RCC_FMC_CLK_ENABLE();             //使能FMC时钟
-    __HAL_RCC_GPIOD_CLK_ENABLE();           //使能GPIOD时钟
-    __HAL_RCC_GPIOE_CLK_ENABLE();           //使能GPIOE时钟
-    __HAL_RCC_GPIOG_CLK_ENABLE();           //使能GPIOG时钟
+    NAND_FMC_PORT_CLK_ENABLE();             //使能FMC时钟
+    NAND_D_PORT_CLK_ENABLE();           //使能GPIOD时钟
+    NAND_E_PORT_CLK_ENABLE();           //使能GPIOE时钟
+    NAND_G_PORT_CLK_ENABLE();           //使能GPIOG时钟
     
 	//初始化PD6 R/B引脚
-	GPIO_Initure.Pin=GPIO_PIN_6;
+		GPIO_Initure.Pin=NAND_RB_FMC_NWAIT;
     GPIO_Initure.Mode=GPIO_MODE_INPUT;          //输入
     GPIO_Initure.Pull=GPIO_PULLUP;    			//上拉          
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;         //高速
-    HAL_GPIO_Init(GPIOD,&GPIO_Initure);
+    HAL_GPIO_Init(NAND_RB_PORT,&GPIO_Initure);
 	   
 	//初始化PG9 NCE3引脚
-    GPIO_Initure.Pin=GPIO_PIN_9;
+    GPIO_Initure.Pin=NAND_CE_FMC_NCE3;
     GPIO_Initure.Mode=GPIO_MODE_AF_PP;          //输入
     GPIO_Initure.Pull=GPIO_NOPULL;    			//上拉          
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;         //高速
-	GPIO_Initure.Alternate=GPIO_AF12_FMC;       //复用为FMC
-    HAL_GPIO_Init(GPIOG,&GPIO_Initure);  
+		GPIO_Initure.Alternate=GPIO_AF12_FMC;       //复用为FMC
+    HAL_GPIO_Init(NAND_G_PORT,&GPIO_Initure);  
 	
     //初始化PD0,1,4,5,11,12,14,15
-    GPIO_Initure.Pin=GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_4|GPIO_PIN_5|\
-                     GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_14|GPIO_PIN_15;
+    GPIO_Initure.Pin=NAND_IO2_FMC_D2|NAND_IO3_FMC_D3|NAND_RE_FMC_NOE|NAND_WE_FMC_NWE|\
+                     NAND_CLE_FMC_A16_CLE|NAND_ALE_FMC_A17_CLE|NAND_IO0_FMC_D0|NAND_IO1_FMC_D1;
     GPIO_Initure.Pull=GPIO_NOPULL;              
-    HAL_GPIO_Init(GPIOD,&GPIO_Initure);
+    HAL_GPIO_Init(NAND_D_PORT,&GPIO_Initure);
 
     //初始化PE7,8,9,10
-    GPIO_Initure.Pin=GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10;
-    HAL_GPIO_Init(GPIOE,&GPIO_Initure);
+    GPIO_Initure.Pin=NAND_IO4_FMC_D4|NAND_IO5_FMC_D5|NAND_IO6_FMC_D6|NAND_IO7_FMC_D7;
+    HAL_GPIO_Init(NAND_E_PORT,&GPIO_Initure);
 }
 
 //读取NAND FLASH的ID
@@ -118,14 +118,14 @@ void HAL_NAND_MspInit(NAND_HandleTypeDef *hnand)
 //    其他,失败
 u8 NAND_ModeSet(u8 mode)
 {   
-    *(vu8*)(NAND_ADDRESS|NAND_CMD)=NAND_FEATURE;//发送设置特性命令
-    *(vu8*)(NAND_ADDRESS|NAND_ADDR)=0X01;		//地址为0X01,设置mode
+  *(vu8*)(NAND_ADDRESS|NAND_CMD)=NAND_FEATURE;//发送设置特性命令
+  *(vu8*)(NAND_ADDRESS|NAND_ADDR)=0X01;		//地址为0X01,设置mode
  	*(vu8*)NAND_ADDRESS=mode;					//P1参数,设置mode
 	*(vu8*)NAND_ADDRESS=0;
 	*(vu8*)NAND_ADDRESS=0;
 	*(vu8*)NAND_ADDRESS=0; 
-    if(NAND_WaitForReady()==NSTA_READY)return 0;//成功
-    else return 1;								//失败
+  if(NAND_WaitForReady()==NSTA_READY)return 0;//成功
+  else return 1;								//失败
 }
 
 //读取NAND FLASH的ID

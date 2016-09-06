@@ -77,31 +77,37 @@ void HAL_SDRAM_MspInit(SDRAM_HandleTypeDef *hsdram)
 {
     GPIO_InitTypeDef GPIO_Initure;
     
-    __HAL_RCC_FMC_CLK_ENABLE();                 //使能FMC时钟
-    __HAL_RCC_GPIOC_CLK_ENABLE();               //使能GPIOC时钟
-    __HAL_RCC_GPIOD_CLK_ENABLE();               //使能GPIOD时钟
-    __HAL_RCC_GPIOE_CLK_ENABLE();               //使能GPIOE时钟
-    __HAL_RCC_GPIOF_CLK_ENABLE();               //使能GPIOF时钟
-    __HAL_RCC_GPIOG_CLK_ENABLE();               //使能GPIOG时钟
+    SRAM_FMC_PORT_CLK_ENABLE();             //使能FMC时钟
+    SRAM_C_PORT_CLK_ENABLE();               //使能GPIOC时钟
+    SRAM_D_PORT_CLK_ENABLE();               //使能GPIOD时钟
+    SRAM_E_PORT_CLK_ENABLE();               //使能GPIOE时钟
+    SRAM_F_PORT_CLK_ENABLE();               //使能GPIOF时钟
+    SRAM_G_PORT_CLK_ENABLE();               //使能GPIOG时钟
     
-    GPIO_Initure.Pin=GPIO_PIN_0|GPIO_PIN_2|GPIO_PIN_3;  
+    GPIO_Initure.Pin=SRAM_WE_FMC_SDNWE|SRAM_CS_FMC_SDNE0|SRAM_CKE_FMC_SDCKE0;  
     GPIO_Initure.Mode=GPIO_MODE_AF_PP;          //推挽复用
     GPIO_Initure.Pull=GPIO_PULLUP;              //上拉
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;         //高速
     GPIO_Initure.Alternate=GPIO_AF12_FMC;       //复用为FMC    
-    HAL_GPIO_Init(GPIOC,&GPIO_Initure);          //初始化PC0,2,3
+    HAL_GPIO_Init(SRAM_C_PORT,&GPIO_Initure);          //初始化PC0,2,3
     
-    GPIO_Initure.Pin=GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_14|GPIO_PIN_15;              
-    HAL_GPIO_Init(GPIOD,&GPIO_Initure);     //初始化PD0,1,8,9,10,14,15
+    GPIO_Initure.Pin=SRAM_DQ2_FMC_D2|SRAM_DQ3_FMC_D3|SRAM_DQ13_FMC_D13\
+										|SRAM_DQ14_FMC_D14|SRAM_DQ15_FMC_D15|SRAM_DQ0_FMC_D0|SRAM_DQ1_FMC_D1;              
+    HAL_GPIO_Init(SRAM_D_PORT,&GPIO_Initure);     //初始化PD0,1,8,9,10,14,15
     
-    GPIO_Initure.Pin=GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10| GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;              
-    HAL_GPIO_Init(GPIOE,&GPIO_Initure);     //初始化PE0,1,7,8,9,10,11,12,13,14,15
+    GPIO_Initure.Pin=SRAM_LDQM_FMC_NBL0|SRAM_UDQM_FMC_NBL1|SRAM_DQ4_FMC_D4|SRAM_DQ5_FMC_D5\
+										|SRAM_DQ6_FMC_D6|SRAM_DQ7_FMC_D7| SRAM_DQ8_FMC_D8|SRAM_DQ9_FMC_D9\
+										|SRAM_DQ10_FMC_D10|SRAM_DQ11_FMC_D11|SRAM_DQ12_FMC_D12;              
+    HAL_GPIO_Init(SRAM_E_PORT,&GPIO_Initure);     //初始化PE0,1,7,8,9,10,11,12,13,14,15
     
-    GPIO_Initure.Pin=GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;              
-    HAL_GPIO_Init(GPIOF,&GPIO_Initure);     //初始化PF0,1,2,3,4,5,11,12,13,14,15
+    GPIO_Initure.Pin=SRAM_A0_FMC_A0|SRAM_A1_FMC_A1|SRAM_A2_FMC_A2|SRAM_A3_FMC_A3\
+										|SRAM_A4_FMC_A4|SRAM_A5_FMC_A5|SRAM_RAS_FMSSDNRAS|SRAM_A6_FMC_A6\
+										|SRAM_A7_FMC_A7|SRAM_A8_FMC_A8|SRAM_A9_FMC_A9;              
+    HAL_GPIO_Init(SRAM_F_PORT,&GPIO_Initure);     //初始化PF0,1,2,3,4,5,11,12,13,14,15
     
-    GPIO_Initure.Pin=GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_8|GPIO_PIN_15;              
-    HAL_GPIO_Init(GPIOG,&GPIO_Initure);      //初始化PG0,1,2,4,5,8,15 
+    GPIO_Initure.Pin=SRAM_A10_FMC_A10|SRAM_A11_FMC_A11|SRAM_A12_FMC_A12|SRAM_BA0_FMC_BA0\
+										|SRAM_BA1_FMC_BA1|SRAM_CLK_FMC_SDCLK|SRAM_CAS_FMC_SDNCAS;              
+    HAL_GPIO_Init(SRAM_G_PORT,&GPIO_Initure);      //初始化PG0,1,2,4,5,8,15 
 }
 
 //向SDRAM发送命令

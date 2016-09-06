@@ -203,17 +203,24 @@ u32 gui_disabs(u32 x1,u32 x2)
 //aval:透明度(0~32)
 void gui_alphablend_area(u16 x,u16 y,u16 width,u16 height,u16 color,u8 aval)
 {
-	u16 i,j;
+//	u16 i,j;
+//	u16 tempcolor;
+//	for(i=0;i<width;i++)
+//	{
+//		for(j=0;j<height;j++)
+//		{
+//			tempcolor=gui_phy.read_point(x+i,y+j);
+//			tempcolor=gui_alpha_blend565(tempcolor,color,aval);
+//			gui_phy.draw_point(x+i,y+j,tempcolor);
+//		}
+//	}
+	
+//画圆角矩形背景，选中哪个图标的背景
 	u16 tempcolor;
-	for(i=0;i<width;i++)
-	{
-		for(j=0;j<height;j++)
-		{
-			tempcolor=gui_phy.read_point(x+i,y+j);
-			tempcolor=gui_alpha_blend565(tempcolor,color,aval);
-			gui_phy.draw_point(x+i,y+j,tempcolor);
-		}
-	}
+	tempcolor=gui_phy.read_point(x+width/2,y+height/2);
+	tempcolor=gui_alpha_blend565(tempcolor,color,aval);
+
+	gui_draw_arcrectangle(x,y,width,height,20,1,tempcolor,tempcolor);
 }
 
 //画大点函数
@@ -476,7 +483,7 @@ void gui_draw_arcrectangle(u16 x,u16 y,u16 width,u16 height,u8 r,u8 mode,u16 upc
 	if(mode)//填充
 	{
  		gui_fill_rectangle(x+r,y,width-2*r,btnxh/2,upcolor);			//中上
-  		gui_fill_rectangle(x+r,y+btnxh/2,width-2*r,btnxh/2,downcolor);	//中下
+  	gui_fill_rectangle(x+r,y+btnxh/2,width-2*r,btnxh/2,downcolor);	//中下
 		gui_fill_rectangle(x,y+r,r,btnxh/2-r,upcolor);					//左上
 		gui_fill_rectangle(x,y+btnxh/2,r,btnxh/2-r,downcolor);			//左下
 		gui_fill_rectangle(x+width-r,y+r,r,btnxh/2-r,upcolor);			//右上

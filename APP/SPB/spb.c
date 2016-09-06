@@ -370,13 +370,22 @@ u8* const spb_gsma_msg[GUI_LANGUAGE_NUM][3]=
 //    1,清除背景
 void spb_stabar_msg_show(u8 clr)
 { 
-	u8 temp; 
+	u8 temp;
 	if(clr)
 	{
 		gui_fill_rectangle(0,0,lcddev.width,spbdev.stabarheight,BLACK);
 		gui_show_string("CPU:  %",24+64+20+2+20+2,(spbdev.stabarheight-16)/2,64,16,16,WHITE);//显示CPU数据
-		gui_show_string(":",lcddev.width-42+16,(spbdev.stabarheight-16)/2,8,16,16,WHITE);		//显示':'
-  	}
+		gui_show_string(":",lcddev.width-42+16,(spbdev.stabarheight-16)/2,8,16,16,WHITE);		//显示时后的':'
+		
+		gui_show_string(":",lcddev.width-68+16,(spbdev.stabarheight-16)/2,8,16,16,WHITE);		//显示分后的':'
+		
+		gui_show_num(lcddev.width-250,(spbdev.stabarheight-16)/2,2,WHITE,16,20,0X80); //显示201x年中的20
+		
+		gui_show_string("年",lcddev.width-100-118,(spbdev.stabarheight-16)/2,16,16,16,WHITE);		//显示'年'
+		gui_show_string("月",lcddev.width-100-86,(spbdev.stabarheight-16)/2,16,16,16,WHITE);		//显示'月'
+		gui_show_string("日",lcddev.width-100-56,(spbdev.stabarheight-16)/2,16,16,16,WHITE);		//显示'日'
+		gui_show_string("周",lcddev.width-100-32,(spbdev.stabarheight-16)/2,16,16,16,WHITE);		//显示'周'
+ 	}
 	//GSM信息显示
 	spb_gsm_signal_show(2,(spbdev.stabarheight-20)/2,gsmdev.csq);//显示信号质量
 	gui_fill_rectangle(2+20+2,(spbdev.stabarheight-16)/2,64,16,BLACK);
@@ -401,14 +410,14 @@ void spb_stabar_msg_show(u8 clr)
 	calendar_get_time(&calendar);
 	calendar_get_date(&calendar);
 //	printf("sec:%d\r\n",calendar.sec);
-	gui_show_num(lcddev.width-60,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.hour,0X80);	//显示时钟
+	gui_show_num(lcddev.width-68,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.hour,0X80);	//显示时钟
 	gui_show_num(lcddev.width-42,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.min,0X80);//显示分钟	
 	gui_show_num(lcddev.width-2-16,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.sec,0X80);	//显示秒
 	
-	gui_show_num(lcddev.width-158,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.w_year,0X80);//显示年
-	gui_show_num(lcddev.width-134,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.w_month,0X80);	//显示月
-	gui_show_num(lcddev.width-110,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.w_date,0X80);//显示日
-	gui_show_num(lcddev.width-86,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.week,0X80);//显示星期
+	gui_show_num(lcddev.width-100-134,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.w_year,0X80);//显示年
+	gui_show_num(lcddev.width-100-102,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.w_month,0X80);	//显示月
+	gui_show_num(lcddev.width-100-72,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.w_date,0X80);//显示日
+	gui_show_num(lcddev.width-100-16,(spbdev.stabarheight-16)/2,2,WHITE,16,calendar.week,0X80);//显示星期
 }
 extern u8*const sysset_remindmsg_tbl[2][GUI_LANGUAGE_NUM];
 //加载SPB主界面UI
@@ -529,7 +538,7 @@ u8 spb_move_chk(void)
 			else skips=20;				//MCU屏,跳20个像素
 			break;
 		case 600:
-			skips=80;
+			skips=100;
 			break; 
 	} 
 	tp_dev.scan(0);	//扫描		

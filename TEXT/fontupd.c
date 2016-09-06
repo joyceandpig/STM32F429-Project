@@ -238,7 +238,7 @@ u8 font_init(u8 cmd)
 		
 		u_printf(INFO,"尝试更新字库，请稍后...");
 		LCD_Clear(BLACK);		
-		if(0==update_font(0,0,16,"1:"))//更新成功
+		if(0==update_font(0,0,16,"2:"))//更新成功
 		{
 			u_printf(INFO,"字库更新成功！");
 		}

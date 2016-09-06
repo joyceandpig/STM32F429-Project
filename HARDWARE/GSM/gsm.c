@@ -8,6 +8,8 @@
 #include "usart.h" 
 #include "ff.h" 
 #include "ucos_ii.h" 
+
+
 //////////////////////////////////////////////////////////////////////////////////	   
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -32,9 +34,9 @@ __gsmdev gsmdev;	//gsm控制器
 u8* gsm_check_cmd(u8 *str)
 {
 	char *strx=0;
-	if(USART3_RX_STA&0X8000)		//接收到一次数据了
+	if(__USART_GET_DATA__(USART3_RX_STA))		//接收到一次数据了
 	{ 
-		USART3_RX_BUF[USART3_RX_STA&0X7FFF]=0;//添加结束符
+		USART3_RX_BUF[__USART_CLR_MSB_BIT__(USART3_RX_STA)]=0;//添加结束符
 		strx=strstr((const char*)USART3_RX_BUF,(const char*)str);
 	} 
 	return (u8*)strx;
@@ -53,15 +55,17 @@ u8 gsm_send_cmd(u8 *cmd,u8 *ack,u16 waittime)
 	gsmdev.cmdon=1;//进入指令等待状态
 	if((u32)cmd<=0XFF)
 	{   
-		while((USART3->SR&0X40)==0);//等待上一次数据发送完成  
-		USART3->DR=(u32)cmd;
+//		while((USART3->SR&0X40)==0);//等待上一次数据发送完成  
+//		USART3->DR=(u32)cmd;
+		while(__HAL_UART_GET_FLAG(&USART3_Handler,UART_FLAG_TC));		//直到发送完毕 
+		__HAL_USART_SET_DAT_TO_DR(&USART3_Handler,(u32)cmd);
 	}else u3_printf("%s\r\n",cmd);//发送命令
 	if(ack&&waittime)		//需要等待应答
 	{
 		while(--waittime)	//等待倒计时
 		{
 			delay_ms(10);
-			if(USART3_RX_STA&0X8000)//是否接收到期待的应答结果
+			if(__USART_GET_DATA__(USART3_RX_STA))//是否接收到期待的应答结果
 			{
 				if(gsm_check_cmd(ack))res=0;//收到期待的结果了
 				else res=1;//不是期待的结果
@@ -153,7 +157,7 @@ void gsm_cmsgin_check(void)
 	u8 num;
 	if(gsmdev.cmdon==0&&gsmdev.mode==0)//非指令等待状态,.拨号/短信模式,才检测数据
 	{
-		if(USART3_RX_STA&0X8000)//收到数据了
+		if(__USART_GET_DATA__(USART3_RX_STA))//收到数据了
 		{
 			if(gsm_check_cmd("+CLIP:"))//接收到来电?
 			{
@@ -163,11 +167,11 @@ void gsm_cmsgin_check(void)
 				p2[0]=0;//添加结束符 
 				strcpy((char*)gsmdev.incallnum,(char*)p1);//拷贝号码
 				gsmdev.mode=3;			//标记来电了
-//				phone_incall_task_creat();	//创建来电任务
+				phone_incall_task_creat();	//创建来电任务
 			}
 			if(gsm_check_cmd("+CMGS:"))//短信发送成功
 			{
-//				sms_remind_msg(1);//提示发送信息成功
+				sms_remind_msg(1);//提示发送信息成功
 			}
 			if(gsm_check_cmd("+CMTI:"))//收到新消息
 			{
@@ -181,7 +185,7 @@ void gsm_cmsgin_check(void)
 					gsmdev.newmsgindex[gsmdev.newmsg]=num;
 					gsmdev.newmsg++;
 				}
-//				sms_remind_msg(0);//提示收到新消息
+				sms_remind_msg(0);//提示收到新消息
 			}			
 			USART3_RX_STA=0;
 			printf("rev:%s\r\n",USART3_RX_BUF);	
@@ -200,13 +204,13 @@ void gsm_status_check(void)
 			p1+=2;
 			gsmdev.csq=(p1[0]-'0')*10+p1[1]-'0';//信号质量
 			if(gsmdev.csq>30)gsmdev.csq=30;		
-			gsmdev.status|=1<<7;	//查询GSM模块是否在位?
+			gsmdev.status|=1<<7;	//查询GSM模块是否在位
 		}else 
 		{ 
 			gsmdev.csq=0;	
 			gsmdev.status=0;	//重新查找
 		} 
-		if((gsmdev.status&0XC0)==0X80)//CPIN状态,未获取?
+		if((gsmdev.status&0XC0)==0X80)//CPIN状态,未获取
 		{ 
 			gsm_send_cmd("ATE0","OK",100);//不回显(必须关闭,否则接收数据可能异常)
 			if(gsm_send_cmd("AT+CPIN?","OK",25)==0)gsmdev.status|=1<<6;//SIM卡在位
@@ -216,11 +220,11 @@ void gsm_status_check(void)
 		{ 
 			if(gsm_send_cmd("AT+COPS?","OK",25)==0)//查询运营商名字
 			{ 
-				p1=(u8*)strstr((const char*)(USART3_RX_BUF),"MOBILE");//查找MOBILE,看看是不是中国移动?
+				p1=(u8*)strstr((const char*)(USART3_RX_BUF),"MOBILE");//查找MOBILE,看看是不是中国移动
 				if(p1)gsmdev.status&=~(1<<4); //中国移动 
 				else 
 				{
-					p1=(u8*)strstr((const char*)(USART3_RX_BUF),"UNICOM");//查找UNICOM,看看是不是中国联通?
+					p1=(u8*)strstr((const char*)(USART3_RX_BUF),"UNICOM");//查找UNICOM,看看是不是中国联通
 					if(p1)gsmdev.status|=1<<4;	//中国联通 
 				}
 				if(p1)

@@ -2,10 +2,6 @@
 #include "delay.h"		 
 #include "stm32f4xx_hal_dma.h"
 
-#define __HAL_DMA_TypeDef_SET_LISR(__HANDLE__, __VAL__)   ((uint32_t)((__HANDLE__)->LISR   |= (__VAL__)))
-#define __HAL_DMA_TypeDef_SET_HISR(__HANDLE__, __VAL__)   ((uint32_t)((__HANDLE__)->HISR   |= (__VAL__)))
-#define __HAL_DMA_TypeDef_SET_LIFCR(__HANDLE__, __VAL__)  ((uint32_t)((__HANDLE__)->LIFCR |= (__VAL__)))
-#define __HAL_DMA_TypeDef_SET_HIFCR(__HANDLE__, __VAL__)  ((uint32_t)((__HANDLE__)->HIFCR |= (__VAL__)))
 
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途

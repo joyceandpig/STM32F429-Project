@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx,OS_UCOS,DEBUG,USE_USB_OTG_FS,MPL_LOG_NDEBUG=1,EMPL,MPU9250,EMPL_TARGET_STM32F4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\HARDWARE\DMA;..\APP\SPB;..\APP\COMMON;..\GUI;..\HARDWARE\GSM;..\HARDWARE\RTC;..\APP\CALENDAR;..\APP\SYSTEM SETTING;..\HARDWARE\WM8978;..\APP\EBOOK;..\APP\APPPLAY;..\APP\PHONEPLAY;..\APP\SMSPLAY;..\T9INPUT;..\ATKFREC;..\ATKNCR;..\ATKQR;..\APP\LEDPLAY;..\APP\GRADIENTER;..\APP\GYROSCOPE;..\USB\USB_APP;..\USB\STM32_USB_HOST_Library\Core\inc;..\USB\STM32_USB_HOST_Library\Class\HID\inc;..\USB\STM32_USB_HOST_Library\Class\MSC\inc;..\HARDWARE\OV5640;..\HARDWARE\DCMI;..\HARDWARE\EXTI;..\APP\lyric;..\HARDWARE\SAI;..\AUDIOCODEC\mp3;..\AUDIOCODEC\mp3\helix;..\AUDIOCODEC\flac;..\AUDIOCODEC\flac\flacdec;..\AUDIOCODEC\ape;..\AUDIOCODEC\ape\apedec;..\AUDIOCODEC\wav;..\APP\audio;..\MJPEG\JPEG;..\MJPEG;..\HARDWARE\DS18B20</IncludePath>
+              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\HARDWARE\DMA;..\APP\SPB;..\APP\COMMON;..\GUI;..\HARDWARE\GSM;..\HARDWARE\RTC;..\APP\CALENDAR;..\APP\SYSTEM SETTING;..\HARDWARE\WM8978;..\APP\EBOOK;..\APP\APPPLAY;..\APP\PHONEPLAY;..\APP\SMSPLAY;..\T9INPUT;..\ATKFREC;..\ATKNCR;..\ATKQR;..\APP\LEDPLAY;..\APP\GRADIENTER;..\APP\GYROSCOPE;..\USB\USB_APP;..\USB\STM32_USB_HOST_Library\Core\inc;..\USB\STM32_USB_HOST_Library\Class\HID\inc;..\USB\STM32_USB_HOST_Library\Class\MSC\inc;..\HARDWARE\OV5640;..\HARDWARE\DCMI;..\HARDWARE\EXTI;..\APP\lyric;..\HARDWARE\SAI;..\AUDIOCODEC\mp3;..\AUDIOCODEC\mp3\helix;..\AUDIOCODEC\flac;..\AUDIOCODEC\flac\flacdec;..\AUDIOCODEC\ape;..\AUDIOCODEC\ape\apedec;..\AUDIOCODEC\wav;..\APP\audio;..\MJPEG\JPEG;..\MJPEG;..\HARDWARE\DS18B20;..\HARDWARE\MPU9250\MPL;..\HARDWARE\MPU9250\MPL\driver\eMPL;..\HARDWARE\MPU9250\MPL\driver\include;..\HARDWARE\MPU9250\MPL\driver\stm32L;..\HARDWARE\MPU9250\MPL\eMPL-hal;..\HARDWARE\MPU9250\MPL\mllite;..\HARDWARE\MPU9250\MPL\mpl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1496,81 +1496,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>DMP</GroupName>
-          <Files>
-            <File>
-              <FileName>inv_mpu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\driver\eMPL\inv_mpu.c</FilePath>
-            </File>
-            <File>
-              <FileName>inv_mpu_dmp_motion_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\driver\eMPL\inv_mpu_dmp_motion_driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>log_stm32.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\driver\stm32L\log_stm32.c</FilePath>
-            </File>
-            <File>
-              <FileName>eMPL_outputs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\eMPL-hal\eMPL_outputs.c</FilePath>
-            </File>
-            <File>
-              <FileName>data_builder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\data_builder.c</FilePath>
-            </File>
-            <File>
-              <FileName>hal_outputs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\hal_outputs.c</FilePath>
-            </File>
-            <File>
-              <FileName>message_layer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\message_layer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ml_math_func.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\ml_math_func.c</FilePath>
-            </File>
-            <File>
-              <FileName>mlmath.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\mlmath.c</FilePath>
-            </File>
-            <File>
-              <FileName>mpl.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\mpl.c</FilePath>
-            </File>
-            <File>
-              <FileName>results_holder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\results_holder.c</FilePath>
-            </File>
-            <File>
-              <FileName>start_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\start_manager.c</FilePath>
-            </File>
-            <File>
-              <FileName>storage_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\storage_manager.c</FilePath>
-            </File>
-            <File>
-              <FileName>libmpllib.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\DMP\mpl\libmpllib.lib</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>T9INPUT</GroupName>
           <Files>
             <File>
@@ -2003,6 +1928,81 @@
               <FileName>wrppm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\MJPEG\JPEG\wrppm.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MPL</GroupName>
+          <Files>
+            <File>
+              <FileName>inv_mpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\driver\eMPL\inv_mpu.c</FilePath>
+            </File>
+            <File>
+              <FileName>inv_mpu_dmp_motion_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\driver\eMPL\inv_mpu_dmp_motion_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>log_stm32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\driver\stm32L\log_stm32.c</FilePath>
+            </File>
+            <File>
+              <FileName>eMPL_outputs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\eMPL-hal\eMPL_outputs.c</FilePath>
+            </File>
+            <File>
+              <FileName>data_builder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mllite\data_builder.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_outputs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mllite\hal_outputs.c</FilePath>
+            </File>
+            <File>
+              <FileName>message_layer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mllite\message_layer.c</FilePath>
+            </File>
+            <File>
+              <FileName>ml_math_func.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mllite\ml_math_func.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlmath.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mllite\mlmath.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mllite\mpl.c</FilePath>
+            </File>
+            <File>
+              <FileName>results_holder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mllite\results_holder.c</FilePath>
+            </File>
+            <File>
+              <FileName>start_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mllite\start_manager.c</FilePath>
+            </File>
+            <File>
+              <FileName>storage_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mllite\storage_manager.c</FilePath>
+            </File>
+            <File>
+              <FileName>libmpllib.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\HARDWARE\MPU9250\MPL\mpl\libmpllib.lib</FilePath>
             </File>
           </Files>
         </Group>

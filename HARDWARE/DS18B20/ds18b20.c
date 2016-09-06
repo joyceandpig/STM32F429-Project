@@ -20,10 +20,10 @@ void DS18B20_Rst(void)
 {                 
 	DS18B20_IO_OUT(); //SET PG11 OUTPUT
 	
-  DS18B20_DQ_OUT_CLEAR; //拉低DQ
+  DS18B20_DQ_OUT_CLEAR(); //拉低DQ
   delay_us(750);    //拉低750us
 	
-  DS18B20_DQ_OUT_SET; //DQ=1 
+  DS18B20_DQ_OUT_SET(); //DQ=1 
 	delay_us(15);     //15US
 }
 //等待DS18B20的回应
@@ -33,7 +33,7 @@ u8 DS18B20_Check(void)
 {   
 	u8 retry=0;
 	DS18B20_IO_IN();//SET pin INPUT	 
-  while (DS18B20_DQ_IN_STA&&retry<200){
+  while (DS18B20_DQ_IN_STA()&&retry<200){
 		retry++;
 		delay_us(1);
 	};	 
@@ -42,7 +42,7 @@ u8 DS18B20_Check(void)
 	}else{
 		retry=0;
 	}
-  while (!DS18B20_DQ_IN_STA&&retry<240){
+  while (!DS18B20_DQ_IN_STA()&&retry<240){
 		retry++;
 		delay_us(1);
 	};
@@ -56,15 +56,15 @@ u8 DS18B20_Check(void)
 u8 DS18B20_Read_Bit(void) 			  
 {
 	DS18B20_IO_OUT();//SET  OUTPUT
-  DS18B20_DQ_OUT_CLEAR; 
+  DS18B20_DQ_OUT_CLEAR(); 
 	delay_us(2);
 	
-  DS18B20_DQ_OUT_SET; 
+  DS18B20_DQ_OUT_SET(); 
 	DS18B20_IO_IN();//SET  INPUT
 	delay_us(12);
 	
 	delay_us(50);           
-	return DS18B20_DQ_IN_STA?1:0;
+	return DS18B20_DQ_IN_STA()?1:0;
 }
 //从DS18B20读取一个字节
 //返回值：读到的数据
@@ -91,15 +91,15 @@ void DS18B20_Write_Byte(u8 dat)
 	{
 		testb=dat&0x01;
 		dat=dat>>1;
-		if (testb) {
-			DS18B20_DQ_OUT_CLEAR;// Write 1
+		if (testb){
+			DS18B20_DQ_OUT_CLEAR();// Write 1
 			delay_us(2);                            
-			DS18B20_DQ_OUT_SET;
+			DS18B20_DQ_OUT_SET();
 			delay_us(60);             
 		}else {
-			DS18B20_DQ_OUT_CLEAR;// Write 0
+			DS18B20_DQ_OUT_CLEAR();// Write 0
 			delay_us(60);             
-			DS18B20_DQ_OUT_SET;
+			DS18B20_DQ_OUT_SET();
 			delay_us(2);                          
 		}
   }

@@ -18,7 +18,8 @@
 //V1.1  20160320 
 //修改为支持3页滑动.
 //////////////////////////////////////////////////////////////////////////////////	  
-
+#define __HAL_DMA_Stream_SET_PAR(__HANDLE__, __VAL__)  ((uint32_t)((__HANDLE__)->Instance)->PAR  |= (__VAL__))
+#define __HAL_DMA_Stream_SET_M0AR(__HANDLE__, __VAL__) ((uint32_t)((__HANDLE__)->Instance)->M0AR |= (__VAL__))
 
 #define SLCD_DMA_MAX_TRANS	60*1024		//DMA一次最多传输60K字节	
 extern u16 *sramlcdbuf;					//SRAMLCD缓存,先在SRAM 里面将图片解码,并加入图标以及文字等信息

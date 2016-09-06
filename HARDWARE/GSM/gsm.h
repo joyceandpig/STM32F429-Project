@@ -13,7 +13,12 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2014-2024
 //All rights reserved 
 ////////////////////////////////////////////////////////////////////////////////// 	
- 
+
+///////////////////////////////宏定义操作////////////////////////////////////////
+#define __USART_RX_STA_GET_BIT__          0x8000
+#define __USART_GET_DATA__(__STA__)       (__STA__ & __USART_RX_STA_GET_BIT__)
+#define __USART_CLR_MSB_BIT__(__STA__)    (__STA__ & (~__USART_RX_STA_GET_BIT__))
+
 #define GSM_MAX_NEWMSG	10		//最大10条新消息
 
 typedef struct 

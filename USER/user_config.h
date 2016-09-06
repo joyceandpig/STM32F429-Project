@@ -35,12 +35,12 @@ enum TASK_PRIO{
 	//以上顺序勿随意改动
 
 	//user task	
-	TASK_KEY_PRIO,
+	
 	TASK_MAIN_PRIO ,
 	TASK_LED_PRIO,
 	TASK_USB_PRIO,
 	TASK_PICTURE_PRIO,
-
+	TASK_KEY_PRIO,
 	
 	
 	/////
@@ -61,7 +61,7 @@ enum TASK_PRIO{
 #define TASK_LED_STACK_SIZE					512
 #define TASK_USB_STACK_SIZE					512
 #define TASK_PICTURE_STACK_SIZE			512
-#define TASK_KEY_STACK_SIZE			512
+#define TASK_KEY_STACK_SIZE					512
 /*
 *********************************************************************************************************
 *                               		IRQ_PRIORITY
