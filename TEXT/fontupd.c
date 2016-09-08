@@ -89,9 +89,9 @@ u8 updata_fontx(u16 x,u16 y,u8 size,u8 *fxpath,u8 fx)
 	u16 bread;
 	u32 offx=0;
 	u8 rval=0;	     
-	fftemp=(FIL*)mymalloc(SRAMIN,sizeof(FIL));	//·ÖÅäÄÚ´æ	
+	fftemp=(FIL*)mymalloc(SRAMEX,sizeof(FIL));	//·ÖÅäÄÚ´æ	SRAMIN
 	if(fftemp==NULL)rval=1;
-	tempbuf=mymalloc(SRAMIN,4096);				//·ÖÅä4096¸ö×Ö½Ú¿Õ¼ä
+	tempbuf=mymalloc(SRAMEX,4096);				//·ÖÅä4096¸ö×Ö½Ú¿Õ¼SRAMINä
 	if(tempbuf==NULL)rval=1;
  	res=f_open(fftemp,(const TCHAR*)fxpath,FA_READ); 
  	if(res)rval=2;//´ò¿ªÎÄ¼şÊ§°Ü  
@@ -137,8 +137,8 @@ u8 updata_fontx(u16 x,u16 y,u8 size,u8 *fxpath,u8 fx)
 	 	} 	
 		f_close(fftemp);		
 	}			 
-	myfree(SRAMIN,fftemp);	//ÊÍ·ÅÄÚ´æ
-	myfree(SRAMIN,tempbuf);	//ÊÍ·ÅÄÚ´æ
+	myfree(SRAMEX,fftemp);	//ÊÍ·ÅÄÚ´æSRAMIN
+	myfree(SRAMEX,tempbuf);	//ÊÍ·ÅÄÚ´æSRAMIN
 	return res;
 } 
 //¸üĞÂ×ÖÌåÎÄ¼ş,UNIGBK,GBK12,GBK16,GBK24,GBK32Ò»Æğ¸üĞÂ
@@ -158,14 +158,14 @@ u8 update_font(u16 x,u16 y,u8 size,u8* src)
 	u8 rval=0; 
 	res=0XFF;		
 	ftinfo.fontok=0XFF;
-	pname=mymalloc(SRAMIN,100);	//ÉêÇë100×Ö½ÚÄÚ´æ  
-	buf=mymalloc(SRAMIN,4096);	//ÉêÇë4K×Ö½ÚÄÚ´æ  
-	fftemp=(FIL*)mymalloc(SRAMIN,sizeof(FIL));	//·ÖÅäÄÚ´æ	
+	pname=mymalloc(SRAMEX,100);	//ÉêÇë100×Ö½ÚÄÚ´æ  SRAMIN
+	buf=mymalloc(SRAMEX,4096);	//ÉêÇë4K×Ö½ÚÄÚ´æ SRAMIN 
+	fftemp=(FIL*)mymalloc(SRAMEX,sizeof(FIL));	//·ÖÅäÄÚ´SRAMINæ	
 	if(buf==NULL||pname==NULL||fftemp==NULL)
 	{
-		myfree(SRAMIN,fftemp);
-		myfree(SRAMIN,pname);
-		myfree(SRAMIN,buf);
+		myfree(SRAMEX,fftemp);//SRAMIN
+		myfree(SRAMEX,pname);//SRAMIN
+		myfree(SRAMEX,buf);//SRAMIN
 		return 5;		//ÄÚ´æÉêÇëÊ§°Ü
 	}
 	for(i=0;i<5;i++)	//ÏÈ²éÕÒÎÄ¼şUNIGBK,GBK12,GBK16,GBK24,GBK32ÊÇ·ñÕı³£ 
@@ -179,7 +179,7 @@ u8 update_font(u16 x,u16 y,u8 size,u8* src)
 			break;		//³ö´íÁË,Ö±½ÓÍË³ö
 		}
 	} 
-	myfree(SRAMIN,fftemp);	//ÊÍ·ÅÄÚ´æ
+	myfree(SRAMEX,fftemp);	//ÊÍ·ÅÄÚ´SRAMINæ
 	if(rval==0)				//×Ö¿âÎÄ¼ş¶¼´æÔÚ.
 	{  
 		LCD_ShowString(x,y,240,320,size,"Erasing sectors... ");//ÌáÊ¾ÕıÔÚ²Á³ıÉÈÇø	
@@ -201,8 +201,8 @@ u8 update_font(u16 x,u16 y,u8 size,u8* src)
 			res=updata_fontx(x+20*size/2,y,size,pname,i);	//¸üĞÂ×Ö¿â
 			if(res)
 			{
-				myfree(SRAMIN,buf);
-				myfree(SRAMIN,pname);
+				myfree(SRAMEX,buf);//SRAMIN
+				myfree(SRAMEX,pname);//SRAMIN
 				return 1+i;
 			} 
 		} 
@@ -210,8 +210,8 @@ u8 update_font(u16 x,u16 y,u8 size,u8* src)
 		ftinfo.fontok=0XAA;
 		W25QXX_Write((u8*)&ftinfo,FONTINFOADDR,sizeof(ftinfo));	//±£´æ×Ö¿âĞÅÏ¢
 	}
-	myfree(SRAMIN,pname);//ÊÍ·ÅÄÚ´æ 
-	myfree(SRAMIN,buf);
+	myfree(SRAMEX,pname);//ÊÍ·ÅÄÚ´æ SRAMIN
+	myfree(SRAMEX,buf);//SRAMIN
 	return rval;//ÎŞ´íÎó.			 
 } 
 

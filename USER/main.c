@@ -95,7 +95,7 @@ int main(void)
 	SDRAM_Init();                   //SDRAM初始化
  	my_mem_init(SRAMIN);		    //初始化内部内存池
 	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测W25Q128错误
-	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存
+	MSC_BOT_Data=mymalloc(SRAMEX,MSC_MEDIA_PACKET);			//申请内存SRAMIN
 	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
 	while(1)；
 }
@@ -186,7 +186,7 @@ int main(void)
 	Show_Str(30,50+32*4+24*3,300,32,"2016年8月25日",24,0);
 
 	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测NandFlash错误
-	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存
+	MSC_BOT_Data=mymalloc(SRAMEX,MSC_MEDIA_PACKET);			//申请内存SRAMIN
 	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
 //	Sleep(2000);
 	
@@ -344,7 +344,7 @@ void main_thread(void *pdata)
 			case notepad_app	:notepad_play();	break;//记事本	
 			case exe_app			:exe_play();		break;//运行器
 			case paint_app		:paint_play();		break;//手写画笔
-// 			case camera_app		:camera_play();		break;//摄像头
+ 			case camera_app		:camera_play();		break;//摄像头
 //			case recorder_app	:recorder_play();	break;//录音机
 // 			case usb_app		:usb_play();		break;//USB连接
 // 	    case net_app		:net_play();		break;//网络测试
@@ -391,7 +391,7 @@ u16 pic_get_tnum(u8 *path)
 	u16 rval=0;
  	DIR tdir;	 		//临时目录
 	FILINFO *tfileinfo;	//临时文件信息	    			     
-	tfileinfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));//申请内存
+	tfileinfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));//申请内存SRAMIN
     res=f_opendir(&tdir,(const TCHAR*)path); 	//打开目录 
 	if(res==FR_OK&&tfileinfo)
 	{
@@ -406,7 +406,7 @@ u16 pic_get_tnum(u8 *path)
 			}	    
 		}  
 	}  
-	myfree(SRAMIN,tfileinfo);//释放内存
+	myfree(SRAMIN,tfileinfo);//释放内存SRAMIN
 	return rval;
 }
 
@@ -443,9 +443,9 @@ void ShowPicture(void)
 		u_printf(DBG,"0 Picture!");
 		delay_ms(200);			  
 	} 
-	picfileinfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));	//申请内存
- 	pname=mymalloc(SRAMIN,_MAX_LFN*2+1);					//为带路径的文件名分配内存
- 	picoffsettbl=mymalloc(SRAMIN,4*totpicnum);					//申请4*totpicnum个字节的内存,用于存放图片索引
+	picfileinfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));	//申请内存SRAMIN
+ 	pname=mymalloc(SRAMIN,_MAX_LFN*2+1);					//为带路径的文件名分配内存SRAMIN
+ 	picoffsettbl=mymalloc(SRAMIN,4*totpicnum);					//申请4*totpicnum个字节的内存,用于存放图片索引SRAMIN
  	while(!picfileinfo||!pname||!picoffsettbl)					//内存分配出错
  	{	    	
 		u_printf(DBG,"mem is malloc error!");     
@@ -514,9 +514,9 @@ void ShowPicture(void)
 		}				
 		res=0; 	
 	} 							    
-	myfree(SRAMIN,picfileinfo);			//释放内存						   		    
-	myfree(SRAMIN,pname);				//释放内存			    
-	myfree(SRAMIN,picoffsettbl);			//释放内存	
+	myfree(SRAMIN,picfileinfo);			//释放内存SRAMIN						   		    
+	myfree(SRAMIN,pname);				//释放内存	SRAMIN		    
+	myfree(SRAMIN,picoffsettbl);			//释放内存	SRAMIN
 }
 #endif
 

@@ -261,7 +261,7 @@
 
   <Group>
     <GroupName>CORE</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1404,8 +1404,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\APP\qrplay\qrplay.c</PathWithFileName>
-      <FilenameWithoutPath>qrplay.c</FilenameWithoutPath>
+      <PathWithFileName>..\APP\facereco\facereco.c</PathWithFileName>
+      <FilenameWithoutPath>facereco.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1416,8 +1416,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\APP\camera\camera.c</PathWithFileName>
-      <FilenameWithoutPath>camera.c</FilenameWithoutPath>
+      <PathWithFileName>..\APP\qrplay\qrplay.c</PathWithFileName>
+      <FilenameWithoutPath>qrplay.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1428,8 +1428,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\APP\facereco\facereco.c</PathWithFileName>
-      <FilenameWithoutPath>facereco.c</FilenameWithoutPath>
+      <PathWithFileName>..\APP\camera\camera.c</PathWithFileName>
+      <FilenameWithoutPath>camera.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

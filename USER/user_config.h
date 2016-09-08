@@ -57,7 +57,7 @@ enum TASK_PRIO{
 //Sys Task!!!
 
 //User Task
-#define TASK_MAIN_STACK_SIZE				1200
+#define TASK_MAIN_STACK_SIZE				512
 #define TASK_LED_STACK_SIZE					512
 #define TASK_USB_STACK_SIZE					512
 #define TASK_PICTURE_STACK_SIZE			512

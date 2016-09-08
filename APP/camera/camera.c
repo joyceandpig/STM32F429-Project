@@ -248,7 +248,7 @@ u8 ov5640_jpg_photo(u8 *pname)
 	u32 bwr;
 	u32 i,jpgstart,jpglen;
 	u8* pbuf;
-	f_jpg=(FIL *)mymalloc(SRAMIN,sizeof(FIL));	//开辟FIL字节的内存区域 
+	f_jpg=(FIL *)mymalloc(SRAMEX,sizeof(FIL));	//开辟FIL字节的内存区域 SRAMIN
 	if(f_jpg==NULL)return 0XFF;				//内存申请失败.
 	ovx_mode=1;
 	jpeg_data_ok=0;
@@ -310,7 +310,7 @@ u8 ov5640_jpg_photo(u8 *pname)
 	{
 		DCMI_DMA_Init((u32)&LCD->LCD_RAM,0,1,1,0);			//DCMI DMA配置,MCU屏,竖屏
 	}
-	myfree(SRAMIN,f_jpg); 
+	myfree(SRAMEX,f_jpg); //SRAMIN
 	return res;
 }   
 

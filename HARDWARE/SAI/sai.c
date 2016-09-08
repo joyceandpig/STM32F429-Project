@@ -1,7 +1,6 @@
 #include "sai.h"  
 #include "includes.h"	 	//ucos 使用	  
 #include "stm32f4xx_hal_dma.h"
-#include "stm32f4xx_hal_dma_ex.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板

@@ -53,12 +53,12 @@ u8 exfuns_init(void)
 	u8 i;
 	for(i=0;i<_VOLUMES;i++)
 	{
-		fs[i]=(FATFS*)mymalloc(SRAMIN,sizeof(FATFS));	//为磁盘i工作区申请内存	
+		fs[i]=(FATFS*)mymalloc(SRAMIN,sizeof(FATFS));	//为磁盘i工作区申请内存	//SRAMIN
 		if(!fs[i])break;
 	}
-	file=(FIL*)mymalloc(SRAMIN,sizeof(FIL));		//为file申请内存
-	ftemp=(FIL*)mymalloc(SRAMIN,sizeof(FIL));		//为ftemp申请内存
-	fatbuf=(u8*)mymalloc(SRAMIN,512);				//为fatbuf申请内存
+	file=(FIL*)mymalloc(SRAMIN,sizeof(FIL));		//为file申请内存SRAMIN
+	ftemp=(FIL*)mymalloc(SRAMIN,sizeof(FIL));		//为ftemp申请内存SRAMIN
+	fatbuf=(u8*)mymalloc(SRAMIN,512);				//为fatbuf申请内存SRAMIN
 	if(i==_VOLUMES&&file&&ftemp&&fatbuf)return 0;  //申请有一个失败,即失败.
 	else return 1;	
 }
@@ -167,9 +167,9 @@ u8 exf_copy(u8(*fcpymsg)(u8*pname,u8 pct,u8 mode),u8 *psrc,u8 *pdst,u32 totsize,
 	u8 *fbuf=0;
 	u8 curpct=0;
 	unsigned long long lcpdsize=cpdsize; 
- 	fsrc=(FIL*)mymalloc(SRAMIN,sizeof(FIL));//申请内存
- 	fdst=(FIL*)mymalloc(SRAMIN,sizeof(FIL));
-	fbuf=(u8*)mymalloc(SRAMIN,8192);
+ 	fsrc=(FIL*)mymalloc(SRAMIN,sizeof(FIL));//申请内存SRAMIN
+ 	fdst=(FIL*)mymalloc(SRAMIN,sizeof(FIL));//SRAMIN
+	fbuf=(u8*)mymalloc(SRAMIN,8192);//SRAMIN
   	if(fsrc==NULL||fdst==NULL||fbuf==NULL)res=100;//前面的值留给fatfs
 	else
 	{   
@@ -208,9 +208,9 @@ u8 exf_copy(u8(*fcpymsg)(u8*pname,u8 pct,u8 mode),u8 *psrc,u8 *pdst,u32 totsize,
 		    f_close(fdst);
 		}
 	}
-	myfree(SRAMIN,fsrc);//释放内存
-	myfree(SRAMIN,fdst);
-	myfree(SRAMIN,fbuf);
+	myfree(SRAMIN,fsrc);//释放内存SRAMIN
+	myfree(SRAMIN,fdst);//         SRAMIN 
+	myfree(SRAMIN,fbuf);//         SRAMIN 
 	return res;
 }
 
@@ -243,12 +243,12 @@ u32 exf_fdsize(u8 *fdname)
  	u16 pathlen=0;		//目标路径长度
 	u32 fdsize=0;
 
-	fddir=(DIR*)mymalloc(SRAMIN,sizeof(DIR));//申请内存
- 	finfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));
+	fddir=(DIR*)mymalloc(SRAMIN,sizeof(DIR));//申请内存SRAMIN
+ 	finfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));//SRAMIN
    	if(fddir==NULL||finfo==NULL)res=100;
 	if(res==0)
 	{ 
- 		pathname=mymalloc(SRAMIN,MAX_PATHNAME_DEPTH);	    
+ 		pathname=mymalloc(SRAMIN,MAX_PATHNAME_DEPTH);	 //  SRAMIN 
  		if(pathname==NULL)res=101;	   
  		if(res==0)
 		{
@@ -274,11 +274,11 @@ u32 exf_fdsize(u8 *fdname)
 						
 				} 
 		    }	  
-  			myfree(SRAMIN,pathname);	     
+  			myfree(SRAMIN,pathname);	 // SRAMIN   
 		}
  	}
-	myfree(SRAMIN,fddir);    
-	myfree(SRAMIN,finfo);
+	myfree(SRAMIN,fddir);//SRAMIN    
+	myfree(SRAMIN,finfo);//SRAMIN
 	if(res)return 0;
 	else return fdsize;
 }	  
@@ -318,15 +318,15 @@ u8 exf_fdcopy(u8(*fcpymsg)(u8*pname,u8 pct,u8 mode),u8 *psrc,u8 *pdst,u32 *totsi
  	u16 srcpathlen=0;	//源路径长度
 
   
-	srcdir=(DIR*)mymalloc(SRAMIN,sizeof(DIR));//申请内存
- 	dstdir=(DIR*)mymalloc(SRAMIN,sizeof(DIR));
-	finfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));
+	srcdir=(DIR*)mymalloc(SRAMIN,sizeof(DIR));//申请内存SRAMIN
+ 	dstdir=(DIR*)mymalloc(SRAMIN,sizeof(DIR));//         SRAMIN 
+	finfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));//SRAMIN
 
    	if(srcdir==NULL||dstdir==NULL||finfo==NULL)res=100;
 	if(res==0)
 	{ 
- 		dstpathname=mymalloc(SRAMIN,MAX_PATHNAME_DEPTH);
-		srcpathname=mymalloc(SRAMIN,MAX_PATHNAME_DEPTH);
+ 		dstpathname=mymalloc(SRAMIN,MAX_PATHNAME_DEPTH);//SRAMIN
+		srcpathname=mymalloc(SRAMIN,MAX_PATHNAME_DEPTH);//SRAMIN
  		if(dstpathname==NULL||srcpathname==NULL)res=101;	   
  		if(res==0)
 		{
@@ -375,13 +375,13 @@ u8 exf_fdcopy(u8(*fcpymsg)(u8*pname,u8 pct,u8 mode),u8 *psrc,u8 *pdst,u32 *totsi
 					dstpathname[dstpathlen]=0;//加入结束符	    
 				} 
 		    }	  
-  			myfree(SRAMIN,dstpathname);
- 			myfree(SRAMIN,srcpathname); 
+  			myfree(SRAMIN,dstpathname);//SRAMIN
+				myfree(SRAMIN,srcpathname); //SRAMIN
 		}
  	}
-	myfree(SRAMIN,srcdir);
-	myfree(SRAMIN,dstdir);
-	myfree(SRAMIN,finfo);
+	myfree(SRAMIN,srcdir);//SRAMIN
+	myfree(SRAMIN,dstdir);//SRAMIN
+	myfree(SRAMIN,finfo);// SRAMIN
     return res;	  
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

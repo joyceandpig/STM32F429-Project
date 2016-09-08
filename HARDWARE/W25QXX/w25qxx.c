@@ -238,7 +238,7 @@ void W25QXX_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
  	u16 i;    
 	u8 * W25QXX_BUF;	  
 #if	W25QXX_USE_MALLOC==1	//动态内存管理
-	W25QXX_BUF=mymalloc(SRAMIN,4096);//申请内存
+	W25QXX_BUF=mymalloc(SRAMEX,4096);//申请内存 SRAMIN
 #else
    	W25QXX_BUF=W25QXX_BUFFER; 
 #endif  	     
@@ -278,7 +278,7 @@ void W25QXX_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 		}	 
 	};
 #if	W25QXX_USE_MALLOC==1		 
-	myfree(SRAMIN,W25QXX_BUF);	//释放内存
+	myfree(SRAMEX,W25QXX_BUF);	//释放内存 SRAMIN
 #endif		 
 }
 //擦除整个芯片		  

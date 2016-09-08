@@ -1,6 +1,7 @@
 #include "sys.h"
 #include "sccb.h"
 #include "delay.h"
+#include "stm32f4xx_hal.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -21,9 +22,22 @@ void SCCB_Delay(void)
 //初始化SCCB接口 
 void SCCB_Init(void)
 {											      	 
-	RCC->AHB1ENR|=1<<1;    	//使能外设PORTB时钟	
-//	GPIO_Set(GPIOB,PIN3|PIN4,GPIO_MODE_OUT,GPIO_OTYPE_PP,GPIO_SPEED_50M,GPIO_PUPD_PU);	//PB3/4推挽输出
-	GPIOB->ODR|=3<<3;			//PB3/4输出1  
+//	RCC->AHB1ENR|=1<<1;    	//使能外设PORTB时钟	
+////	GPIO_Set(GPIOB,PIN3|PIN4,GPIO_MODE_OUT,GPIO_OTYPE_PP,GPIO_SPEED_50M,GPIO_PUPD_PU);	//PB3/4推挽输出
+//	GPIOB->ODR|=3<<3;			//PB3/4输出1  
+	
+	   GPIO_InitTypeDef GPIO_Initure;
+    __HAL_RCC_GPIOB_CLK_ENABLE();           //开启GPIOB时钟
+	
+    GPIO_Initure.Pin=GPIO_PIN_3|GPIO_PIN_4; //PB3,4
+    GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;  //推挽输出
+    GPIO_Initure.Pull=GPIO_PULLUP;          //上拉
+    GPIO_Initure.Speed=GPIO_SPEED_HIGH;     //高速
+    HAL_GPIO_Init(GPIOB,&GPIO_Initure);
+	
+	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_SET);
+	
 	SCCB_SDA_OUT();	   
 }			 
 

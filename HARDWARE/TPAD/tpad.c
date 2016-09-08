@@ -22,8 +22,6 @@
 
 
 
-
-
 #define TPAD_ARR_MAX_VAL  0X4000		//最大的ARR值(TIM2是32位定时器)	  
 vu16 tpad_default_val=0;				//空载的时候(没有手按下),计数器需要的时间
 //初始化触摸按键
@@ -140,39 +138,7 @@ u8 TPAD_Scan(u8 mode)
 	if(keyen)keyen--;		   							   		     	    					   
 	return res;
 }	 
-//定时器2通道2输入捕获配置	 
-//arr：自动重装值
-//psc：时钟预分频数
-void TIM2_CH1_Cap_Init(u32 arr,u16 psc)
-{
-//	RCC->APB1ENR|=1<<0;		//TIM2时钟使能    
-//	RCC->AHB1ENR|=1<<0;   	//使能PORTA时钟	
-//	GPIO_Set(GPIOA,PIN5,GPIO_MODE_AF,GPIO_OTYPE_PP,GPIO_SPEED_100M,GPIO_PUPD_NONE);//PA5,复用功能,不带上下拉
-//	GPIO_AF_Set(GPIOA,5,1);	//PA5,AF1 
-		GPIO_InitTypeDef TPAD_GPIO_Handler;
-		__HAL_RCC_TIM2_CLK_ENABLE();//TIM2时钟使能    
-	  TPAD_RST_GPIO_PORT_CLK_ENABLE();           //开启GPIOA时钟
-		HAL_GPIO_DeInit(TPAD_RST_GPIO_PORT,TPAD_RST_GPIO_PIN);
-    TPAD_GPIO_Handler.Pin=TPAD_RST_GPIO_PIN; //p5
-    TPAD_GPIO_Handler.Mode=GPIO_MODE_AF_PP;  //推挽输出
-    TPAD_GPIO_Handler.Pull=GPIO_NOPULL;          //下拉
-    TPAD_GPIO_Handler.Speed=GPIO_SPEED_HIGH;     //高速 100m
-		TPAD_GPIO_Handler.Alternate = GPIO_AF1_TIM2;
-    HAL_GPIO_Init(TPAD_RST_GPIO_PORT,&TPAD_GPIO_Handler);
-	
-	  
- 	TIM2->ARR=arr;  		//设定计数器自动重装值//刚好1ms    
-	TIM2->PSC=psc;  		//预分频器,1M的计数频率	 
 
-	TIM2->CCMR1|=1<<0;		//CC1S=01 	选择输入端 IC1映射到TI1上
- 	TIM2->CCMR1|=0<<4; 		//IC1F=0000 配置输入滤波器 不滤波 
- 
-	TIM2->EGR=1<<0;			//软件控制产生更新事件,使写入PSC的值立即生效,否则将会要等到定时器溢出才会生效!
-	TIM2->CCER|=0<<1; 		//CC1P=0	上升沿捕获
-	TIM2->CCER|=1<<0; 		//CC1E=1 	允许捕获计数器的值到捕获寄存器中
-																 
-	TIM2->CR1|=0x01;    	//使能定时器2
-}
 
 
 

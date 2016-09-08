@@ -226,7 +226,7 @@ void qr_decode_play(void)
 		qr_input_width=240;
 		qr_img_scale=2;
 	}	
-	qr_result=mymalloc(SRAMIN,2048);	
+	qr_result=mymalloc(SRAMEX,2048);	//SRAMIN
 	qr_gray_buf=mymalloc(SRAMCCM,qr_input_width*qr_input_width);	//申请内存
 	dcmi_line_buf[0]=gui_memin_malloc(qr_lcd_width*2);				//为行缓存接收申请内存	
 	dcmi_line_buf[1]=gui_memin_malloc(qr_lcd_width*2);				//为行缓存接收申请内存
@@ -318,8 +318,8 @@ void qr_decode_play(void)
 		}
 	}
 	DCMI_Stop();						//停止摄像头工作
-	myfree(SRAMIN,qr_result);
-	myfree(SRAMCCM,qr_gray_buf);	
+	myfree(SRAMEX,qr_result);//SRAMIN
+	myfree(SRAMCCM,qr_gray_buf);	//
 	gui_memin_free(dcmi_line_buf[0]);
 	gui_memin_free(dcmi_line_buf[1]);
 	gui_memex_free(rgb_data_buf);

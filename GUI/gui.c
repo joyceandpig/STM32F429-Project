@@ -1168,12 +1168,12 @@ void gui_memset(void *p,u8 c,u32 len)
 //返回值:NULL:分配失败;其他,内存地址
 void *gui_memin_malloc(u32 size)			
 {
-	return (void*)mymalloc(SRAMIN,size);
+	return (void*)mymalloc(SRAMIN,size);//SRAMIN
 }
 //内部内存释放
 void gui_memin_free(void* ptr)		 
 {
-	if(ptr)myfree(SRAMIN,ptr);
+	if(ptr)myfree(SRAMIN,ptr);//SRAMIN
 }  
 //外部内存分配 
 //size:要分配的内存大小(u8为单位)

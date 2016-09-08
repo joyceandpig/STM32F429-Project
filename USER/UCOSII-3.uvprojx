@@ -282,8 +282,8 @@
               </OCR_RVCT5>
               <OCR_RVCT6>
                 <Type>0</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
+                <StartAddress>0xc0000000</StartAddress>
+                <Size>0x2000000</Size>
               </OCR_RVCT6>
               <OCR_RVCT7>
                 <Type>0</Type>
@@ -956,6 +956,11 @@
               <FilePath>..\APP\Gyroscope\gyroscope.c</FilePath>
             </File>
             <File>
+              <FileName>facereco.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\facereco\facereco.c</FilePath>
+            </File>
+            <File>
               <FileName>qrplay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\qrplay\qrplay.c</FilePath>
@@ -964,11 +969,6 @@
               <FileName>camera.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\camera\camera.c</FilePath>
-            </File>
-            <File>
-              <FileName>facereco.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\APP\facereco\facereco.c</FilePath>
             </File>
           </Files>
         </Group>

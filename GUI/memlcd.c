@@ -17,7 +17,7 @@ u8 mlcd_init(u16 width,u16 height,u8 lx)
 	if(lx>MEMLCD_MAX_LAYER||lx==0)return 1;			//lx·Ç·¨ 
 	for(i=0;i<lx;i++)
 	{
-		mlcddev.grambuf[i]=mymalloc(SRAMEX,memsize);//ÉêÇëÄÚ´æ
+		mlcddev.grambuf[i]=mymalloc(SRAMIN,memsize);//ÉêÇëÄÚ´æ
 		if(mlcddev.grambuf[i]==NULL)break;
 	}
 	if(i!=MEMLCD_MAX_LAYER)//ÉêÇëÊ§°ÜÁË
@@ -33,7 +33,7 @@ void mlcd_delete(void)
 	u8 i;
 	for(i=0;i<MEMLCD_MAX_LAYER;i++)
 	{
-		if(mlcddev.grambuf[i])myfree(SRAMEX,mlcddev.grambuf[i]);//ÊÍ·ÅÄÚ´æ
+		if(mlcddev.grambuf[i])myfree(SRAMIN,mlcddev.grambuf[i]);//ÊÍ·ÅÄÚ´æ
 		mlcddev.grambuf[i]=0;
 	}
 	mlcddev.width=0;
