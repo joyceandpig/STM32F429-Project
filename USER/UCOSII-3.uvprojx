@@ -137,7 +137,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx,OS_UCOS,DEBUG,USE_USB_OTG_FS,MPL_LOG_NDEBUG=1,EMPL,MPU9250,EMPL_TARGET_STM32F4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\HARDWARE\DMA;..\APP\SPB;..\APP\COMMON;..\GUI;..\HARDWARE\GSM;..\HARDWARE\RTC;..\APP\CALENDAR;..\APP\SYSTEM SETTING;..\HARDWARE\WM8978;..\APP\EBOOK;..\APP\APPPLAY;..\APP\PHONEPLAY;..\APP\SMSPLAY;..\T9INPUT;..\ATKFREC;..\ATKNCR;..\ATKQR;..\APP\LEDPLAY;..\APP\GRADIENTER;..\APP\GYROSCOPE;..\USB\USB_APP;..\USB\STM32_USB_HOST_Library\Core\inc;..\USB\STM32_USB_HOST_Library\Class\HID\inc;..\USB\STM32_USB_HOST_Library\Class\MSC\inc;..\HARDWARE\OV5640;..\HARDWARE\DCMI;..\HARDWARE\EXTI;..\APP\lyric;..\HARDWARE\SAI;..\AUDIOCODEC\mp3;..\AUDIOCODEC\mp3\helix;..\AUDIOCODEC\flac;..\AUDIOCODEC\flac\flacdec;..\AUDIOCODEC\ape;..\AUDIOCODEC\ape\apedec;..\AUDIOCODEC\wav;..\APP\audio;..\MJPEG\JPEG;..\MJPEG;..\HARDWARE\DS18B20;..\HARDWARE\MPU9250\MPL;..\HARDWARE\MPU9250\MPL\driver\eMPL;..\HARDWARE\MPU9250\MPL\driver\include;..\HARDWARE\MPU9250\MPL\driver\stm32L;..\HARDWARE\MPU9250\MPL\eMPL-hal;..\HARDWARE\MPU9250\MPL\mllite;..\HARDWARE\MPU9250\MPL\mpl</IncludePath>
+              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\24CXX;..\HARDWARE\TOUCH;..\HARDWARE\SDRAM;..\HARDWARE\TPAD;..\UCOSII\uC-LIB;..\UCOSII\uC-CPU;..\UCOSII\UCOS_BSP;..\UCOSII\uCOS-CONFIG;..\UCOSII\uCOS-II\Source;..\UCOSII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSII\uCOS-II\Ports\ARM-Cortex-M4\Generic\RealView;..\MALLOC;..\os_api\api\inc;..\USMART;..\HARDWARE\SPI;..\HARDWARE\W25QXX;..\PICTURE;..\TEXT;..\FATFS\src;..\FATFS\exfuns;..\USB\USB_APP;..\USB\STM32_USB_OTG_Driver\inc;..\USB\STM32_USB_Device_Library\Core\inc;..\USB\STM32_USB_Device_Library\Class\msc\inc;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\HARDWARE\MPU9250;..\DMP\driver\eMPL;..\DMP\driver\include;..\DMP\driver\stm32L;..\DMP\eMPL-hal;..\DMP\mllite;..\DMP\mpl;..\HARDWARE\SPBLCD;..\HARDWARE\DMA;..\APP\SPB;..\APP\COMMON;..\GUI;..\HARDWARE\GSM;..\HARDWARE\RTC;..\APP\CALENDAR;..\APP\SYSTEM SETTING;..\HARDWARE\WM8978;..\APP\EBOOK;..\APP\APPPLAY;..\APP\PHONEPLAY;..\APP\SMSPLAY;..\T9INPUT;..\ATKFREC;..\ATKNCR;..\ATKQR;..\APP\LEDPLAY;..\APP\GRADIENTER;..\USB\USB_APP;..\USB\STM32_USB_HOST_Library\Core\inc;..\USB\STM32_USB_HOST_Library\Class\HID\inc;..\USB\STM32_USB_HOST_Library\Class\MSC\inc;..\HARDWARE\OV5640;..\HARDWARE\DCMI;..\HARDWARE\EXTI;..\APP\lyric;..\HARDWARE\SAI;..\AUDIOCODEC\mp3;..\AUDIOCODEC\mp3\helix;..\AUDIOCODEC\flac;..\AUDIOCODEC\flac\flacdec;..\AUDIOCODEC\ape;..\AUDIOCODEC\ape\apedec;..\AUDIOCODEC\wav;..\APP\audio;..\MJPEG\JPEG;..\MJPEG;..\HARDWARE\DS18B20;..\HARDWARE\MPU9250\MPL;..\HARDWARE\MPU9250\MPL\driver\eMPL;..\HARDWARE\MPU9250\MPL\driver\include;..\HARDWARE\MPU9250\MPL\driver\stm32L;..\HARDWARE\MPU9250\MPL\eMPL-hal;..\HARDWARE\MPU9250\MPL\mllite;..\HARDWARE\MPU9250\MPL\mpl;..\APP\calculator;..\APP\paint;..\APP\Gyroscope;..\QR_ENCODE;..\APP\qrplay;..\HARDWARE\DCMI;..\APP\camera;..\APP\facereco;..\ATKQR;..\ATKFREC;..\ATKNCR;..\HARDWARE\TPAD</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -670,6 +670,16 @@
               <FileType>1</FileType>
               <FilePath>..\HALLIB\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sai_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_dcmi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HALLIB\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dcmi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_dcmi_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HALLIB\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dcmi_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -830,6 +840,21 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\DS18B20\ds18b20.c</FilePath>
             </File>
+            <File>
+              <FileName>dcmi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\DCMI\dcmi.c</FilePath>
+            </File>
+            <File>
+              <FileName>tpad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\TPAD\tpad.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\TIMER\timer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -881,16 +906,6 @@
               <FilePath>..\APP\LEDPLAY\ledplay.c</FilePath>
             </File>
             <File>
-              <FileName>gradienter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\APP\GRADIENTER\gradienter.c</FilePath>
-            </File>
-            <File>
-              <FileName>gyroscope.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\APP\GYROSCOPE\gyroscope.c</FilePath>
-            </File>
-            <File>
               <FileName>notepad.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\notepad\notepad.c</FilePath>
@@ -916,60 +931,6 @@
               <FilePath>..\APP\lyric\lyric.c</FilePath>
             </File>
             <File>
-              <FileName>videoplay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\APP\video\videoplay.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>0</v6Lto>
-                    <v6WtE>0</v6WtE>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
               <FileName>keyplay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\key\keyplay.c</FilePath>
@@ -983,6 +944,31 @@
               <FileName>exeplay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\exe\exeplay.c</FilePath>
+            </File>
+            <File>
+              <FileName>gradienter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\GRADIENTER\gradienter.c</FilePath>
+            </File>
+            <File>
+              <FileName>gyroscope.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\Gyroscope\gyroscope.c</FilePath>
+            </File>
+            <File>
+              <FileName>qrplay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\qrplay\qrplay.c</FilePath>
+            </File>
+            <File>
+              <FileName>camera.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\camera\camera.c</FilePath>
+            </File>
+            <File>
+              <FileName>facereco.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\facereco\facereco.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1533,6 +1519,11 @@
               <FileType>1</FileType>
               <FilePath>..\ATKFREC\atk_frec.c</FilePath>
             </File>
+            <File>
+              <FileName>ATKFREC.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\ATKFREC\ATKFREC.lib</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1542,6 +1533,11 @@
               <FileName>atk_qrdecode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ATKQR\atk_qrdecode.c</FilePath>
+            </File>
+            <File>
+              <FileName>ATK_QR_V1.4.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\ATKQR\ATK_QR_V1.4.lib</FilePath>
             </File>
           </Files>
         </Group>
@@ -2003,6 +1999,16 @@
               <FileName>libmpllib.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\HARDWARE\MPU9250\MPL\mpl\libmpllib.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>QR_ENCODE</GroupName>
+          <Files>
+            <File>
+              <FileName>qr_encode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\QR_ENCODE\qr_encode.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -152,19 +152,16 @@ u8 grad_play(void)
 	//提示开始检测MPU9250 的MPL
  	window_msg_box((lcddev.width-200)/2,(lcddev.height-80)/2,200,80,(u8*)gyro_remind_tbl[0][gui_phy.language],(u8*)APP_REMIND_CAPTION_TBL[gui_phy.language],12,0,0,0);
 	app_wm8978_volset(0);				//静音
-	printf("mpu_dmp_init\r\n");
 	OSSchedLock(); 
 	res=mpu_dmp_init();					//初始化DMP  
 	OSSchedUnlock();
 	app_wm8978_volset(wm8978set.mvol);	//重新恢复音量	
-	printf("grad init result:%d\r\n",res);
 	if(res)
 	{
 		window_msg_box((lcddev.width-200)/2,(lcddev.height-80)/2,200,80,(u8*)gyro_remind_tbl[1][gui_phy.language],(u8*)APP_REMIND_CAPTION_TBL[gui_phy.language],12,0,0,0);
 		delay_ms(500);   
 		rval=1;
 	}else rval=grad_load_font();//加载字体 
-	printf("grad_load_font result:%d\r\n",rval);
 	if(lcddev.width==240)
 	{
 		fsize=72;angy=230;
@@ -197,13 +194,11 @@ u8 grad_play(void)
 		yr2=ycenter-wr2/2;
 		gui_phy.draw_point=(void(*)(u16,u16,u32))mlcd_draw_point;
 		system_task_return=0;
-		printf("loop get mpu data\r\n");
 		while(1)
 		{ 
 			if(system_task_return)break;				//TPAD返回  
 			if(mpu_mpl_get_data(&pitch,&roll,&yaw)==0)
 			{ 
-				printf("loop get mpu data ok\r\n");
 				if((t%10)==0)
 				{  
 					angle=sqrt(pitch*pitch+roll*roll); 
@@ -218,7 +213,6 @@ u8 grad_play(void)
 						stable=0;
 					}else 
 					{ 
-						
 						if(stable<10)stable++;	//等待状态稳定
 						else
 						{

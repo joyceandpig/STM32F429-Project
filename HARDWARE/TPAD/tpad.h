@@ -22,6 +22,20 @@
    
 //空载的时候(没有手按下),计数器需要的时间
 //这个值应该在每次开机的时候被初始化一次
+
+
+#define TPAD_RST_GPIO_PIN_NUM           		 5
+
+#define TPAD_RST_GPIO_PORT               		 GPIOA
+#define TPAD_RST_GPIO_PIN           		 GPIO_PIN_5
+
+#define TPAD_RST_GPIO_PORT_CLK_ENABLE()           __HAL_RCC_GPIOA_CLK_ENABLE()
+
+////IO操作函数											   
+#define	TPAD_RST_SET()     HAL_GPIO_WritePin(TPAD_RST_GPIO_PORT, TPAD_RST_GPIO_PIN, GPIO_PIN_SET) //SCL	 
+#define	TPAD_RST_CLEAR()   HAL_GPIO_WritePin(TPAD_RST_GPIO_PORT, TPAD_RST_GPIO_PIN, GPIO_PIN_RESET) //SCL
+
+
 extern vu16 tpad_default_val;
 							   	    
 void TPAD_Reset(void);

@@ -9,6 +9,7 @@
 #include "exti.h"  
 //#include "pcf8574.h"  
 #include "ltdc.h"  
+#include "stm32f4xx_hal.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -76,8 +77,16 @@ u8 OV5640_Init(void)
 	u16 i=0;
 	u16 reg;
 	//设置IO     	
-  	RCC->AHB1ENR|=1<<0;		//使能外设PORTA时钟    
+//  	RCC->AHB1ENR|=1<<0;		//使能外设PORTA时钟    
 // 	GPIO_Set(GPIOA,PIN15,GPIO_MODE_OUT,GPIO_OTYPE_PP,GPIO_SPEED_50M,GPIO_PUPD_PU);	//PA15推挽输出
+GPIO_InitTypeDef OV5640_GPIO_Handler;
+    OV5640_RST_GPIO_PORT_CLK_ENABLE();           //开启GPIOA时钟
+    OV5640_GPIO_Handler.Pin=OV5640_RST_GPIO_PIN; //p15
+    OV5640_GPIO_Handler.Mode=GPIO_MODE_OUTPUT_PP;  //推挽输出
+    OV5640_GPIO_Handler.Pull=GPIO_PULLUP;          //上拉
+    OV5640_GPIO_Handler.Speed=GPIO_SPEED_FAST;     //高速 50m
+    HAL_GPIO_Init(OV5640_RST_GPIO_PORT,&OV5640_GPIO_Handler);
+	
 	//PCF8574_Init();			//初始化PCF8574
 	OV5640_RST_CLEAR();			//必须先拉低OV5640的RST脚,再上电
 	delay_ms(20); 

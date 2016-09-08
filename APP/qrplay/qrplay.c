@@ -2,11 +2,11 @@
 #include "ov5640.h" 
 #include "dcmi.h"  
 //#include "pcf8574.h"
-//#include "qr_encode.h"
+#include "qr_encode.h"
 #include "atk_qrdecode.h"
 #include "t9input.h"
-//#include "audioplay.h" 
-//#include "camera.h"
+#include "audioplay.h" 
+#include "camera.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -76,6 +76,7 @@ void qr_dcmi_rx_callback(void)
 	u32 temp;
 	if(lcdltdc.pwidth!=0)	//RGB屏,直接显示
 	{
+//		__HAL_DMA_GET_IT_SOURCE(DMA_Handler, DMA_FLAG_TEIF2_6);
 		if(DMA2_Stream1->CR&(1<<19))//DMA使用buf1,读取buf0
 		{ 
 			disbuf=(u16*)dcmi_line_buf[0];

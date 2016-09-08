@@ -1,7 +1,13 @@
 #include "common.h"
 #include "spb.h"
+#include "appplay.h"
+#include "calculator.h"	
 #include "settings.h"
-#include "calendar.h"
+#include "calendar.h"	
+#include "phoneplay.h"	
+#include "audioplay.h"	
+//#include "recorder.h"	 
+#include "paint.h"
 
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途

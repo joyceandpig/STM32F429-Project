@@ -1,6 +1,7 @@
 #include "tpad.h"
 #include "delay.h"		    
 #include "usart.h"
+#include "stm32f4xx_hal.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -18,6 +19,10 @@
 //1,去掉TPAD_GATE_VAL的定义,改为判断tpad_default_val的4/3为门限
 //2,修改TPAD_Get_MaxVal函数的实现方式,提高抗干扰性
 ////////////////////////////////////////////////////////////////////////////////// 	
+
+
+
+
 
 #define TPAD_ARR_MAX_VAL  0X4000		//最大的ARR值(TIM2是32位定时器)	  
 vu16 tpad_default_val=0;				//空载的时候(没有手按下),计数器需要的时间
@@ -59,12 +64,27 @@ u8 TPAD_Init(u8 psc)
 //释放电容电量，并清除定时器的计数值
 void TPAD_Reset(void)
 {	
-	GPIO_Set(GPIOA,PIN5,GPIO_MODE_OUT,GPIO_OTYPE_PP,GPIO_SPEED_100M,GPIO_PUPD_PD);//PA5推挽输出
-	PAout(5)=0; 	//输出0,放电
+//	GPIO_Set(GPIOA,PIN5,GPIO_MODE_OUT,GPIO_OTYPE_PP,GPIO_SPEED_100M,GPIO_PUPD_PD);//PA5推挽输出
+//	PAout(5)=0; 	//输出0,放电
+		GPIO_InitTypeDef TPAD_GPIO_Handler;
+	  TPAD_RST_GPIO_PORT_CLK_ENABLE();           //开启GPIOA时钟
+		HAL_GPIO_DeInit(TPAD_RST_GPIO_PORT,TPAD_RST_GPIO_PIN);
+    TPAD_GPIO_Handler.Pin=TPAD_RST_GPIO_PIN; //p5
+    TPAD_GPIO_Handler.Mode=GPIO_MODE_OUTPUT_PP;  //推挽输出
+    TPAD_GPIO_Handler.Pull=GPIO_PULLDOWN;          //下拉
+    TPAD_GPIO_Handler.Speed=GPIO_SPEED_HIGH;     //高速 100m
+    HAL_GPIO_Init(TPAD_RST_GPIO_PORT,&TPAD_GPIO_Handler);
+	
+		TPAD_RST_SET();
+	
 	delay_ms(5);
 	TIM2->SR=0;   	//清除标记
 	TIM2->CNT=0;	//归零     
-	GPIO_Set(GPIOA,PIN5,GPIO_MODE_AF,GPIO_OTYPE_PP,GPIO_SPEED_100M,GPIO_PUPD_NONE);//PA5,复用功能,不带上下拉 
+//	GPIO_Set(GPIOA,PIN5,GPIO_MODE_AF,GPIO_OTYPE_PP,GPIO_SPEED_100M,GPIO_PUPD_NONE);//PA5,复用功能,不带上下拉 
+	    
+	 TPAD_GPIO_Handler.Mode=GPIO_MODE_AF_PP;  //复用功能
+   TPAD_GPIO_Handler.Pull=GPIO_NOPULL;          //不带上下拉 
+	 HAL_GPIO_Init(TPAD_RST_GPIO_PORT,&TPAD_GPIO_Handler);
 }
 //得到定时器捕获值
 //如果超时,则直接返回定时器的计数值.
@@ -125,10 +145,21 @@ u8 TPAD_Scan(u8 mode)
 //psc：时钟预分频数
 void TIM2_CH1_Cap_Init(u32 arr,u16 psc)
 {
-	RCC->APB1ENR|=1<<0;		//TIM2时钟使能    
-	RCC->AHB1ENR|=1<<0;   	//使能PORTA时钟	
-	GPIO_Set(GPIOA,PIN5,GPIO_MODE_AF,GPIO_OTYPE_PP,GPIO_SPEED_100M,GPIO_PUPD_NONE);//PA5,复用功能,不带上下拉
-	GPIO_AF_Set(GPIOA,5,1);	//PA5,AF1 
+//	RCC->APB1ENR|=1<<0;		//TIM2时钟使能    
+//	RCC->AHB1ENR|=1<<0;   	//使能PORTA时钟	
+//	GPIO_Set(GPIOA,PIN5,GPIO_MODE_AF,GPIO_OTYPE_PP,GPIO_SPEED_100M,GPIO_PUPD_NONE);//PA5,复用功能,不带上下拉
+//	GPIO_AF_Set(GPIOA,5,1);	//PA5,AF1 
+		GPIO_InitTypeDef TPAD_GPIO_Handler;
+		__HAL_RCC_TIM2_CLK_ENABLE();//TIM2时钟使能    
+	  TPAD_RST_GPIO_PORT_CLK_ENABLE();           //开启GPIOA时钟
+		HAL_GPIO_DeInit(TPAD_RST_GPIO_PORT,TPAD_RST_GPIO_PIN);
+    TPAD_GPIO_Handler.Pin=TPAD_RST_GPIO_PIN; //p5
+    TPAD_GPIO_Handler.Mode=GPIO_MODE_AF_PP;  //推挽输出
+    TPAD_GPIO_Handler.Pull=GPIO_NOPULL;          //下拉
+    TPAD_GPIO_Handler.Speed=GPIO_SPEED_HIGH;     //高速 100m
+		TPAD_GPIO_Handler.Alternate = GPIO_AF1_TIM2;
+    HAL_GPIO_Init(TPAD_RST_GPIO_PORT,&TPAD_GPIO_Handler);
+	
 	  
  	TIM2->ARR=arr;  		//设定计数器自动重装值//刚好1ms    
 	TIM2->PSC=psc;  		//预分频器,1M的计数频率	 

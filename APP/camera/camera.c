@@ -7,6 +7,7 @@
 #include "facereco.h" 
 #include "qrplay.h"
 //#include "pcf8574.h"
+#include "key.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -205,9 +206,9 @@ void sw_ov5640_mode(void)
  	OV5640_WR_Reg(0X3017,0XFF);	//开启OV5650输出(可以正常显示)
 	OV5640_WR_Reg(0X3018,0XFF); 
 	//GPIOC8/9/11切换为 DCMI接口
- 	GPIO_AF_Set(GPIOC,8,13);	//PC8,AF13  DCMI_D2
- 	GPIO_AF_Set(GPIOC,9,13);	//PC9,AF13  DCMI_D3
- 	GPIO_AF_Set(GPIOC,11,13);	//PC11,AF13 DCMI_D4  
+// 	GPIO_AF_Set(GPIOC,8,13);	//PC8,AF13  DCMI_D2
+// 	GPIO_AF_Set(GPIOC,9,13);	//PC9,AF13  DCMI_D3
+// 	GPIO_AF_Set(GPIOC,11,13);	//PC11,AF13 DCMI_D4  
 } 
 //切换为SD卡模式
 void sw_sdcard_mode(void)
@@ -215,9 +216,9 @@ void sw_sdcard_mode(void)
 	OV5640_WR_Reg(0X3017,0X00);	//关闭OV5640全部输出(不影响SD卡通信)
 	OV5640_WR_Reg(0X3018,0X00);  
  	//GPIOC8/9/11切换为 SDIO接口
-  	GPIO_AF_Set(GPIOC,8,12);	//PC8,AF12
- 	GPIO_AF_Set(GPIOC,9,12);	//PC9,AF12 
- 	GPIO_AF_Set(GPIOC,11,12);	//PC11,AF12  
+//  	GPIO_AF_Set(GPIOC,8,12);	//PC8,AF12
+// 	GPIO_AF_Set(GPIOC,9,12);	//PC9,AF12 
+// 	GPIO_AF_Set(GPIOC,11,12);	//PC11,AF12  
 } 
 //得到文件名,按文日期时间命名
 //mode:0,创建.bmp文件;1,创建.jpg文件.
@@ -254,7 +255,7 @@ u8 ov5640_jpg_photo(u8 *pname)
 	sw_ov5640_mode();						//切换为OV5640模式 
 	OV5640_JPEG_Mode();						//JPEG模式  
 	OV5640_OutSize_Set(16,4,2592,1944);		//设置输出尺寸(500W) 
-	dcmi_rx_callback=jpeg_dcmi_rx_callback;	//JPEG接收数据回调函数
+//	dcmi_rx_callback=jpeg_dcmi_rx_callback;	//JPEG接收数据回调函数
 	DCMI_DMA_Init((u32)dcmi_line_buf[0],(u32)dcmi_line_buf[1],jpeg_line_size,2,1);//DCMI DMA配置    
 	DCMI_Start(); 			//启动传输 
 	while(jpeg_data_ok!=1);	//等待第一帧图片采集完
@@ -303,7 +304,7 @@ u8 ov5640_jpg_photo(u8 *pname)
 	OV5640_RGB565_Mode();	//RGB565模式  
 	if(lcdltdc.pwidth!=0)	//RGB屏
 	{
-		dcmi_rx_callback=rgblcd_dcmi_rx_callback;//RGB屏接收数据回调函数
+//		dcmi_rx_callback=rgblcd_dcmi_rx_callback;//RGB屏接收数据回调函数
 		DCMI_DMA_Init((u32)dcmi_line_buf[0],(u32)dcmi_line_buf[1],lcddev.width/2,1,1);//DCMI DMA配置  
 	}else					//MCU 屏
 	{
@@ -368,7 +369,7 @@ u8 camera_play(void)
 		DCMI_Init();			//DCMI配置 
 		if(lcdltdc.pwidth!=0)	//RGB屏
 		{
-			dcmi_rx_callback=rgblcd_dcmi_rx_callback;//RGB屏接收数据回调函数
+//			dcmi_rx_callback=rgblcd_dcmi_rx_callback;//RGB屏接收数据回调函数
 			DCMI_DMA_Init((u32)dcmi_line_buf[0],(u32)dcmi_line_buf[1],lcddev.width/2,1,1);//DCMI DMA配置  
 		}else					//MCU 屏
 		{
@@ -419,7 +420,7 @@ u8 camera_play(void)
 				{
 					case KEY0_PRES:	//KEY0按下,JPEG拍照
 					case KEY2_PRES:	//KEY2按下,BMP拍照
-						LED1=0;		//DS1亮,提示拍照中
+//						LED1=0;		//DS1亮,提示拍照中
 						sw_sdcard_mode();	//切换为SD卡模式
 						if(key==KEY0_PRES)	//JPEG拍照
 						{
@@ -443,7 +444,7 @@ u8 camera_play(void)
 // 							PCF8574_WriteBit(BEEP_IO,0);	//蜂鸣器短叫，提示拍照完成
 							delay_ms(100); 
 						}
-						LED1=1;						//DS1灭,提示保存完成
+//						LED1=1;						//DS1灭,提示保存完成
 //						PCF8574_WriteBit(BEEP_IO,1);//关闭蜂鸣器
 						delay_ms(2000); 
 						sw_ov5640_mode();			//切换为OV5640模式   

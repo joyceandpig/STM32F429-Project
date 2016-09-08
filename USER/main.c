@@ -158,8 +158,8 @@ int main(void)
 	my_mem_init(SRAMEX);		//初始化外部内存池
 	my_mem_init(SRAMCCM);		//初始化CCM内存池 
 	
-	printf("mpu9250 Check...");
-	MPU9250_Init();
+
+	printf("mpu init res:%d\r\n",MPU9250_Init());
 	gui_init();
 	piclib_init();				//piclib初始化
 	slcd_dma_init();
@@ -216,7 +216,7 @@ void led_task(void *pdata)
 	{
 		usmart_scan();
 		t++;
-		Sleep(5);
+		Sleep(125);
 		if(t==8)LED1_OFF();	//LED0灭
 		if(t==100)		//LED0亮
 		{
@@ -236,7 +236,7 @@ void key_thread(void *pdata)
 		{
 			system_task_return = 1;
 		}
-	Sleep(5);
+	Sleep(100);
 	}									 
 }
 void ShowPicture(void);
@@ -251,10 +251,10 @@ void usb_Task(void *pdata)
 	pdata=pdata;
 
  	u_printf(DBG,"USB Connecting...");	//提示正在建立连接 	
-//	MPU_Test();		
+//	MPU_Test();	
 	while(1)
 	{
-    Sleep(100);				  
+    Sleep(500);				  
 		if(USB_STA!=USB_STATUS_REG)//状态改变了 
 		{	 						   		  	   
 			if(USB_STATUS_REG&0x01)//正在写		  
@@ -282,7 +282,7 @@ void usb_Task(void *pdata)
 			Divece_STA=bDeviceState;
 		}
 		tct++;
-		if(tct==10)
+		if(tct==2)
 		{
 			tct=0;
 			LED1_OFF();
@@ -306,7 +306,7 @@ void picture_task(void *pdata)
 //	ShowPicture();	//显示图片
 	while(1)
 	{
-		Sleep(100);
+		Sleep(2000);
 	}
 }
 
@@ -349,7 +349,7 @@ void main_thread(void *pdata)
 // 			case usb_app		:usb_play();		break;//USB连接
 // 	    case net_app		:net_play();		break;//网络测试
 			case calc_app		:calc_play();		break;//计算器   
-//			case qr_app			:qr_play();			break;//二维码
+			case qr_app			:qr_play();			break;//二维码
 // 			case webcam_app		:webcam_play();		break;//网络摄像头
 //			case frec_app		:frec_play();		break;//人脸识别
 			case gyro_app		:gyro_play();		break;//9轴传感器
@@ -363,9 +363,9 @@ void main_thread(void *pdata)
 		} 
 		
 		if(selx!=0XFF)spb_load_mui();//显示主界面
-		delay_ms(1000/OS_TICKS_PER_SEC);//延时一个时钟节拍
+		delay_ms(10000/OS_TICKS_PER_SEC);//延时一个时钟节拍
 		tcnt++;
-		if(tcnt==500)	//500个节拍为1秒钟
+		if(tcnt==50)	//500个节拍为1秒钟
 		{
 			tcnt=0;
 			spb_stabar_msg_show(0);//更新状态栏信息

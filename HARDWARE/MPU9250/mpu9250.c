@@ -19,30 +19,59 @@
 //    其他,错误代码
 u8 MPU9250_Init(void)
 {
+//    u8 res=0;
+//    IIC_Init();     //初始化IIC总线
+//    MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT1_REG,0X80);//复位MPU9250
+//    delay_ms(100);  //延时100ms
+//    MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT1_REG,0X00);//唤醒MPU9250
+//    MPU_Set_Gyro_Fsr(3);					        	//陀螺仪传感器,±2000dps
+//	  MPU_Set_Accel_Fsr(0);					       	 	//加速度传感器,±2g
+//    MPU_Set_Rate(50);						       	 	//设置采样率50Hz
+//    MPU_Write_Byte(MPU9250_ADDR,MPU_INT_EN_REG,0X00);   //关闭所有中断
+//	  MPU_Write_Byte(MPU9250_ADDR,MPU_USER_CTRL_REG,0X00);//I2C主模式关闭
+//	  MPU_Write_Byte(MPU9250_ADDR,MPU_FIFO_EN_REG,0X00);	//关闭FIFO
+//	  MPU_Write_Byte(MPU9250_ADDR,MPU_INTBP_CFG_REG,0X82);//INT引脚低电平有效，开启bypass模式，可以直接读取磁力计
+//    res=MPU_Read_Byte(MPU9250_ADDR,MPU_DEVICE_ID_REG);  //读取MPU6500的ID
+//    if(res==MPU6500_ID) //器件ID正确
+//    {
+//        MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT1_REG,0X01);  	//设置CLKSEL,PLL X轴为参考
+//        MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT2_REG,0X00);  	//加速度与陀螺仪都工作
+//		    MPU_Set_Rate(50);						       	//设置采样率为50Hz   
+//    }else return 1;
+
+//    res=MPU_Read_Byte(AK8963_ADDR,MAG_WIA);    			//读取AK8963 ID   
+//    if(res==AK8963_ID)
+//    {
+//        MPU_Write_Byte(AK8963_ADDR,MAG_CNTL1,0X11);		//设置AK8963为单次测量模式
+//    }else return 1;
+
+//    return 0;
     u8 res=0;
     IIC_Init();     //初始化IIC总线
     MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT1_REG,0X80);//复位MPU9250
     delay_ms(100);  //延时100ms
     MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT1_REG,0X00);//唤醒MPU9250
     MPU_Set_Gyro_Fsr(3);					        	//陀螺仪传感器,±2000dps
-	  MPU_Set_Accel_Fsr(0);					       	 	//加速度传感器,±2g
+	MPU_Set_Accel_Fsr(0);					       	 	//加速度传感器,±2g
     MPU_Set_Rate(50);						       	 	//设置采样率50Hz
     MPU_Write_Byte(MPU9250_ADDR,MPU_INT_EN_REG,0X00);   //关闭所有中断
-	  MPU_Write_Byte(MPU9250_ADDR,MPU_USER_CTRL_REG,0X00);//I2C主模式关闭
-	  MPU_Write_Byte(MPU9250_ADDR,MPU_FIFO_EN_REG,0X00);	//关闭FIFO
-	  MPU_Write_Byte(MPU9250_ADDR,MPU_INTBP_CFG_REG,0X82);//INT引脚低电平有效，开启bypass模式，可以直接读取磁力计
+	MPU_Write_Byte(MPU9250_ADDR,MPU_USER_CTRL_REG,0X00);//I2C主模式关闭
+	MPU_Write_Byte(MPU9250_ADDR,MPU_FIFO_EN_REG,0X00);	//关闭FIFO
+	MPU_Write_Byte(MPU9250_ADDR,MPU_INTBP_CFG_REG,0X82);//INT引脚低电平有效，开启bypass模式，可以直接读取磁力计
     res=MPU_Read_Byte(MPU9250_ADDR,MPU_DEVICE_ID_REG);  //读取MPU6500的ID
     if(res==MPU6500_ID) //器件ID正确
     {
         MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT1_REG,0X01);  	//设置CLKSEL,PLL X轴为参考
         MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT2_REG,0X00);  	//加速度与陀螺仪都工作
-		    MPU_Set_Rate(50);						       	//设置采样率为50Hz   
+		MPU_Set_Rate(50);						       	//设置采样率为50Hz   
     }else return 1;
  
     res=MPU_Read_Byte(AK8963_ADDR,MAG_WIA);    			//读取AK8963 ID   
     if(res==AK8963_ID)
     {
-        MPU_Write_Byte(AK8963_ADDR,MAG_CNTL1,0X11);		//设置AK8963为单次测量模式
+        MPU_Write_Byte(AK8963_ADDR,MAG_CNTL2,0X01);		//复位AK8963
+		delay_ms(50);
+        MPU_Write_Byte(AK8963_ADDR,MAG_CNTL1,0X11);		//设置AK8963为单次测量
     }else return 1;
 
     return 0;

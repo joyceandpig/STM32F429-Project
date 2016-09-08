@@ -1,8 +1,8 @@
 #include "phoneplay.h"
 #include "spb.h" 
 //#include "camera.h" 
-//#include "sai.h" 
-//#include "audioplay.h" 
+#include "sai.h" 
+#include "audioplay.h" 
 #include "usart.h" 
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途

@@ -179,7 +179,6 @@ u8 gyro_play(void)
 	res=mpu_dmp_init();					//初始化DMP  
 	OSSchedUnlock();
 	app_wm8978_volset(wm8978set.mvol);	//重新恢复音量	
-	printf("gyro init result:%d\r\n",res);
 	if(res)
 	{
 		window_msg_box((lcddev.width-200)/2,(lcddev.height-80)/2,200,80,(u8*)gyro_remind_tbl[1][gui_phy.language],(u8*)APP_REMIND_CAPTION_TBL[gui_phy.language],12,0,0,0);

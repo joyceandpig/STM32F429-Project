@@ -1,7 +1,7 @@
 ;******************** (C) COPYRIGHT 2015 STMicroelectronics ********************
 ;* File Name          : startup_stm32f429xx.s
 ;* Author             : MCD Application Team
-;* Version            : V2.4.2
+;* Version            : V1.3.2
 ;* Date               : 13-November-2015
 ;* Description        : STM32F429x devices vector table for MDK-ARM toolchain. 
 ;*                      This module performs:
@@ -45,7 +45,7 @@
 ;   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Stack_Size      EQU     0x00001000
+Stack_Size      EQU     0x400;
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
 Stack_Mem       SPACE   Stack_Size
@@ -56,9 +56,7 @@ __initial_sp
 ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-;未用到编译器自带的内存管理(malloc,free等)，设置Heap_Szie为0
-Heap_Size       EQU     0x00000000
-
+Heap_Size      EQU     0x200;
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base
@@ -194,22 +192,30 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
 ; Reset handler
 Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
-        ;IMPORT  SystemInit					;寄存器代码,不需要在这里调用SystemInit函数,故屏蔽掉,库函数版本代码,可以留下
-											;不过需要在外部实现SystemInit函数,否则会报错.
+        IMPORT  SystemInit
         IMPORT  __main
-                 LDR     R0, =0xE000ED88    ; 使能浮点运算 CP10,CP11
-                 LDR     R1,[R0]
-                 ORR     R1,R1,#(0xF << 20)
-                 STR     R1,[R0]
-                                            ;禁止automatic FP register content
-                                            ;禁止lazy context switch,纯软件保存FPU
-                 LDR	 R0,=0xE000EF34     ;加载FPCCR寄存器地址
-                 LDR     R1,[R0]
-                 AND     R1,R1,#(0x3FFFFFFF);清除LSPEN和ASPEN位
-                 STR     R1,[R0]  
+
+                 LDR     R0, =SystemInit
+                 BLX     R0
 				 
-                 ;LDR     R0, =SystemInit	;寄存器代码,未用到,屏蔽
-                 ;BLX     R0				;寄存器代码,未用到,屏蔽
+				 IF {FPU} != "SoftVFP"
+                                                ; Enable Floating Point Support at reset for FPU
+                 LDR.W   R0, =0xE000ED88         ; Load address of CPACR register
+                 LDR     R1, [R0]                ; Read value at CPACR
+                 ORR     R1,  R1, #(0xF <<20)    ; Set bits 20-23 to enable CP10 and CP11 coprocessors
+                                                ; Write back the modified CPACR value
+                 STR     R1, [R0]                ; Wait for store to complete
+                 DSB
+                
+                                                ; Disable automatic FP register content
+                                                ; Disable lazy context switch
+                 LDR.W   R0, =0xE000EF34         ; Load address to FPCCR register
+                 LDR     R1, [R0]
+                 AND     R1,  R1, #(0x3FFFFFFF)  ; Clear the LSPEN and ASPEN bits
+                 STR     R1, [R0]
+                 ISB                             ; Reset pipeline now the FPU is enabled
+                 ENDIF
+					 
                  LDR     R0, =__main
                  BX      R0
                  ENDP
