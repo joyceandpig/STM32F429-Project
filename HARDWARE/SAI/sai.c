@@ -145,7 +145,7 @@ void SAIB_Init(u8 mode,u8 cpol,u8 datalen)
 //	SAI1_Block_B->CR1|=1<<17;	//使能DMA
 //	SAI1_Block_B->CR1|=1<<16;	//使能SAI1 Block B
 	
-		 HAL_SAI_DeInit(&SAI1B_Handler);                          //清除以前的配置
+		HAL_SAI_DeInit(&SAI1B_Handler);                          //清除以前的配置
     SAI1B_Handler.Instance=SAI1_Block_B;                     //SAI1 Bock B
     SAI1B_Handler.Init.AudioMode=mode;                       //设置SAI1工作模式
     SAI1B_Handler.Init.Synchro=SAI_ASYNCHRONOUS;             //音频模块异步
@@ -205,10 +205,11 @@ const u16 SAI_PSC_TBL[][5]=
 //因此我们需要自己操作寄存器编写一个
 void SAIA_DMA_Enable(void)
 {
-    u32 tempreg=0;
-    tempreg=SAI1_Block_A->CR1;          //先读出以前的设置			
-	tempreg|=1<<17;					    //使能DMA
-	SAI1_Block_A->CR1=tempreg;		    //写入CR1寄存器中
+//  u32 tempreg=0;
+//  tempreg=SAI1_Block_A->CR1;          //先读出以前的设置			
+//	tempreg|=1<<17;					    //使能DMA
+//	SAI1_Block_A->CR1=tempreg;		    //写入CR1寄存器中
+	HAL_SAI_DMAResume(&SAI1A_Handler);
 }
 //设置SAIA的采样率(@MCKEN)
 //samplerate:采样率,单位:Hz
@@ -303,7 +304,7 @@ void SAIA_TX_DMA_Init(u8* buf0,u8 *buf1,u16 num,u8 width)
 //	DMA2_Stream3->CR|=1<<4;		//开启传输完成中断
 ////	MY_NVIC_Init(0,0,DMA2_Stream3_IRQn,2);	//抢占1，子优先级0，组2  
 
-u32 memwidth=0,perwidth=0;      //外设和存储器位宽
+		u32 memwidth=0,perwidth=0;      //外设和存储器位宽
     switch(width)
     {
         case 0:         //8位
@@ -353,33 +354,75 @@ u32 memwidth=0,perwidth=0;      //外设和存储器位宽
 //width:位宽(存储器和外设,同时设置),0,8位;1,16位;2,32位;
 void SAIB_RX_DMA_Init(u8* buf0,u8 *buf1,u16 num,u8 width)
 {  
-	RCC->AHB1ENR|=1<<22;		//DMA2时钟使能   
-	while(DMA2_Stream5->CR&0X01);//等待DMA2_Stream5可配置 
-	DMA2->HIFCR|=0X3D<<6*1;		//清空通道5上所有中断标志
-	DMA2_Stream5->FCR=0X0000021;//设置为默认值	
-	
-	DMA2_Stream5->PAR=(u32)&SAI1_Block_B->DR;//外设地址为:SAI1_Block_B->DR
-	DMA2_Stream5->M0AR=(u32)buf0;//内存1地址
-	DMA2_Stream5->M1AR=(u32)buf1;//内存2地址
-	DMA2_Stream5->NDTR=num;		//暂时设置长度为1
-	DMA2_Stream5->CR=0;			//先全部复位CR寄存器值  
-	DMA2_Stream5->CR|=0<<6;		//外设到存储器模式 
-	DMA2_Stream5->CR|=1<<8;		//循环模式
-	DMA2_Stream5->CR|=0<<9;		//外设非增量模式
-	DMA2_Stream5->CR|=1<<10;	//存储器增量模式
-	DMA2_Stream5->CR|=(u16)width<<11;//外设数据长度:16位/32位
-	DMA2_Stream5->CR|=(u16)width<<13;//存储器数据长度:16位/32位
-	DMA2_Stream5->CR|=1<<16;	//中等优先级
-	DMA2_Stream5->CR|=1<<18;	//双缓冲模式
-	DMA2_Stream5->CR|=0<<21;	//外设突发单次传输
-	DMA2_Stream5->CR|=0<<23;	//存储器突发单次传输
-	DMA2_Stream5->CR|=0<<25;	//选择通道0 SAI1_B通道 
+//	RCC->AHB1ENR|=1<<22;		//DMA2时钟使能   
+//	while(DMA2_Stream5->CR&0X01);//等待DMA2_Stream5可配置 
+//	DMA2->HIFCR|=0X3D<<6*1;		//清空通道5上所有中断标志
+//	DMA2_Stream5->FCR=0X0000021;//设置为默认值	
+//	
+//	DMA2_Stream5->PAR=(u32)&SAI1_Block_B->DR;//外设地址为:SAI1_Block_B->DR
+//	DMA2_Stream5->M0AR=(u32)buf0;//内存1地址
+//	DMA2_Stream5->M1AR=(u32)buf1;//内存2地址
+//	DMA2_Stream5->NDTR=num;		//暂时设置长度为1
+//	DMA2_Stream5->CR=0;			//先全部复位CR寄存器值  
+//	DMA2_Stream5->CR|=0<<6;		//外设到存储器模式 
+//	DMA2_Stream5->CR|=1<<8;		//循环模式
+//	DMA2_Stream5->CR|=0<<9;		//外设非增量模式
+//	DMA2_Stream5->CR|=1<<10;	//存储器增量模式
+//	DMA2_Stream5->CR|=(u16)width<<11;//外设数据长度:16位/32位
+//	DMA2_Stream5->CR|=(u16)width<<13;//存储器数据长度:16位/32位
+//	DMA2_Stream5->CR|=1<<16;	//中等优先级
+//	DMA2_Stream5->CR|=1<<18;	//双缓冲模式
+//	DMA2_Stream5->CR|=0<<21;	//外设突发单次传输
+//	DMA2_Stream5->CR|=0<<23;	//存储器突发单次传输
+//	DMA2_Stream5->CR|=0<<25;	//选择通道0 SAI1_B通道 
 
-	DMA2_Stream5->FCR&=~(1<<2);	//不使用FIFO模式
-	DMA2_Stream5->FCR&=~(3<<0);	//无FIFO 设置
-	
-	DMA2_Stream5->CR|=1<<4;		//开启传输完成中断
-//	MY_NVIC_Init(0,1,DMA2_Stream5_IRQn,2);	//抢占1，子优先级1，组2  
+//	DMA2_Stream5->FCR&=~(1<<2);	//不使用FIFO模式
+//	DMA2_Stream5->FCR&=~(3<<0);	//无FIFO 设置
+//	
+//	DMA2_Stream5->CR|=1<<4;		//开启传输完成中断
+////	MY_NVIC_Init(0,1,DMA2_Stream5_IRQn,2);	//抢占1，子优先级1，组2  
+
+		u32 memwidth=0,perwidth=0;      //外设和存储器位宽
+    switch(width)
+    {
+        case 0:         //8位
+            memwidth=DMA_MDATAALIGN_BYTE;
+            perwidth=DMA_PDATAALIGN_BYTE;
+            break;
+        case 1:         //16位
+            memwidth=DMA_MDATAALIGN_HALFWORD;
+            perwidth=DMA_PDATAALIGN_HALFWORD;
+            break;
+        case 2:         //32位
+            memwidth=DMA_MDATAALIGN_WORD;
+            perwidth=DMA_PDATAALIGN_WORD;
+            break;
+            
+    }
+    __HAL_RCC_DMA2_CLK_ENABLE();                                    //使能DMA2时钟
+    __HAL_LINKDMA(&SAI1B_Handler,hdmatx,SAI1_RXDMA_Handler);        //将DMA与SAI联系起来
+    SAI1_RXDMA_Handler.Instance=DMA2_Stream5;                       //DMA2数据流3                     
+    SAI1_RXDMA_Handler.Init.Channel=DMA_CHANNEL_0;                  //通道0
+    SAI1_RXDMA_Handler.Init.Direction=DMA_MEMORY_TO_PERIPH;         //存储器到外设模式
+    SAI1_RXDMA_Handler.Init.PeriphInc=DMA_PINC_DISABLE;             //外设非增量模式
+    SAI1_RXDMA_Handler.Init.MemInc=DMA_MINC_ENABLE;                 //存储器增量模式
+    SAI1_RXDMA_Handler.Init.PeriphDataAlignment=perwidth;           //外设数据长度:16/32位
+    SAI1_RXDMA_Handler.Init.MemDataAlignment=memwidth;              //存储器数据长度:16/32位
+    SAI1_RXDMA_Handler.Init.Mode=DMA_CIRCULAR;                      //使用循环模式 
+    SAI1_RXDMA_Handler.Init.Priority=DMA_PRIORITY_MEDIUM;           //中优先级
+    SAI1_RXDMA_Handler.Init.FIFOMode=DMA_FIFOMODE_DISABLE;          //不使用FIFO
+    SAI1_RXDMA_Handler.Init.MemBurst=DMA_MBURST_SINGLE;             //存储器单次突发传输
+    SAI1_RXDMA_Handler.Init.PeriphBurst=DMA_PBURST_SINGLE;          //外设突发单次传输 
+    HAL_DMA_DeInit(&SAI1_RXDMA_Handler);                            //先清除以前的设置
+    HAL_DMA_Init(&SAI1_RXDMA_Handler);	                            //初始化DMA
+
+    HAL_DMAEx_MultiBufferStart(&SAI1_RXDMA_Handler,(u32)buf0,(u32)&SAI1_Block_B->DR,(u32)buf1,num);//开启双缓冲
+    __HAL_DMA_DISABLE(&SAI1_RXDMA_Handler);                         //先关闭DMA 
+    delay_us(10);                                                   //10us延时，防止-O2优化出问题 	
+    __HAL_DMA_ENABLE_IT(&SAI1_RXDMA_Handler,DMA_IT_TC);             //开启传输完成中断
+    __HAL_DMA_CLEAR_FLAG(&SAI1_RXDMA_Handler,DMA_FLAG_TCIF3_7);     //清除DMA传输完成中断标志位
+    HAL_NVIC_SetPriority(DMA2_Stream5_IRQn,0,0);                    //DMA中断优先级
+    HAL_NVIC_EnableIRQ(DMA2_Stream5_IRQn);
 } 
 //SAI DMA回调函数指针
 void (*sai_tx_callback)(void);	//TX回调函数 
@@ -405,11 +448,16 @@ void DMA2_Stream3_IRQHandler(void)
 void DMA2_Stream5_IRQHandler(void)
 {       			    
 	OSIntEnter();   
-	if(DMA2->HISR&(1<<11))	//DMA2_Steam5,传输完成标志
-	{ 
-		DMA2->HIFCR|=1<<11;	//清除传输完成中断
-      	sai_rx_callback();	//执行回调函数,读取数据等操作在这里面处理  
-	}   		   
+//	if(DMA2->HISR&(1<<11))	//DMA2_Steam5,传输完成标志
+//	{ 
+//		DMA2->HIFCR|=1<<11;	//清除传输完成中断
+//      	sai_rx_callback();	//执行回调函数,读取数据等操作在这里面处理  
+//	}   		   
+	if(__HAL_DMA_GET_FLAG(&SAI1_TXDMA_Handler,DMA_FLAG_TCIF1_5)!=RESET) //DMA传输完成
+	{
+			__HAL_DMA_CLEAR_FLAG(&SAI1_RXDMA_Handler,DMA_FLAG_TCIF3_7);     //清除DMA传输完成中断标志位
+			sai_rx_callback();	//执行回调函数,读取数据等操作在这里面处理  
+	} 
 	OSIntExit(); 	    									 
 }  
 //SAI开始播放
@@ -427,12 +475,14 @@ __HAL_DMA_DISABLE(&SAI1_TXDMA_Handler);  //结束播放
 //SAI开始录音
 void SAI_Rec_Start(void)
 {   	    
-	DMA2_Stream5->CR|=1<<0;		//开启DMA RX传输 		
+//	DMA2_Stream5->CR|=1<<0;		//开启DMA RX传输 		
+	__HAL_DMA_ENABLE(&SAI1_RXDMA_Handler);//开启DMA RX传输 		
 }
 //关闭SAI录音
 void SAI_Rec_Stop(void)
 {   	  
-	DMA2_Stream5->CR&=~(1<<0);	//结束录音		 
+//	DMA2_Stream5->CR&=~(1<<0);	//结束录音	
+	__HAL_DMA_DISABLE(&SAI1_RXDMA_Handler);  //结束录音	
 }
 
 

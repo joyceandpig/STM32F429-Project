@@ -37,6 +37,8 @@ TIM_HandleTypeDef TIM7_Handler;
 TIM_HandleTypeDef TIM8_Handler;
 TIM_HandleTypeDef TIM9_Handler;
 
+
+
 TIM_OC_InitTypeDef TIM3_CH4Handler;	    //定时器3通道4句柄
 TIM_OC_InitTypeDef TIM9_CH2Handler;	    //定时器9通道2句柄
 
@@ -48,12 +50,10 @@ TIM_OC_InitTypeDef TIM9_CH2Handler;	    //定时器9通道2句柄
 u8  TIM5CH1_CAPTURE_STA=0;	//输入捕获状态		    				
 u32	TIM5CH1_CAPTURE_VAL;	//输入捕获值(TIM2/TIM5是32位)
 
-//extern vu8 aviframeup;
+extern vu8 aviframeup;
 //extern vu8 webcam_oensec;
-//extern u16 reg_time;
-vu8 aviframeup;
-vu8 webcam_oensec;
 extern u16 reg_time;
+vu8 webcam_oensec;
 
 extern vu16 USART3_RX_STA;
 
@@ -219,18 +219,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			}
 			TIM5->SR=0;//清除中断标志位   
 		}else if(htim==(&TIM6_Handler))
-    {
-//        LED1=!LED1;        //LED1反转
-			if(TIM6->SR&0X0001)//溢出中断
-			{ 
+    { 
 				aviframeup=1;
 				webcam_oensec=1;
 				reg_time++;
-			}				   
-			TIM6->SR&=~(1<<0);//清除中断标志位 	
     }else if(htim==(&TIM7_Handler))
 		{
-			if(TIM7->SR&0X01)//是更新中断
+//			if(TIM7->SR&0X01)//是更新中断
 			{	 			   
 				USART3_RX_STA|=1<<15;	//标记接收完成
 				TIM7->SR&=~(1<<0);		//清除中断标志位		   
@@ -238,8 +233,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			}	
 		}else if(htim==(&TIM8_Handler))
 		{
-			if(TIM8->SR&0X0001)//溢出中断 
-			{
 				if(OSRunning!=TRUE)//OS还没运行,借TIM3的中断,10ms一次,来扫描USB
 				{
 		//			usbapp_pulling();
@@ -248,9 +241,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 					framecntout=framecnt;
 					printf("frame:%d\r\n",framecntout);//打印帧率
 					framecnt=0;
-				}
-			}				   
-			TIM8->SR&=~(1<<0);//清除中断标志位 
+				}				    
 		}	
 }
 
@@ -612,21 +603,40 @@ void TIM6_DAC_IRQHandler(void)
 //Ft=定时器工作频率,单位:Mhz
 //这里使用的是定时器3!
 void TIM6_Int_Init(u16 arr,u16 psc)
-{
+{		
+//	u32 temp0;	
+//	u32 temp,temp1;
 //	RCC->APB1ENR|=1<<4;	//TIM6时钟使能    
 // 	TIM6->ARR=arr;  	//设定计数器自动重装值 
 //	TIM6->PSC=psc;  	//预分频器	  
 //	TIM6->CNT=0;  		//计数器清零	  
 //	TIM6->DIER|=1<<0;   //允许更新中断	  
 //	TIM6->CR1|=0x01;    //使能定时器6
-//  	MY_NVIC_Init(3,0,TIM6_DAC_IRQn,2);	//抢占0，子优先级3，组2		
-
+////  	MY_NVIC_Init(3,0,TIM6_DAC_IRQn,2);	//抢占0，子优先级3，组2		
+//  
+////	MY_NVIC_PriorityGroupConfig(2);//设置分组
+//			  
+//	temp1=(~2)&0x07;//取后三位
+//	temp1<<=8;
+//	temp=SCB->AIRCR;  //读取先前的设置
+//	temp&=0X0000F8FF; //清空先前分组
+//	temp|=0X05FA0000; //写入钥匙
+//	temp|=temp1;	   
+//	SCB->AIRCR=temp;  //设置分组	  
+//	
+//	temp0=3<<(4-2);	  
+//	temp0|=0&(0x0f>>2);
+//	temp0&=0xf;								//取低四位
+//	NVIC->ISER[TIM6_DAC_IRQn/32]|=1<<TIM6_DAC_IRQn%32;//使能中断位(要清除的话,设置ICER对应位为1即可)
+//	NVIC->IP[TIM6_DAC_IRQn]|=temp0<<4;				//设置响应优先级和抢断优先级   	
+	
 	  TIM6_Handler.Instance=TIM6;                          //通用定时器6
     TIM6_Handler.Init.Prescaler=psc;                     //分频系数
     TIM6_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;    //向上计数器
     TIM6_Handler.Init.Period=arr;                        //自动装载值
     TIM6_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;//时钟分频因子
-    HAL_TIM_Base_Init(&TIM6_Handler);
+    TIM6_Handler.Init.RepetitionCounter = 0;
+		HAL_TIM_Base_Init(&TIM6_Handler);
     
     HAL_TIM_Base_Start_IT(&TIM6_Handler); //使能定时器6更新中断：TIM_IT_UPDATE   	
 }
@@ -645,7 +655,7 @@ void TIM7_IRQHandler(void)
 //	OSIntExit();  
 
 	OSIntEnter();  
-	 HAL_TIM_IRQHandler(&TIM6_Handler);
+	 HAL_TIM_IRQHandler(&TIM7_Handler);
 	OSIntExit();	
 } 
 //通用定时器7中断初始化
@@ -693,8 +703,8 @@ void TIM8_UP_TIM13_IRQHandler(void)
 //	}				   
 //	TIM8->SR&=~(1<<0);//清除中断标志位 	    
 //	OSIntExit(); 
-		OSIntEnter();  
-	 HAL_TIM_IRQHandler(&TIM6_Handler);
+	OSIntEnter();  
+	HAL_TIM_IRQHandler(&TIM8_Handler);
 	OSIntExit();
 }
 //定时器8中断初始化
@@ -706,21 +716,61 @@ void TIM8_UP_TIM13_IRQHandler(void)
 //这里使用的是定时器3!
 void TIM8_Int_Init(u16 arr,u16 psc)
 {
+//	u32 temp0;	
+//	u32 temp,temp1;
 //	RCC->APB2ENR|=1<<1;	//TIM8时钟使能    
 // 	TIM8->ARR=arr;  	//设定计数器自动重装值 
 //	TIM8->PSC=psc;  	//预分频器	  
 //	TIM8->DIER|=1<<0;   //允许更新中断	  
 //	TIM8->CR1|=0x01;    //使能定时器8
-//  	MY_NVIC_Init(1,3,TIM8_UP_TIM13_IRQn,2);	//抢占1，子优先级3，组2		
-
-	  TIM8_Handler.Instance=TIM8;                          //通用定时器6
+////  	MY_NVIC_Init(1,3,TIM8_UP_TIM13_IRQn,2);	//抢占1，子优先级3，组2		
+//		temp1=(~2)&0x07;//取后三位
+//	temp1<<=8;
+//	temp=SCB->AIRCR;  //读取先前的设置
+//	temp&=0X0000F8FF; //清空先前分组
+//	temp|=0X05FA0000; //写入钥匙
+//	temp|=temp1;	   
+//	SCB->AIRCR=temp;  //设置分组	  
+//	
+//	temp0=1<<(4-2);	  
+//	temp0|=3&(0x0f>>2);
+//	temp0&=0xf;								//取低四位
+//	NVIC->ISER[TIM8_UP_TIM13_IRQn/32]|=1<<TIM8_UP_TIM13_IRQn%32;//使能中断位(要清除的话,设置ICER对应位为1即可)
+//	NVIC->IP[TIM8_UP_TIM13_IRQn]|=temp0<<4;				//设置响应优先级和抢断优先级   	
+	
+	
+	  TIM8_Handler.Instance=TIM8;                          //通用定时器8
     TIM8_Handler.Init.Prescaler=psc;                     //分频系数
     TIM8_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;    //向上计数器
     TIM8_Handler.Init.Period=arr;                        //自动装载值
     TIM8_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;//时钟分频因子
-    HAL_TIM_Base_Init(&TIM8_Handler);
-    
-    HAL_TIM_Base_Start_IT(&TIM8_Handler); //使能定时器6更新中断：TIM_IT_UPDATE  	
+		HAL_TIM_Base_Init(&TIM8_Handler);
+
+    HAL_TIM_Base_Start_IT(&TIM8_Handler); //使能定时器8更新中断：TIM_IT_UPDATE  	
+
+//  TIM_ClockConfigTypeDef sClockSourceConfig;
+//  TIM_SlaveConfigTypeDef sSlaveConfig;
+//  TIM_MasterConfigTypeDef sMasterConfig;
+//	
+//	TIM8_Handler.Instance = TIM8;
+//  TIM8_Handler.Init.Prescaler = psc;
+//  TIM8_Handler.Init.CounterMode = TIM_COUNTERMODE_UP;
+//  TIM8_Handler.Init.Period = arr;
+//  TIM8_Handler.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+//  TIM8_Handler.Init.RepetitionCounter = 0;
+//  HAL_TIM_Base_Init(&TIM8_Handler);
+
+////  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+////  HAL_TIM_ConfigClockSource(&TIM8_Handler, &sClockSourceConfig);
+
+//  sSlaveConfig.SlaveMode = TIM_SLAVEMODE_DISABLE;
+//  sSlaveConfig.InputTrigger = TIM_TS_ITR0;
+//  HAL_TIM_SlaveConfigSynchronization(&TIM8_Handler, &sSlaveConfig);
+
+//  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+//  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+//  HAL_TIMEx_MasterConfigSynchronization(&TIM8_Handler, &sMasterConfig);
+//	HAL_TIM_Base_Start_IT(&TIM8_Handler);
 }
 
 

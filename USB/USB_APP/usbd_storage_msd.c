@@ -3,7 +3,8 @@
 #include "w25qxx.h"			 
 #include "sdio_sdcard.h"	 
 #include "nand.h"	 
-#include "ftl.h"	
+#include "ftl.h"		 
+#include "usb_app.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -29,7 +30,7 @@
 //bit2:SD卡写数据错误标志位
 //bit3:SD卡读数据错误标志位
 //bit4:1,表示电脑有轮询操作(表明连接还保持着)
-vu8 USB_STATUS_REG=0;
+//vu8 USB_STATUS_REG=0;
 ////////////////////////////////////////////////////////////////////////////////
  
 
@@ -126,9 +127,9 @@ int8_t STORAGE_Init (uint8_t lun)
 		case 1://NAND FLASH
 			res=FTL_Init();
 			break;
-//		case 2://SD卡
-//			res=SD_Init();
-//			break; 
+		case 2://SD卡
+			res=SD_Init();
+			break; 
 	} 
 	return res; 
 } 
@@ -151,10 +152,10 @@ int8_t STORAGE_GetCapacity (uint8_t lun, uint32_t *block_num, uint32_t *block_si
 			*block_size=512;  
 			*block_num=nand_dev.valid_blocknum*nand_dev.block_pagenum*nand_dev.page_mainsize/512;
   			break;
-//		case 2://SD卡
-//			*block_size=512;  
-//			*block_num=SDCardInfo.CardCapacity/512; 
-//			break; 
+		case 2://SD卡
+			*block_size=512;  
+			*block_num=SDCardInfo.CardCapacity/512; 
+			break; 
 	}  	
 	return 0; 
 } 
@@ -165,7 +166,7 @@ int8_t STORAGE_GetCapacity (uint8_t lun, uint32_t *block_num, uint32_t *block_si
 //    其他,未就绪
 int8_t  STORAGE_IsReady (uint8_t lun)
 { 
-	USB_STATUS_REG|=0X10;//标记轮询
+	usbx.bDeviceState|=0X10;//标记轮询
 	return 0;
 } 
 
@@ -188,7 +189,7 @@ int8_t  STORAGE_IsWriteProtected (uint8_t lun)
 int8_t STORAGE_Read (uint8_t lun,uint8_t *buf,uint32_t blk_addr,uint16_t blk_len)
 {
 	int8_t res=0;
-	USB_STATUS_REG|=0X02;//标记正在读数据
+	usbx.bDeviceState|=0X02;//标记正在读数据
 	switch(lun)
 	{
 		case 0://SPI FLASH
@@ -197,13 +198,13 @@ int8_t STORAGE_Read (uint8_t lun,uint8_t *buf,uint32_t blk_addr,uint16_t blk_len
 		case 1://NAND FLASH
 			res=FTL_ReadSectors(buf,blk_addr,512,blk_len);
 			break;
-//		case 2://SD卡
-//			res=SD_ReadDisk(buf,blk_addr,blk_len);
-//			break; 
+		case 2://SD卡
+			res=SD_ReadDisk(buf,blk_addr,blk_len);
+			break; 
 	} 
 	if(res)
 	{
-		USB_STATUS_REG|=0X08;//读错误! 
+		usbx.bDeviceState|=0X08;//读错误! 
 	} 
 	return res;
 }
@@ -217,7 +218,7 @@ int8_t STORAGE_Read (uint8_t lun,uint8_t *buf,uint32_t blk_addr,uint16_t blk_len
 int8_t STORAGE_Write (uint8_t lun,uint8_t *buf,uint32_t blk_addr,uint16_t blk_len) 
 {
 	int8_t res=0;
-	USB_STATUS_REG|=0X01;//标记正在写数据
+	usbx.bDeviceState|=0X01;//标记正在写数据
 	switch(lun)
 	{
 		case 0://SPI FLASH
@@ -226,13 +227,13 @@ int8_t STORAGE_Write (uint8_t lun,uint8_t *buf,uint32_t blk_addr,uint16_t blk_le
 		case 1://NAND FLASH
 			res=FTL_WriteSectors(buf,blk_addr,512,blk_len);
 			break;
-//		case 2://SD卡
-//			res=SD_WriteDisk(buf,blk_addr,blk_len);
-//			break; 
+		case 2://SD卡
+			res=SD_WriteDisk(buf,blk_addr,blk_len);
+			break; 
 	}  
 	if(res)
 	{
-		USB_STATUS_REG|=0X04;//写错误!	 
+		usbx.bDeviceState|=0X04;//写错误!	 
 	}
 	return res; 
 }
@@ -241,10 +242,8 @@ int8_t STORAGE_Write (uint8_t lun,uint8_t *buf,uint32_t blk_addr,uint16_t blk_le
 //返回值:支持的逻辑单元个数-1
 int8_t STORAGE_GetMaxLun (void)
 {
-//	if(SDCardInfo.CardCapacity)return STORAGE_LUN_NBR-1;
-//	else return STORAGE_LUN_NBR-2;
-	
-	return 1;
+	if(SDCardInfo.CardCapacity)return STORAGE_LUN_NBR-1;
+	else return STORAGE_LUN_NBR-2;
 }
 
 

@@ -26,13 +26,13 @@ u8 *sairecbuf2;
 //REC录音FIFO管理参数.
 //由于FATFS文件写入时间的不确定性,如果直接在接收中断里面写文件,可能导致某次写入时间过长
 //从而引起数据丢失,故加入FIFO控制,以解决此问题.
-vu8 sairecfifordpos=0;	//FIFO读位置
-vu8 sairecfifowrpos=0;	//FIFO写位置
+vu8 sairecfifordpos = 0;	//FIFO读位置
+vu8 sairecfifowrpos = 0;	//FIFO写位置
 u8 *sairecfifobuf[SAI_RX_FIFO_SIZE];//定义10个录音接收FIFO
 
-FIL* f_rec=0;		//录音文件	
+FIL* f_rec = 0;		//录音文件	
 u32 wavsize;		//wav数据大小(字节数,不包括文件头!!)
-u8 rec_sta=0;		//录音状态
+u8 rec_sta = 0;		//录音状态
 					//[7]:0,没有开启录音;1,已经开启录音;
 					//[6:1]:保留
 					//[0]:0,正在录音;1,暂停录音;
@@ -40,48 +40,52 @@ u8 *vubuf;			//vu用buf,直接指向sairecbuf1/sairecbuf2
  
 
 
-#define RECORDER_TITLE_COLOR   	0XFFFF		//录音机标题颜色	
-#define RECORDER_TITLE_BKCOLOR	0X0000		//录音机标题背景色	
+#define RECORDER_TITLE_COLOR   	    0XFFFF		//录音机标题颜色	
+#define RECORDER_TITLE_BKCOLOR	    0X0000		//录音机标题背景色	
 
-#define RECORDER_VU_BKCOLOR    	0X39C7		//VU Meter背景色	
-#define RECORDER_VU_L1COLOR    	0X07FF		//VU Meter L1色	
-#define RECORDER_VU_L2COLOR    	0xFFE0		//VU Meter L2色	
-#define RECORDER_VU_L3COLOR    	0xF800		//VU Meter L3色	
+#define RECORDER_VU_BKCOLOR    	    0X39C7		//VU Meter背景色	
+#define RECORDER_VU_L1COLOR    	    0X07FF		//VU Meter L1色	
+#define RECORDER_VU_L2COLOR       	0xFFE0		//VU Meter L2色	
+#define RECORDER_VU_L3COLOR    	    0xF800		//VU Meter L3色	
 
-#define RECORDER_TIME_COLOR    	0X07FF		//时间颜色
-#define RECORDER_MAIN_BKCOLOR	0X18E3		//主背景色
+#define RECORDER_TIME_COLOR    			0X07FF		//时间颜色
+#define RECORDER_MAIN_BKCOLOR				0X18E3		//主背景色
 
 //窗体内嵌字颜色
 #define RECORDER_INWIN_FONT_COLOR		0X736C		//0XAD53		
 
 
-u8*const RECORDER_DEMO_PIC="1:/SYSTEM/APP/RECORDER/Demo.bmp";		//demo图片路径 	      
-u8*const RECORDER_RECR_PIC="1:/SYSTEM/APP/RECORDER/RecR.bmp";		//录音 松开
-u8*const RECORDER_RECP_PIC="1:/SYSTEM/APP/RECORDER/RecP.bmp";		//录音 按下
-u8*const RECORDER_PAUSER_PIC="1:/SYSTEM/APP/RECORDER/PauseR.bmp";	//暂停 松开
-u8*const RECORDER_PAUSEP_PIC="1:/SYSTEM/APP/RECORDER/PauseP.bmp";	//暂停 按下
-u8*const RECORDER_STOPR_PIC="1:/SYSTEM/APP/RECORDER/StopR.bmp";		//停止 松开
-u8*const RECORDER_STOPP_PIC="1:/SYSTEM/APP/RECORDER/StopP.bmp";		//停止 按下    
+u8*const RECORDER_DEMO_PIC   = "1:/SYSTEM/APP/RECORDER/Demo.bmp";		//demo图片路径 	      
+u8*const RECORDER_RECR_PIC   = "1:/SYSTEM/APP/RECORDER/RecR.bmp";		//录音 松开
+u8*const RECORDER_RECP_PIC   = "1:/SYSTEM/APP/RECORDER/RecP.bmp";		//录音 按下
+u8*const RECORDER_PAUSER_PIC = "1:/SYSTEM/APP/RECORDER/PauseR.bmp";	//暂停 松开
+u8*const RECORDER_PAUSEP_PIC = "1:/SYSTEM/APP/RECORDER/PauseP.bmp";	//暂停 按下
+u8*const RECORDER_STOPR_PIC  = "1:/SYSTEM/APP/RECORDER/StopR.bmp";		//停止 松开
+u8*const RECORDER_STOPP_PIC  = "1:/SYSTEM/APP/RECORDER/StopP.bmp";		//停止 按下    
+
 //录音设置选择列表
-u8*const recorder_setsel_tbl[GUI_LANGUAGE_NUM][2]=
+u8*const recorder_setsel_tbl[GUI_LANGUAGE_NUM][2] =
 {
 {"采样率设置","MIC增益设置",},
 {"採樣率設置","MIC增益設置",},		 
 {"Samplerate set","MIC gain set",},
 };
+
 //录音采样率提示信息表
-u8*const recorder_sampleratemsg_tbl[5]={"8KHz","16Khz","32Khz","44.1Khz","48Khz",};
+u8*const recorder_sampleratemsg_tbl[5] = {"8KHz","16Khz","32Khz","44.1Khz","48Khz",};
+
 //录音采样率表
-const u16 recorder_samplerate_tbl[5]={8000,16000,32000,44100,48000};
+const u16 recorder_samplerate_tbl[5] = {8000,16000,32000,44100,48000};
+
 //录音提示信息
-u8*const recorder_remind_tbl[3][GUI_LANGUAGE_NUM]=
+u8*const recorder_remind_tbl[3][GUI_LANGUAGE_NUM] =
 {
-"是否保存该录音文件?","是否保存該錄音文件?","Do you want to save?", 
+{"是否保存该录音文件?","是否保存該錄音文件?","Do you want to save?"}, 
 {"请先停止录音!","請先停止錄音!","Please stop REC first!",},	  
 {"内存不够!!","內存不夠!!","Out of memory!",},	 	 
 };	
 //00级功能选项表标题
-u8*const recorder_modesel_tbl[GUI_LANGUAGE_NUM]=
+u8*const recorder_modesel_tbl[GUI_LANGUAGE_NUM] =
 {
 "录音设置","錄音設置","Recorder Set",
 };	
@@ -92,10 +96,14 @@ u8*const recorder_modesel_tbl[GUI_LANGUAGE_NUM]=
 //      1,读到了1个数据块
 u8 rec_sai_fifo_read(u8 **buf)
 {
-	if(sairecfifordpos==sairecfifowrpos)return 0;
+	if(sairecfifordpos == sairecfifowrpos){
+		return 0;
+	}
 	sairecfifordpos++;		//读位置加1
-	if(sairecfifordpos>=SAI_RX_FIFO_SIZE)sairecfifordpos=0;//归零 
-	*buf=sairecfifobuf[sairecfifordpos];
+	if(sairecfifordpos >= SAI_RX_FIFO_SIZE){
+		sairecfifordpos=0;//归零 
+	}
+	*buf = sairecfifobuf[sairecfifordpos];
 	return 1;
 }
 //写一个录音FIFO
@@ -105,15 +113,18 @@ u8 rec_sai_fifo_read(u8 **buf)
 u8 rec_sai_fifo_write(u8 *buf)
 {
 	u16 i;
-	u8 temp=sairecfifowrpos;//记录当前写位置
+	u8 temp = sairecfifowrpos;//记录当前写位置
 	sairecfifowrpos++;		//写位置加1
-	if(sairecfifowrpos>=SAI_RX_FIFO_SIZE)sairecfifowrpos=0;//归零  
-	if(sairecfifordpos==sairecfifowrpos)
-	{
-		sairecfifowrpos=temp;//还原原来的写位置,此次写入失败
+	if(sairecfifowrpos >= SAI_RX_FIFO_SIZE){
+		sairecfifowrpos = 0;//归零  
+	}
+	if(sairecfifordpos == sairecfifowrpos){
+		sairecfifowrpos = temp;//还原原来的写位置,此次写入失败
 		return 1;	
 	}
-	for(i=0;i<SAI_RX_DMA_BUF_SIZE;i++)sairecfifobuf[sairecfifowrpos][i]=buf[i];//拷贝数据
+	for(i = 0; i < SAI_RX_DMA_BUF_SIZE; i++){
+		sairecfifobuf[sairecfifowrpos][i] = buf[i];//拷贝数据
+	}
 	return 0;
 } 
 //录音SAI DMA RX回调函数
@@ -156,9 +167,12 @@ void recorder_enter_rec_mode(void)
 	SAIB_RX_DMA_Init(sairecbuf1,sairecbuf2,SAI_RX_DMA_BUF_SIZE/2,1);//配置RX DMA
 
 	//降低I2S DMA中断的优先级,让USB优先级可以打断DMA中断优先级
-	MY_NVIC_Init(1,0,DMA1_Stream4_IRQn,2);	//抢占1，子优先级0，组2 
-	MY_NVIC_Init(1,1,DMA1_Stream3_IRQn,2);	//抢占1，子优先级1，组2 
-  	sai_rx_callback=rec_sai_dma_rx_callback;//回调函数指wav_i2s_dma_callback
+//	MY_NVIC_Init(1,0,DMA1_Stream4_IRQn,2);	//抢占1，子优先级0，组2 
+//	MY_NVIC_Init(1,1,DMA1_Stream3_IRQn,2);	//抢占1，子优先级1，组2 
+	HAL_NVIC_SetPriority(DMA1_Stream4_IRQn,0,1);
+	HAL_NVIC_SetPriority(DMA1_Stream3_IRQn,1,1);
+	
+  sai_rx_callback=rec_sai_dma_rx_callback;//回调函数指wav_i2s_dma_callback
  	SAI_Play_Start();	//开始SAI数据发送(主机)
 	SAI_Rec_Start(); 	//开始SAI数据接收(从机)
 }
@@ -200,7 +214,7 @@ void recorder_wav_init(__WaveHeader* wavhead)
  	wavhead->fmt.ByteRate=0;			//字节速率=采样率*通道数*(ADC位数/8),后续确定
  	wavhead->fmt.BlockAlign=4;			//块大小=通道数*(ADC位数/8)
  	wavhead->fmt.BitsPerSample=16;		//16位PCM
-   	wavhead->data.ChunkID=0X61746164;	//"data"
+  wavhead->data.ChunkID=0X61746164;	//"data"
  	wavhead->data.ChunkSize=0;			//数据大小,还需要计算  
 } 
 //电平阀值表

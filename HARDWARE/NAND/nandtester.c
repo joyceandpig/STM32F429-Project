@@ -27,13 +27,13 @@ u8 test_writepage(u32 pagenum,u16 colnum,u16 writebytes)
 	u8 *pbuf;
 	u8 sta=0;
     u16 i=0;
-	pbuf=mymalloc(SRAMEX,5000); // SRAMIN
+	pbuf=mymalloc(SRAMIN,5000); // SRAMIN
     for(i=0;i<writebytes;i++)//×¼±¸ÒªÐ´ÈëµÄÊý¾Ý,Ìî³äÊý¾Ý,´Ó0¿ªÊ¼Ôö´ó
     { 
         pbuf[i]=i;	
     }
 	sta=NAND_WritePage(pagenum,colnum,pbuf,writebytes);	//ÏònandÐ´ÈëÊý¾Ý	
-	myfree(SRAMEX,pbuf);	//ÊÍ·ÅÄÚ´æ  SRAMIN
+	myfree(SRAMIN,pbuf);	//ÊÍ·ÅÄÚ´æ  SRAMIN
 	return sta;
 }
 
@@ -46,7 +46,7 @@ u8 test_readpage(u32 pagenum,u16 colnum,u16 readbytes)
 	u8 *pbuf;
 	u8 sta=0;
     u16 i=0;
-	pbuf=mymalloc(SRAMEX,5000);  //SRAMIN
+	pbuf=mymalloc(SRAMIN,5000);  //SRAMIN
 	sta=NAND_ReadPage(pagenum,colnum,pbuf,readbytes);	//¶ÁÈ¡Êý¾Ý
 	if(sta==0||sta==NSTA_ECC1BITERR||sta==NSTA_ECC2BITERR)//¶ÁÈ¡³É¹¦
 	{ 
@@ -57,7 +57,7 @@ u8 test_readpage(u32 pagenum,u16 colnum,u16 readbytes)
 		}
 		printf("\r\nend\r\n");
 	}
-	myfree(SRAMEX,pbuf);	//ÊÍ·ÅÄÚ´æSRAMIN
+	myfree(SRAMIN,pbuf);	//ÊÍ·ÅÄÚ´æSRAMIN
 	return sta;
 }
 
@@ -72,13 +72,13 @@ u8 test_copypageandwrite(u32 spnum,u32 dpnum,u16 colnum,u16 writebytes)
 	u8 *pbuf;
 	u8 sta=0;
     u16 i=0;
-	pbuf=mymalloc(SRAMEX,5000);  //SRAMIN
+	pbuf=mymalloc(SRAMIN,5000);  //SRAMIN
     for(i=0;i<writebytes;i++)//×¼±¸ÒªÐ´ÈëµÄÊý¾Ý,Ìî³äÊý¾Ý,´Ó0X80¿ªÊ¼Ôö´ó
     { 
         pbuf[i]=i+0X80;	
     }
 	sta=NAND_CopyPageWithWrite(spnum,dpnum,colnum,pbuf,writebytes);	//ÏònandÐ´ÈëÊý¾Ý	
-	myfree(SRAMEX,pbuf);	//ÊÍ·ÅÄÚ´æSRAMIN
+	myfree(SRAMIN,pbuf);	//ÊÍ·ÅÄÚ´æSRAMIN
 	return sta;
 }
  
@@ -91,7 +91,7 @@ u8 test_readspare(u32 pagenum,u16 colnum,u16 readbytes)
 	u8 *pbuf;
 	u8 sta=0;
     u16 i=0;
-	pbuf=mymalloc(SRAMEX,512); // SRAMIN
+	pbuf=mymalloc(SRAMIN,512); // SRAMIN
 	sta=NAND_ReadSpare(pagenum,colnum,pbuf,readbytes);	//¶ÁÈ¡Êý¾Ý
 	if(sta==0)//¶ÁÈ¡³É¹¦
 	{ 
@@ -102,7 +102,7 @@ u8 test_readspare(u32 pagenum,u16 colnum,u16 readbytes)
 		}
 		printf("\r\nend\r\n");
 	}
-	myfree(SRAMEX,pbuf);	//ÊÍ·ÅÄÚ´æSRAMIN
+	myfree(SRAMIN,pbuf);	//ÊÍ·ÅÄÚ´æSRAMIN
 	return sta;
 }
 
@@ -138,13 +138,13 @@ u8 test_ftlwritesectors(u32 secx,u16 secsize,u16 seccnt)
 	u8 *pbuf;
 	u8 sta=0;
     u32 i=0;
-	pbuf=mymalloc(SRAMEX,secsize*seccnt);  //SRAMIN
+	pbuf=mymalloc(SRAMIN,secsize*seccnt);  //SRAMIN
     for(i=0;i<secsize*seccnt;i++)	//×¼±¸ÒªÐ´ÈëµÄÊý¾Ý,Ìî³äÊý¾Ý,´Ó0¿ªÊ¼Ôö´ó
     { 
         pbuf[i]=i;	
     }
 	sta=FTL_WriteSectors(pbuf,secx,secsize,seccnt);	//ÏònandÐ´ÈëÊý¾Ý	
-	myfree(SRAMEX,pbuf);	//ÊÍ·ÅÄÚ´æSRAMIN
+	myfree(SRAMIN,pbuf);	//ÊÍ·ÅÄÚ´æSRAMIN
 	return sta;
 }
 
@@ -158,7 +158,7 @@ u8 test_ftlreadsectors(u32 secx,u16 secsize,u16 seccnt)
 	u8 *pbuf;
 	u8 sta=0;
     u32 i=0;
-	pbuf=mymalloc(SRAMEX,secsize*seccnt);   //SRAMIN
+	pbuf=mymalloc(SRAMIN,secsize*seccnt);   //SRAMIN
 	sta=FTL_ReadSectors(pbuf,secx,secsize,seccnt);	//¶ÁÈ¡Êý¾Ý
 	if(sta==0)
 	{
@@ -169,7 +169,7 @@ u8 test_ftlreadsectors(u32 secx,u16 secsize,u16 seccnt)
 		}
 		printf("\r\nend\r\n");
 	}
-	myfree(SRAMEX,pbuf);	//ÊÍ·ÅÄÚ´SRAMINæ
+	myfree(SRAMIN,pbuf);	//ÊÍ·ÅÄÚ´SRAMINæ
 	return sta;
 }
 

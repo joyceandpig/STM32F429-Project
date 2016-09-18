@@ -2,6 +2,7 @@
 #include "usb_dcd_int.h"
 #include <stdio.h> 
 #include "usart.h" 
+#include "usb_app.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -18,20 +19,8 @@
 //无
 ////////////////////////////////////////////////////////////////////////////////// 	
 
-//表示USB连接状态
-//0,没有连接;
-//1,已经连接;
-vu8 bDeviceState=0;		//默认没有连接  
 
 
-extern USB_OTG_CORE_HANDLE  USB_OTG_dev;
-
-//USB OTG 中断服务函数
-//处理所有USB中断
-void OTG_FS_IRQHandler(void)
-{
-  	USBD_OTG_ISR_Handler(&USB_OTG_dev);
-}  
 //指向DEVICE_PROP结构体
 //USB Device 用户回调函数. 
 USBD_Usr_cb_TypeDef USR_cb =
@@ -69,13 +58,13 @@ void USBD_USR_DeviceReset (uint8_t speed)
 //USB Device 配置成功
 void USBD_USR_DeviceConfigured (void)
 {
-    bDeviceState=1;
+	usbx.bDeviceState|=0X80;
 	printf("MSC Interface started.\r\n"); 
 } 
 //USB Device挂起
 void USBD_USR_DeviceSuspended(void)
 {
-    bDeviceState=0;
+	usbx.bDeviceState=0;//USB挂起了
 	printf("Device In suspend mode.\r\n");
 } 
 //USB Device恢复
@@ -86,12 +75,19 @@ void USBD_USR_DeviceResumed(void)
 //USB Device连接成功
 void USBD_USR_DeviceConnected (void)
 {
-	bDeviceState=1;
 	printf("USB Device Connected.\r\n");
 }
 //USB Device未连接
 void USBD_USR_DeviceDisconnected (void)
 {
-	bDeviceState=0;
+	usbx.bDeviceState=0;
 	printf("USB Device Disconnected.\r\n");
 } 
+
+
+
+
+
+
+
+

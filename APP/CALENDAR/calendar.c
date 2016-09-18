@@ -6,7 +6,7 @@
 #include "24cxx.h"
 #include "math.h"
 #include "rtc.h"
-//#include "camera.h" 
+#include "camera.h" 
 //#include "pcf8574.h"
 #include "wm8978.h"
 //////////////////////////////////////////////////////////////////////////////////	 
@@ -176,8 +176,8 @@ u8 calendar_alarm_msg(u16 x,u16 y)
 	if(DCMI->CR&0X01)//摄像头正在工作?
 	{
 		dcmiflag=1;
-//		DCMI_Stop();//关闭摄像头
-//		sw_sdcard_mode();//切换为SD卡模式
+		DCMI_Stop();//关闭摄像头
+		sw_sdcard_mode();//切换为SD卡模式
 	}
 	OSTaskSuspend(6); //挂起主任务
   twin=window_creat(x,y,200,160,0,1|1<<5|1<<6,16);//创建窗口,读取背景色
@@ -281,8 +281,8 @@ u8 calendar_alarm_msg(u16 x,u16 y)
 	OSTaskResume(6); 		//恢复主任务
 	if(dcmiflag)
 	{
-//		sw_ov5640_mode();
-//		DCMI_Start();//重新启动摄像头
+		sw_ov5640_mode();
+		DCMI_Start();//重新启动摄像头
 	}
 	return rval;
 } 

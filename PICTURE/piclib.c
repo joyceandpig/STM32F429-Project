@@ -171,12 +171,12 @@ u8 ai_load_picfile(const u8 *filename,u16 x,u16 y,u16 width,u16 height,u8 fast)
 //动态分配内存
 void *pic_memalloc (u32 size)			
 {
-	return (void*)mymalloc(SRAMEX,size);//SRAMIN
+	return (void*)mymalloc(SRAMIN,size);//SRAMIN
 }
 //释放内存
 void pic_memfree (void* mf)		 
 {
-	myfree(SRAMEX,mf);//SRAMIN
+	myfree(SRAMIN,mf);//SRAMIN
 }
 
 

@@ -5,6 +5,7 @@
 	#include "24cxx.h"
 	#include "w25qxx.h"
 #endif
+#include "videoplay.h"
 
 #include "fontupd.h"//×Ö¿â
 extern void MPU_Test(void);
@@ -25,6 +26,7 @@ struct _m_usmart_nametab usmart_nametab[]=
 	(void*) W25QXX_Test,"void W25QXX_Test(u8 n)",
 #endif	
 	(void*) MPU_Test,"void MPU_Test(void)",
+	(void*) video_play,"void video_play(void)",
 };	
 
 #include "usart.h"

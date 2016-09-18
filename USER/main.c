@@ -38,6 +38,8 @@
 #include "gradienter.h"
 #include "audioplay.h"
 
+#include "usb_app.h"
+#include "usbplay.h"
 
 enum 
 {
@@ -69,12 +71,12 @@ enum
 };
 
 USB_OTG_CORE_HANDLE USB_OTG_dev;
-extern vu8 USB_STATUS_REG;		//USB状态
-extern vu8 bDeviceState;		//USB连接 情况
+vu8 USB_STATUS_REG;		//USB状态
+vu8 bDeviceState;		//USB连接 情况
 
 void sys_reset(void)
 {//软件复位
-	u_printf(INFO,"System well Reset.\r\n");
+	u_printf(INFO,"System will Reset.\r\n");
 	NVIC_SystemReset();
   __DSB();  
 	while (1);
@@ -95,7 +97,7 @@ int main(void)
 	SDRAM_Init();                   //SDRAM初始化
  	my_mem_init(SRAMIN);		    //初始化内部内存池
 	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测W25Q128错误
-	MSC_BOT_Data=mymalloc(SRAMEX,MSC_MEDIA_PACKET);			//申请内存SRAMIN
+	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存SRAMIN
 	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
 	while(1)；
 }
@@ -145,6 +147,7 @@ int main(void)
     Stm32_Clock_Init(384,25,2,8);   //设置时钟,180Mhz
     delay_init(192);                //初始化延时函数
 #endif	
+	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_2);
   uart1_init(115200);              //初始化USART
 	usmart_dev.init(96);
 	LED_Init();                     //初始化LED
@@ -164,8 +167,9 @@ int main(void)
 	piclib_init();				//piclib初始化
 	slcd_dma_init();
 	exfuns_init();				//FATFS 申请内存
+	usbapp_init();
 	
-	printf("RTC Check...");			   
+	printf("RTC Check...\r\n");			   
  	if(RTC_Init())
 	{
 		printf("RTC ERROR!\r\n"); //RTC检测
@@ -186,9 +190,10 @@ int main(void)
 	Show_Str(30,50+32*4+24*3,300,32,"2016年8月25日",24,0);
 
 	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测NandFlash错误
-	MSC_BOT_Data=mymalloc(SRAMEX,MSC_MEDIA_PACKET);			//申请内存SRAMIN
+	
+	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存SRAMIN
 	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
-//	Sleep(2000);
+	Sleep(2000);
 	
 	f_mount(fs[0],"0:",1); 		//挂载SD卡  
 	f_mount(fs[1],"1:",1); 		//挂载SPI FLASH. 
@@ -306,7 +311,18 @@ void picture_task(void *pdata)
 //	ShowPicture();	//显示图片
 	while(1)
 	{
-		Sleep(2000);
+		if(usbx.mode==USBD_MSC_MODE)			//U盘模式,才处理
+		{
+			u_printf(DBG,"USB USBH_MSC_MODE\r\n");
+			while((usbx.bDeviceState&0XC0)==0X40)//USB设备插入了,但是还没连接成功,猛查询.
+			{
+				usbapp_pulling();	//轮询处理USB事务
+				delay_us(1000);		//不能像HID那么猛...,U盘比较慢
+			}
+			u_printf(DBG,"USB After query\r\n");
+			usbapp_pulling();//处理USB事务
+		}
+		Sleep(1000);
 	}
 }
 
@@ -338,15 +354,15 @@ void main_thread(void *pdata)
 			case ebook_app		:ebook_play();		break;//电子图书 
  			case picviewer_app	:picviewer_play();	break;//数码相框  
  			case audio_app		:audio_play();		break;//音乐播放 
-// 			case video_app		:video_play();		break;//视频播放
+ 			case video_app		:video_play();		break;//视频播放
 			case calendar_app	:calendar_play();	break;//时钟 
  			case sysset_app		:sysset_play();		break;//系统设置
 			case notepad_app	:notepad_play();	break;//记事本	
 			case exe_app			:exe_play();		break;//运行器
 			case paint_app		:paint_play();		break;//手写画笔
  			case camera_app		:camera_play();		break;//摄像头
-//			case recorder_app	:recorder_play();	break;//录音机
-// 			case usb_app		:usb_play();		break;//USB连接
+			case recorder_app	:recorder_play();	break;//录音机
+ 			case usb_app		:usb_play();		break;//USB连接
 // 	    case net_app		:net_play();		break;//网络测试
 			case calc_app		:calc_play();		break;//计算器   
 			case qr_app			:qr_play();			break;//二维码
@@ -391,7 +407,7 @@ u16 pic_get_tnum(u8 *path)
 	u16 rval=0;
  	DIR tdir;	 		//临时目录
 	FILINFO *tfileinfo;	//临时文件信息	    			     
-	tfileinfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));//申请内存SRAMIN
+	tfileinfo=(FILINFO*)mymalloc(SRAMEX,sizeof(FILINFO));//申请内存SRAMIN
     res=f_opendir(&tdir,(const TCHAR*)path); 	//打开目录 
 	if(res==FR_OK&&tfileinfo)
 	{
@@ -406,7 +422,7 @@ u16 pic_get_tnum(u8 *path)
 			}	    
 		}  
 	}  
-	myfree(SRAMIN,tfileinfo);//释放内存SRAMIN
+	myfree(SRAMEX,tfileinfo);//释放内存SRAMIN
 	return rval;
 }
 
@@ -443,9 +459,9 @@ void ShowPicture(void)
 		u_printf(DBG,"0 Picture!");
 		delay_ms(200);			  
 	} 
-	picfileinfo=(FILINFO*)mymalloc(SRAMIN,sizeof(FILINFO));	//申请内存SRAMIN
- 	pname=mymalloc(SRAMIN,_MAX_LFN*2+1);					//为带路径的文件名分配内存SRAMIN
- 	picoffsettbl=mymalloc(SRAMIN,4*totpicnum);					//申请4*totpicnum个字节的内存,用于存放图片索引SRAMIN
+	picfileinfo=(FILINFO*)mymalloc(SRAMEX,sizeof(FILINFO));	//申请内存SRAMIN
+ 	pname=mymalloc(SRAMEX,_MAX_LFN*2+1);					//为带路径的文件名分配内存SRAMIN
+ 	picoffsettbl=mymalloc(SRAMEX,4*totpicnum);					//申请4*totpicnum个字节的内存,用于存放图片索引SRAMIN
  	while(!picfileinfo||!pname||!picoffsettbl)					//内存分配出错
  	{	    	
 		u_printf(DBG,"mem is malloc error!");     
@@ -514,9 +530,9 @@ void ShowPicture(void)
 		}				
 		res=0; 	
 	} 							    
-	myfree(SRAMIN,picfileinfo);			//释放内存SRAMIN						   		    
-	myfree(SRAMIN,pname);				//释放内存	SRAMIN		    
-	myfree(SRAMIN,picoffsettbl);			//释放内存	SRAMIN
+	myfree(SRAMEX,picfileinfo);			//释放内存SRAMIN						   		    
+	myfree(SRAMEX,pname);				//释放内存	SRAMIN		    
+	myfree(SRAMEX,picoffsettbl);			//释放内存	SRAMIN
 }
 #endif
 

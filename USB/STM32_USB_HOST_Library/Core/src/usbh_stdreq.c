@@ -79,7 +79,8 @@
     #pragma data_alignment=4   
   #endif
 #endif /* USB_OTG_HS_INTERNAL_DMA_ENABLED */
-__ALIGN_BEGIN uint8_t          USBH_CfgDesc[CFG_DESC_MAX_SIZE] __ALIGN_END ;
+//__ALIGN_BEGIN uint8_t          USBH_CfgDesc[CFG_DESC_MAX_SIZE] __ALIGN_END ;
+uint8_t * USBH_CfgDesc;
 
 
 /** @defgroup USBH_STDREQ_Private_FunctionPrototypes

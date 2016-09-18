@@ -43,6 +43,8 @@
 #include "usbh_hid_core.h"
 #include "usbh_hid_mouse.h"
 #include "usbh_hid_keybd.h"
+#include "usbh_hid_gamepad.h"
+#include "usart.h"
 
 /** @addtogroup USBH_LIB
 * @{
@@ -262,49 +264,108 @@ static USBH_Status USBH_HID_InterfaceInit ( USB_OTG_CORE_HANDLE *pdev,
     
      start_toggle =0;
      status = USBH_OK; 
-  }
-  else
+  }else if(pphost->device_prop.Itf_Desc[0].bInterfaceSubClass==0X00)//自定义HID设备
+	{  
+		//自定义协议,支持游戏手柄
+		if(pphost->device_prop.Itf_Desc[0].bInterfaceProtocol == 0X00)
+		{
+			HID_Machine.cb = &HID_GAMEPAD_cb;//游戏手柄
+		}  
+		HID_Machine.state     = HID_IDLE;
+		HID_Machine.ctl_state = HID_REQ_IDLE; 
+		HID_Machine.ep_addr   = pphost->device_prop.Ep_Desc[0][0].bEndpointAddress;
+		HID_Machine.length    = pphost->device_prop.Ep_Desc[0][0].wMaxPacketSize;
+		HID_Machine.poll      = pphost->device_prop.Ep_Desc[0][0].bInterval ; 
+		if (HID_Machine.poll  < HID_MIN_POLL) 
+		{
+			HID_Machine.poll = HID_MIN_POLL;
+		} 
+		/* Check fo available number of endpoints */
+		/* Find the number of EPs in the Interface Descriptor */      
+		/* Choose the lower number in order not to overrun the buffer allocated */
+		maxEP = ( (pphost->device_prop.Itf_Desc[0].bNumEndpoints <= USBH_MAX_NUM_ENDPOINTS) ? 
+				pphost->device_prop.Itf_Desc[0].bNumEndpoints :
+				USBH_MAX_NUM_ENDPOINTS);   
+		/* Decode endpoint IN and OUT address from interface descriptor */ 
+		for (num=0; num < maxEP; num++)
+		{
+			if(pphost->device_prop.Ep_Desc[0][num].bEndpointAddress & 0x80)
+			{
+				HID_Machine.HIDIntInEp = (pphost->device_prop.Ep_Desc[0][num].bEndpointAddress);
+				HID_Machine.hc_num_in  =\
+				USBH_Alloc_Channel(pdev, 
+								   pphost->device_prop.Ep_Desc[0][num].bEndpointAddress);
+
+				/* Open channel for IN endpoint */
+				USBH_Open_Channel  (pdev,
+									HID_Machine.hc_num_in,
+									pphost->device_prop.address,
+									pphost->device_prop.speed,
+									EP_TYPE_INTR,
+									HID_Machine.length); 
+			}
+			else
+			{
+				HID_Machine.HIDIntOutEp = (pphost->device_prop.Ep_Desc[0][num].bEndpointAddress);
+				HID_Machine.hc_num_out  =\
+				USBH_Alloc_Channel(pdev, 
+								   pphost->device_prop.Ep_Desc[0][num].bEndpointAddress);
+
+				/* Open channel for OUT endpoint */
+				USBH_Open_Channel  (pdev,
+									HID_Machine.hc_num_out,
+									pphost->device_prop.address,
+									pphost->device_prop.speed,
+									EP_TYPE_INTR,
+									HID_Machine.length); 
+			}
+
+		}   
+		start_toggle =0;
+		status = USBH_OK; 
+		
+	}else
   {
     if (pphost->device_prop.Itf_Desc[0].bInterfaceClass == USB_HUB)
     {
-      LCD_ErrLog("Hub is not supported.\n");
+      printf("Hub is not supported.\r\n");
     }
     
     else if (pphost->device_prop.Itf_Desc[0].bInterfaceClass == USB_CDCC)
     {
-      LCD_ErrLog("Communications and CDC Control device is not supported.\n");
+      printf("Communications and CDC Control device is not supported.\r\n");
     }
     
     else if (pphost->device_prop.Itf_Desc[0].bInterfaceClass == USB_MSC)
     {
-      LCD_ErrLog("MSC device is not supported.\n");
+      printf("MSC device is not supported.\r\n");
     }
     
     else if (pphost->device_prop.Itf_Desc[0].bInterfaceClass == USB_PRINTER)
     {
-      LCD_ErrLog("Printer device is not supported.\n");
+      printf("Printer device is not supported.\r\n");
     }
     
     else if (pphost->device_prop.Itf_Desc[0].bInterfaceClass == USB_SMARTCARD)
     {
-      LCD_ErrLog("Smart Card device is not supported.\n");
+      printf("Smart Card device is not supported.\r\n");
     }
     
     
     else if (pphost->device_prop.Itf_Desc[0].bInterfaceClass == USB_VIDEO)
     {
-      LCD_ErrLog("Video device  is not supported.\n");
+      printf("Video device  is not supported.\r\n");
     }
     
     
     else if (pphost->device_prop.Itf_Desc[0].bInterfaceClass == USB_AVD)
     {
-      LCD_ErrLog("Audio/Video Devices is not supported.\n");
+      printf("Audio/Video Devices is not supported.\r\n");
     }
     
     else
     {
-      LCD_ErrLog ("The attached device is not supported. \n");
+      printf ("The attached device is not supported. \r\n");
     }
     
     pphost->usr_cb->DeviceNotSupported();  
@@ -390,7 +451,7 @@ static USBH_Status USBH_HID_ClassRequest(USB_OTG_CORE_HANDLE *pdev ,
     
   case HID_REQ_SET_IDLE:
     
-    classReqStatus = USBH_Set_Idle (pdev, pphost, 0, 0);
+    classReqStatus = USBH_Set_Idle (pdev, pphost, 100, 0);
     
     /* set Idle */
     if (classReqStatus == USBH_OK)
@@ -581,7 +642,7 @@ static USBH_Status USBH_Set_Idle (USB_OTG_CORE_HANDLE *pdev,
   phost->Control.setup.b.wValue.w = (duration << 8 ) | reportId;
   
   phost->Control.setup.b.wIndex.w = 0;
-  phost->Control.setup.b.wLength.w = 0;
+  phost->Control.setup.b.wLength.w = 100;	//官方的这里设置的是0,导致部分鼠标无法识别,这里修改为100以后,识别率明显提高.
   
   return USBH_CtlReq(pdev, phost, 0 , 0 );
 }

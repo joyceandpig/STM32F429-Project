@@ -1,6 +1,7 @@
 #include "usbplay.h"
 #include "usb_app.h" 
 #include "sdio_sdcard.h"
+#include "debug.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -34,7 +35,7 @@ u8 usb_play(void)
 		}
 	}
 	POINT_COLOR=BLUE;  
-  	BACK_COLOR=LGRAY; 
+  BACK_COLOR=LGRAY; 
 	LCD_Clear(BACK_COLOR);
 	app_filebrower((u8*)APP_MFUNS_CAPTION_TBL[12][gui_phy.language],0X05);//显示标题 
 	usbapp_mode_set(USBD_MSC_MODE);//DEVICE MSC 
@@ -44,13 +45,17 @@ u8 usb_play(void)
  		delay_ms(1000/OS_TICKS_PER_SEC);//延时一个时钟节拍
 		if(system_task_return)
 		{
+			u_printf(DBG,"system return\r\n");
 			delay_ms(10);
 			TPAD_Scan(1);
+			u_printf(DBG,"TPAD_Scan(1-1)\r\n");
 			delay_ms(10);
 			if(TPAD_Scan(1))
 			{
+				u_printf(DBG,"TPAD_Scan(1)\r\n");
 				if(busycnt)//USB正在读写
 				{
+					u_printf(DBG,"busycnt true\r\n");
 					POINT_COLOR=RED;  					    
 					LCD_ShowString(60+(lcddev.width-240)/2,110+(lcddev.height-320)/2,lcddev.width,lcddev.height,16,"USB BUSY!!!");//提示SD卡已经准备了
 					POINT_COLOR=BLUE;  
@@ -68,17 +73,20 @@ u8 usb_play(void)
 			else gui_fill_rectangle(60+(lcddev.width-240)/2,170+(lcddev.height-320)/2,128,16,BACK_COLOR);//清除显示
 			if(usbx.bDeviceState&0x10)//有轮询操作
 			{
+				u_printf(DBG,"USB query opration\r\n");
 				offline_cnt=0;				//USB连接了,则清除offline计数器
 				usbx.bDeviceState|=0X80;	//标记USB连接正常
 				usbx.bDeviceState&=~(1<<4);	//清除轮询标志位
 			}else
 			{
+				u_printf(DBG,"USB No query opration\r\n");
 				offline_cnt++;  
 				if(offline_cnt>50)usbx.bDeviceState=0;//2s内没收到在线标记,代表USB被拔出了
 			} 
 		} 
 		if(USB_STA!=usbx.bDeviceState)//状态改变了 
 		{	 	
+			u_printf(DBG,"USB status changed\r\n");
 			gui_fill_rectangle(60+(lcddev.width-240)/2,150+(lcddev.height-320)/2,120,16,BACK_COLOR);//清除显示 
 			if(usbx.bDeviceState&0x01)//正在写		  
 			{

@@ -169,7 +169,7 @@ ANSI¿ØÖÆÂë ²Î¿¼:http://my.oschina.net/u/1587819/blog/227164
 	#define P_ENTER(...)  		
 	#define P_EXIT(...)  	
 	#define P_HEX(X,Y)		
-#endif/* DEBUG */
+#endif /* DEBUG */
 		
 #define u_printf(X,...)	P_##X(__VA_ARGS__)
 	

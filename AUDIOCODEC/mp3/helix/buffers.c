@@ -141,18 +141,18 @@ MP3DecInfo *AllocateBuffers(void)
 	IMDCTInfo *mi;
 	SubbandInfo *sbi;
 
-	mp3DecInfo_pointer = (MP3DecInfo *)mymalloc(SRAMIN,sizeof(MP3DecInfo));
+	mp3DecInfo_pointer = (MP3DecInfo *)mymalloc(SRAMEX,sizeof(MP3DecInfo));//SRAMIN
 	if (!mp3DecInfo_pointer)
 		return 0;
 	ClearBuffer(mp3DecInfo_pointer, sizeof(MP3DecInfo));
 	
-	fh =  (FrameHeader *)     mymalloc(SRAMIN,sizeof(FrameHeader));
-	si =  (SideInfo *)        mymalloc(SRAMIN,sizeof(SideInfo));
-	sfi = (ScaleFactorInfo *) mymalloc(SRAMIN,sizeof(ScaleFactorInfo));
-	hi =  (HuffmanInfo *)     mymalloc(SRAMIN,sizeof(HuffmanInfo));
-	di =  (DequantInfo *)     mymalloc(SRAMIN,sizeof(DequantInfo));
-	mi =  (IMDCTInfo *)       mymalloc(SRAMIN,sizeof(IMDCTInfo));
-	sbi = (SubbandInfo *)     mymalloc(SRAMIN,sizeof(SubbandInfo));
+	fh =  (FrameHeader *)     mymalloc(SRAMEX,sizeof(FrameHeader));          //SRAMIN
+	si =  (SideInfo *)        mymalloc(SRAMEX,sizeof(SideInfo));   					 //SRAMIN
+	sfi = (ScaleFactorInfo *) mymalloc(SRAMEX,sizeof(ScaleFactorInfo));   	 //SRAMIN
+	hi =  (HuffmanInfo *)     mymalloc(SRAMEX,sizeof(HuffmanInfo));					 //SRAMIN
+	di =  (DequantInfo *)     mymalloc(SRAMEX,sizeof(DequantInfo));					 //SRAMIN
+	mi =  (IMDCTInfo *)       mymalloc(SRAMEX,sizeof(IMDCTInfo));						 //SRAMIN
+	sbi = (SubbandInfo *)     mymalloc(SRAMEX,sizeof(SubbandInfo));					 //SRAMIN
 
 	mp3DecInfo_pointer->FrameHeaderPS =     (void *)fh;
 	mp3DecInfo_pointer->SideInfoPS =        (void *)si;

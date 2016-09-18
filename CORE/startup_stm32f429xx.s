@@ -192,29 +192,53 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
 ; Reset handler
 Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
-        IMPORT  SystemInit
+	    IMPORT  SystemInit					;寄存器代码,不需要在这里调用SystemInit函数,故屏蔽掉,库函数版本代码,可以留下
+											;不过需要在外部实现SystemInit函数,否则会报错.
         IMPORT  __main
-
-                 LDR     R0, =SystemInit
-                 BLX     R0
+                 LDR     R0, =0xE000ED88    ; 使能浮点运算 CP10,CP11
+                 LDR     R1,[R0]
+                 ORR     R1,R1,#(0xF << 20)
+                 STR     R1,[R0]
+                                            ;禁止automatic FP register content
+                                            ;禁止lazy context switch,纯软件保存FPU
+                 LDR	 R0,=0xE000EF34     ;加载FPCCR寄存器地址
+                 LDR     R1,[R0]
+                 AND     R1,R1,#(0x3FFFFFFF);清除LSPEN和ASPEN位
+                 STR     R1,[R0]  
 				 
-				 IF {FPU} != "SoftVFP"
-                                                ; Enable Floating Point Support at reset for FPU
-                 LDR.W   R0, =0xE000ED88         ; Load address of CPACR register
-                 LDR     R1, [R0]                ; Read value at CPACR
-                 ORR     R1,  R1, #(0xF <<20)    ; Set bits 20-23 to enable CP10 and CP11 coprocessors
-                                                ; Write back the modified CPACR value
-                 STR     R1, [R0]                ; Wait for store to complete
-                 DSB
+                 ;LDR     R0, =SystemInit	;寄存器代码,未用到,屏蔽
+                 ;BLX     R0				;寄存器代码,未用到,屏蔽
+                 LDR     R0, =__main
+                 BX      R0
+                 ENDP
+					 
+        ;IMPORT  SystemInit
+        ;IMPORT  __main
+
+                 ;LDR     R0, =SystemInit
+                 ;BLX     R0
+				 
+				 ;IF {FPU} != "SoftVFP"
+                                                ;; Enable Floating Point Support at reset for FPU
+                 ;LDR.W   R0, =0xE000ED88         ; Load address of CPACR register
+                 ;LDR     R1, [R0]                ; Read value at CPACR
+                 ;ORR     R1,  R1, #(0xF <<20)    ; Set bits 20-23 to enable CP10 and CP11 coprocessors
+                                                ;; Write back the modified CPACR value
+                 ;STR     R1, [R0]                ; Wait for store to complete
+                 ;DSB
                 
-                                                ; Disable automatic FP register content
-                                                ; Disable lazy context switch
-                 LDR.W   R0, =0xE000EF34         ; Load address to FPCCR register
-                 LDR     R1, [R0]
-                 AND     R1,  R1, #(0x3FFFFFFF)  ; Clear the LSPEN and ASPEN bits
-                 STR     R1, [R0]
-                 ISB                             ; Reset pipeline now the FPU is enabled
-                 ENDIF
+                                                ;; Disable automatic FP register content
+                                                ;; Disable lazy context switch
+                 ;LDR.W   R0, =0xE000EF34         ; Load address to FPCCR register
+                 ;LDR     R1, [R0]
+                 ;AND     R1,  R1, #(0x3FFFFFFF)  ; Clear the LSPEN and ASPEN bits
+                 ;STR     R1, [R0]
+                 ;ISB                             ; Reset pipeline now the FPU is enabled
+                 ;ENDIF
+				 					 
+                 ;LDR     R0, =__main
+                 ;BX      R0
+                 ;ENDP
 					 
   ;LDR R0,= 0x00000114
   ;LDR R1,= 0x40021014
@@ -246,10 +270,7 @@ Reset_Handler    PROC
   ;LDR R0,= 0x44444B44
   ;LDR R1,= 0x40012004
   ;STR R0,[R1] ;??GPIOG
-					 
-                 LDR     R0, =__main
-                 BX      R0
-                 ENDP
+
 
 ; Dummy Exception Handlers (infinite loops which can be modified)
 

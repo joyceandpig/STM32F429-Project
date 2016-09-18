@@ -522,6 +522,7 @@ u8 video_play_mjpeg(void)
 			tcnt=0;
 			key=0;
 			videodev.status=3;//非暂停,非快进快退
+
  			while(key==0)//播放循环
 			{		
 				if(videodev.status&(1<<0)&&videodev.status&(1<<1))
@@ -540,14 +541,17 @@ u8 video_play_mjpeg(void)
 						framecnt++;
 					}else 	//音频流
 					{		  
-						//video_time_show(videodev.file,&avix); 	//显示当前播放时间
+//						//video_time_show(videodev.file,&avix); 	//显示当前播放时间
 						saisavebuf++;
 						if(saisavebuf>3)saisavebuf=0;
 						do
 						{
 							nr=videodev.saiplaybuf;
-							if(nr)nr--;
-							else nr=3; 
+							if(nr){
+								nr--;
+							}else{
+								nr=3; 
+							}
 						}while(saisavebuf==nr);//碰撞等待. 
 						f_read(videodev.file,videodev.saibuf[saisavebuf],avix.StreamSize+8,&nr);//填充videodev.saibuf	 
 						pbuf=videodev.saibuf[saisavebuf];  
@@ -648,7 +652,7 @@ u8 video_play_mjpeg(void)
 			}
 			SAI_Play_Stop();	//关闭音频
 			TIM6->CR1&=~(1<<0); //关闭定时器6 
-			TIM8->CR1&=~(1<<0); //关闭定时器3  
+			TIM8->CR1&=~(1<<0); //关闭定时器8 
 			mjpegdec_free();	//释放内存
 			f_close(videodev.file); 
 			if(key==0)

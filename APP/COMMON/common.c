@@ -50,7 +50,7 @@ u8*const APP_DELETE_CAPTION_TBL[GUI_LANGUAGE_NUM]=
 //创建文件失败,提示是否存在SD卡? ,200的宽度
 u8*const APP_CREAT_ERR_MSG_TBL[GUI_LANGUAGE_NUM]=
 {							 
-"创建文件失败,请检查!","創建文件失敗,請檢查!","Creat File Failed,Please Check!",
+"创建文件失败,请检查SD卡!","創建文件失敗,請檢查SD卡!","Creat File Failed,Please Check SDcard!",
 }; 
 //磁盘名字表
 u8*const APP_DISK_NAME_TBL[3][GUI_LANGUAGE_NUM]=

@@ -113,16 +113,16 @@ u8 ape_play_song(u8* fname)
 	int *decoded1;
 	u32 totalsamples; 
 	 
-	filterbuf64=mymalloc(SRAMIN,2816);  
-	apectrl=mymalloc(SRAMIN,sizeof(__apectrl));
-	apex=mymalloc(SRAMIN,sizeof(struct ape_ctx_t));
+	filterbuf64=mymalloc(SRAMEX,2816);  //SRAMIN
+	apectrl=mymalloc(SRAMEX,sizeof(__apectrl));//SRAMIN
+	apex=mymalloc(SRAMEX,sizeof(struct ape_ctx_t));//SRAMIN
 	decoded0=mymalloc(SRAMCCM,APE_BLOCKS_PER_LOOP*4);
 	decoded1=mymalloc(SRAMCCM,APE_BLOCKS_PER_LOOP*4); 
-	audiodev.file=(FIL*)mymalloc(SRAMIN,sizeof(FIL));
-	audiodev.saibuf1=mymalloc(SRAMIN,APE_BLOCKS_PER_LOOP*4);
-	audiodev.saibuf2=mymalloc(SRAMIN,APE_BLOCKS_PER_LOOP*4);  
+	audiodev.file=(FIL*)mymalloc(SRAMEX,sizeof(FIL));//SRAMIN
+	audiodev.saibuf1=mymalloc(SRAMEX,APE_BLOCKS_PER_LOOP*4);//SRAMIN
+	audiodev.saibuf2=mymalloc(SRAMEX,APE_BLOCKS_PER_LOOP*4);  //SRAMIN
 	audiodev.file_seek=ape_file_seek;
-	buffer=mymalloc(SRAMIN,APE_FILE_BUF_SZ);
+	buffer=mymalloc(SRAMEX,APE_FILE_BUF_SZ);//SRAMIN
 	if(filterbuf64&&apectrl&&apex&&decoded0&&decoded1&&audiodev.file&&audiodev.saibuf1&&audiodev.saibuf2&&buffer)//所有内存申请都OK.
 	{ 
 		memset(apex,0,sizeof(struct ape_ctx_t));
@@ -233,16 +233,16 @@ u8 ape_play_song(u8* fname)
 		audio_stop();
 	}
 	f_close(audiodev.file);
-	myfree(SRAMIN,filterbuf64); 
-	myfree(SRAMIN,apectrl);
-	myfree(SRAMIN,apex->seektable);
-	myfree(SRAMIN,apex);
+	myfree(SRAMEX,filterbuf64);      //SRAMIN
+	myfree(SRAMEX,apectrl);          //SRAMIN
+	myfree(SRAMEX,apex->seektable);  //SRAMIN
+	myfree(SRAMEX,apex);             //SRAMIN
 	myfree(SRAMCCM,decoded0);
 	myfree(SRAMCCM,decoded1);
-	myfree(SRAMIN,audiodev.file);
-	myfree(SRAMIN,audiodev.saibuf1);
-	myfree(SRAMIN,audiodev.saibuf2); 
-	myfree(SRAMIN,buffer);  
+	myfree(SRAMEX,audiodev.file);    //SRAMIN
+	myfree(SRAMEX,audiodev.saibuf1); //SRAMIN
+	myfree(SRAMEX,audiodev.saibuf2); //SRAMIN
+	myfree(SRAMEX,buffer);           //SRAMIN
 	return res;
 }
 

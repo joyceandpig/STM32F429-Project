@@ -31,33 +31,96 @@ __packed typedef struct
 
 extern _wm8978_obj wm8978set;//WM8978的设置
 
+#define WM8978_ADDR_MSB_BIT(__ADDR__, __VAL__)      ((__ADDR__ << 1) | ((__VAL__ >> 8) & 0x01))
+
 
 #define WM8978_ADDR				0X1A	//WM8978的器件地址,固定为0X1A 
  
-#define EQ1_80Hz		0X00
-#define EQ1_105Hz		0X01
-#define EQ1_135Hz		0X02
-#define EQ1_175Hz		0X03
+#define WM8978_EQ1_80Hz		0X00
+#define WM8978_EQ1_105Hz		0X01
+#define WM8978_EQ1_135Hz		0X02
+#define WM8978_EQ1_175Hz		0X03
 
-#define EQ2_230Hz		0X00
-#define EQ2_300Hz		0X01
-#define EQ2_385Hz		0X02
-#define EQ2_500Hz		0X03
+#define WM8978_EQ2_230Hz		0X00
+#define WM8978_EQ2_300Hz		0X01
+#define WM8978_EQ2_385Hz		0X02
+#define WM8978_EQ2_500Hz		0X03
 
-#define EQ3_650Hz		0X00
-#define EQ3_850Hz		0X01
-#define EQ3_1100Hz		0X02
-#define EQ3_14000Hz		0X03
+#define WM8978_EQ3_650Hz		0X00
+#define WM8978_EQ3_850Hz		0X01
+#define WM8978_EQ3_1100Hz		0X02
+#define WM8978_EQ3_14000Hz		0X03
 
-#define EQ4_1800Hz		0X00
-#define EQ4_2400Hz		0X01
-#define EQ4_3200Hz		0X02
-#define EQ4_4100Hz		0X03
+#define WM8978_EQ4_1800Hz		0X00
+#define WM8978_EQ4_2400Hz		0X01
+#define WM8978_EQ4_3200Hz		0X02
+#define WM8978_EQ4_4100Hz		0X03
 
-#define EQ5_5300Hz		0X00
-#define EQ5_6900Hz		0X01
-#define EQ5_9000Hz		0X02
-#define EQ5_11700Hz		0X03
+#define WM8978_EQ5_5300Hz		0X00
+#define WM8978_EQ5_6900Hz		0X01
+#define WM8978_EQ5_9000Hz		0X02
+#define WM8978_EQ5_11700Hz		0X03
+
+//WM8978 寄存器数值
+#define WM8978_REG_R1        1
+#define WM8978_REG_R2        2 
+#define WM8978_REG_R3        3 
+#define WM8978_REG_R4        4 
+#define WM8978_REG_R5        5 
+#define WM8978_REG_R6        6 
+#define WM8978_REG_R7        7 
+#define WM8978_REG_R8        8 
+#define WM8978_REG_R9        9 
+#define WM8978_REG_R10       10
+#define WM8978_REG_R11       11
+#define WM8978_REG_R12       12
+#define WM8978_REG_R13       13 
+#define WM8978_REG_R14       14 
+#define WM8978_REG_R15       15 
+#define WM8978_REG_R16       16 
+#define WM8978_REG_R17       17 
+#define WM8978_REG_R18       18 
+#define WM8978_REG_R19       19 
+#define WM8978_REG_R20       20 
+#define WM8978_REG_R21       21 
+#define WM8978_REG_R22       22
+#define WM8978_REG_R23       23
+#define WM8978_REG_R24       24
+#define WM8978_REG_R25       25
+#define WM8978_REG_R26       26 
+#define WM8978_REG_R27       27 
+#define WM8978_REG_R28       28 
+#define WM8978_REG_R29       29 
+#define WM8978_REG_R30       30 
+#define WM8978_REG_R31       31 
+#define WM8978_REG_R32       32 
+#define WM8978_REG_R33       33 
+#define WM8978_REG_R34       34
+#define WM8978_REG_R35       35
+#define WM8978_REG_R36       36
+#define WM8978_REG_R37       37 
+#define WM8978_REG_R38       38 
+#define WM8978_REG_R39       39 
+#define WM8978_REG_R40       40 
+#define WM8978_REG_R41       41 
+#define WM8978_REG_R42       42 
+#define WM8978_REG_R43       43 
+#define WM8978_REG_R44       44 
+#define WM8978_REG_R45       45 
+#define WM8978_REG_R46       46
+#define WM8978_REG_R47       47
+#define WM8978_REG_R48       48
+#define WM8978_REG_R49       49 
+#define WM8978_REG_R50       50 
+#define WM8978_REG_R51       51 
+#define WM8978_REG_R52       52 
+#define WM8978_REG_R53       53 
+#define WM8978_REG_R54       54 
+#define WM8978_REG_R55       55 
+#define WM8978_REG_R56       56 
+#define WM8978_REG_R57       57 
+#define WM8978_REG_R58       58
+      
 
   
 void wm8978_read_para(_wm8978_obj * wm8978dev);

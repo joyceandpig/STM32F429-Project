@@ -141,7 +141,7 @@ u8 AT24CXX_Check(void)
 	else//排除第一次初始化的情况
 	{
 		AT24CXX_WriteOneByte(255,0X55);
-	    temp=AT24CXX_ReadOneByte(255);	  
+	  temp=AT24CXX_ReadOneByte(255);	  
 		if(temp==0X55)return 0;
 	}
 	return 1;											  

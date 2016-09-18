@@ -39,14 +39,14 @@ u8 flac_init(FIL* fx,__flacctrl* fctrl,FLACContext* fc)
 	u32 br;
 	u8 res;
 
-	buf=mymalloc(SRAMIN,512);	//申请512字节内存
+	buf=mymalloc(SRAMEX,512);	//申请512字节内存 SRAMIN
 	if(!buf)return 1;			//内存申请失败 
 	f_lseek(fx,0);				//偏移到文件头
 	f_read(fx,buf,4,&br);		//读取4字节 
 	flactag=(FLAC_Tag*)buf;		//强制转换为flac tag标签
 	if(strncmp("fLaC",(char*)flactag->id,4)!=0) 
 	{
-		myfree(SRAMIN,buf);		//释放内存
+		myfree(SRAMEX,buf);		//释放内存 SRAMIN
 		return 2;				//非flac文件
     } 
     while(!endofmetadata) 
@@ -79,7 +79,7 @@ u8 flac_init(FIL* fx,__flacctrl* fctrl,FLACContext* fc)
             }
 		}
     } 
-	myfree(SRAMIN,buf);//释放内存.
+	myfree(SRAMEX,buf);//释放内存.SRAMIN
 	if(fctrl->totsec)
 	{
 		fctrl->outsamples=fc->max_blocksize*2;//PCM输出数据量(*2,表示2个声道的数据量)
@@ -157,9 +157,9 @@ u8 flac_play_song(u8* fname)
 	u8* p8=0;    
 	u32 flac_fptr=0; 
 	
- 	fc=mymalloc(SRAMIN,sizeof(FLACContext)); 
-	flacctrl=mymalloc(SRAMIN,sizeof(__flacctrl)); 
-	audiodev.file=(FIL*)mymalloc(SRAMIN,sizeof(FIL));
+ 	fc=mymalloc(SRAMEX,sizeof(FLACContext)); //SRAMIN
+	flacctrl=mymalloc(SRAMEX,sizeof(__flacctrl)); //SRAMIN
+	audiodev.file=(FIL*)mymalloc(SRAMEX,sizeof(FIL));//SRAMIN
 	audiodev.file_seek=flac_file_seek;
 	if(!fc||!audiodev.file||!flacctrl)res=1;//内存申请错误
 	else
@@ -173,12 +173,12 @@ u8 flac_play_song(u8* fname)
 			{
 				if(fc->bps==24)	//24位音频数据
 				{	
-					audiodev.saibuf1=mymalloc(SRAMIN,fc->max_blocksize*8);
-					audiodev.saibuf2=mymalloc(SRAMIN,fc->max_blocksize*8);  
+					audiodev.saibuf1=mymalloc(SRAMEX,fc->max_blocksize*8);//SRAMIN
+					audiodev.saibuf2=mymalloc(SRAMEX,fc->max_blocksize*8);//SRAMIN
 				}else			//16位音频数据
 				{
-					audiodev.saibuf1=mymalloc(SRAMIN,fc->max_blocksize*4);
-					audiodev.saibuf2=mymalloc(SRAMIN,fc->max_blocksize*4); 
+					audiodev.saibuf1=mymalloc(SRAMEX,fc->max_blocksize*4);//SRAMIN
+					audiodev.saibuf2=mymalloc(SRAMEX,fc->max_blocksize*4);//SRAMIN 
 				}
 				buffer=mymalloc(SRAMCCM,fc->max_framesize); 	//申请解码帧缓存 
 				decbuf0=mymalloc(SRAMCCM,fc->max_blocksize*4);
@@ -285,11 +285,11 @@ u8 flac_play_song(u8* fname)
 		audio_stop();
 	}else res=AP_ERR;
 	f_close(audiodev.file);
-	myfree(SRAMIN,fc);
-	myfree(SRAMIN,flacctrl);
-	myfree(SRAMIN,audiodev.file);
-	myfree(SRAMIN,audiodev.saibuf1);
-	myfree(SRAMIN,audiodev.saibuf2); 
+	myfree(SRAMEX,fc);                  //SRAMIN
+	myfree(SRAMEX,flacctrl);            //SRAMIN
+	myfree(SRAMEX,audiodev.file);       //SRAMIN
+	myfree(SRAMEX,audiodev.saibuf1);    //SRAMIN
+	myfree(SRAMEX,audiodev.saibuf2);    //SRAMIN
 	myfree(SRAMCCM,buffer);
 	myfree(SRAMCCM,decbuf0);
 	myfree(SRAMCCM,decbuf1); 

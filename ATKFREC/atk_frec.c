@@ -38,12 +38,12 @@ void atk_frec_memset(char *p,char c,unsigned long len)
 //内存申请函数
 void *atk_frec_malloc(unsigned int size) 
 {
-	return mymalloc(SRAMEX,size);
+	return mymalloc(SRAMIN,size);
 }
 //内存释放函数
 void atk_frec_free(void *ptr) 
 {
-	myfree(SRAMEX,ptr);
+	myfree(SRAMIN,ptr);
 }
 
 //保存人脸识别所需的数据

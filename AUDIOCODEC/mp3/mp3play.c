@@ -161,8 +161,8 @@ u8 mp3_get_info(u8 *pname,__mp3ctrl* pctrl)
 	short samples_per_frame;	//一帧的采样个数
 	u32 totframes;				//总帧数
 	
-	fmp3=mymalloc(SRAMIN,sizeof(FIL)); // SRAMIN
-	buf=mymalloc(SRAMIN,5*1024);		//申请5K内存 SRAMIN
+	fmp3=mymalloc(SRAMEX,sizeof(FIL)); // SRAMIN
+	buf=mymalloc(SRAMEX,5*1024);		//申请5K内存 SRAMIN
 	if(fmp3&&buf)//内存申请成功
 	{ 		
 		f_open(fmp3,(const TCHAR*)pname,FA_READ);//打开文件
@@ -224,8 +224,8 @@ u8 mp3_get_info(u8 *pname,__mp3ctrl* pctrl)
 		} 
 		f_close(fmp3);
 	}else res=0XFF;
-	myfree(SRAMIN,fmp3); //SRAMIN
-	myfree(SRAMIN,buf);	// SRAMIN
+	myfree(SRAMEX,fmp3); //SRAMIN
+	myfree(SRAMEX,buf);	// SRAMIN
 	return res;	
 }  
 //得到当前播放时间
@@ -268,22 +268,22 @@ u8 mp3_play_song(u8* fname)
 	u32 br=0; 
 	int err=0;  
 	
- 	mp3ctrl=mymalloc(SRAMIN,sizeof(__mp3ctrl)); //SRAMIN
-	buffer=mymalloc(SRAMIN,MP3_FILE_BUF_SZ); 	//申请解码buf大小SRAMIN
-	audiodev.file=(FIL*)mymalloc(SRAMIN,sizeof(FIL));//SRAMIN
-	audiodev.saibuf1=mymalloc(SRAMIN,2304*2);//SRAMIN
-	audiodev.saibuf2=mymalloc(SRAMIN,2304*2);//SRAMIN
-	audiodev.tbuf=mymalloc(SRAMIN,2304*2);//SRAMIN
+ 	mp3ctrl=mymalloc(SRAMEX,sizeof(__mp3ctrl)); //SRAMIN
+	buffer=mymalloc(SRAMEX,MP3_FILE_BUF_SZ); 	//申请解码buf大小SRAMIN
+	audiodev.file=(FIL*)mymalloc(SRAMEX,sizeof(FIL));//SRAMIN
+	audiodev.saibuf1=mymalloc(SRAMEX,2304*2);//SRAMIN
+	audiodev.saibuf2=mymalloc(SRAMEX,2304*2);//SRAMIN
+	audiodev.tbuf=mymalloc(SRAMEX,2304*2);//SRAMIN
 	audiodev.file_seek=mp3_file_seek;
 	
 	if(!mp3ctrl||!buffer||!audiodev.file||!audiodev.saibuf1||!audiodev.saibuf2||!audiodev.tbuf)//内存申请失败
 	{
-		myfree(SRAMIN,mp3ctrl);           //SRAMIN
-		myfree(SRAMIN,buffer);//            SRAMIN
-		myfree(SRAMIN,audiodev.file);//     SRAMIN
-		myfree(SRAMIN,audiodev.saibuf1);//  SRAMIN
-		myfree(SRAMIN,audiodev.saibuf2);//  SRAMIN
-		myfree(SRAMIN,audiodev.tbuf); //    SRAMIN
+		myfree(SRAMEX,mp3ctrl);           //SRAMIN
+		myfree(SRAMEX,buffer);//            SRAMIN
+		myfree(SRAMEX,audiodev.file);//     SRAMIN
+		myfree(SRAMEX,audiodev.saibuf1);//  SRAMIN
+		myfree(SRAMEX,audiodev.saibuf2);//  SRAMIN
+		myfree(SRAMEX,audiodev.tbuf); //    SRAMIN
 		return AP_ERR;	//错误
 	} 
 	memset(audiodev.saibuf1,0,2304*2);	//数据清零 
@@ -388,12 +388,12 @@ u8 mp3_play_song(u8* fname)
 	}else res=AP_ERR;//错误
 	f_close(audiodev.file);
 	MP3FreeDecoder(mp3decoder);		//释放内存	
-	myfree(SRAMIN,mp3ctrl);          //SRAMIN
-	myfree(SRAMIN,buffer);//           SRAMIN
-	myfree(SRAMIN,audiodev.file);//    SRAMIN
-	myfree(SRAMIN,audiodev.saibuf1);// SRAMIN
-	myfree(SRAMIN,audiodev.saibuf2);// SRAMIN
-	myfree(SRAMIN,audiodev.tbuf);//    SRAMIN
+	myfree(SRAMEX,mp3ctrl);          //SRAMIN
+	myfree(SRAMEX,buffer);//           SRAMIN
+	myfree(SRAMEX,audiodev.file);//    SRAMIN
+	myfree(SRAMEX,audiodev.saibuf1);// SRAMIN
+	myfree(SRAMEX,audiodev.saibuf2);// SRAMIN
+	myfree(SRAMEX,audiodev.tbuf);//    SRAMIN
 	return res;
 }
 

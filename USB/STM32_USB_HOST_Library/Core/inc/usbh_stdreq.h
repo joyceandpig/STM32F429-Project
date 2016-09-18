@@ -87,7 +87,8 @@
 /** @defgroup USBH_STDREQ_Exported_Variables
   * @{
   */ 
-extern uint8_t USBH_CfgDesc[512];
+//extern uint8_t USBH_CfgDesc[512];
+extern uint8_t *USBH_CfgDesc;
 /**
   * @}
   */ 

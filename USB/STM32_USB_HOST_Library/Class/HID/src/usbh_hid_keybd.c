@@ -30,6 +30,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbh_hid_keybd.h"
+#include "usbh_hid_gamepad.h"
 
 /** @addtogroup USBH_LIB
 * @{
@@ -101,110 +102,7 @@ HID_cb_TypeDef HID_KEYBRD_cb=
   KEYBRD_Init,
   KEYBRD_Decode
 };
-
-/*
-*******************************************************************************
-*                                             LOCAL CONSTANTS
-*******************************************************************************
-*/
-
-static  const  uint8_t  HID_KEYBRD_Codes[] = {
-  0,     0,    0,    0,   31,   50,   48,   33, 
-  19,   34,   35,   36,   24,   37,   38,   39,       /* 0x00 - 0x0F */
-  52,    51,   25,   26,   17,   20,   32,   21,
-  23,   49,   18,   47,   22,   46,    2,    3,       /* 0x10 - 0x1F */
-  4,    5,    6,    7,    8,    9,   10,   11, 
-  43,  110,   15,   16,   61,   12,   13,   27,       /* 0x20 - 0x2F */
-  28,   29,   42,   40,   41,    1,   53,   54,  
-  55,   30,  112,  113,  114,  115,  116,  117,       /* 0x30 - 0x3F */
-  118,  119,  120,  121,  122,  123,  124,  125,  
-  126,   75,   80,   85,   76,   81,   86,   89,       /* 0x40 - 0x4F */
-  79,   84,   83,   90,   95,  100,  105,  106,
-  108,   93,   98,  103,   92,   97,  102,   91,       /* 0x50 - 0x5F */
-  96,  101,   99,  104,   45,  129,    0,    0, 
-  0,    0,    0,    0,    0,    0,    0,    0,       /* 0x60 - 0x6F */
-  0,    0,    0,    0,    0,    0,    0,    0,
-  0,    0,    0,    0,    0,    0,    0,    0,       /* 0x70 - 0x7F */
-  0,    0,    0,    0,    0,  107,    0,   56,
-  0,    0,    0,    0,    0,    0,    0,    0,       /* 0x80 - 0x8F */
-  0,    0,    0,    0,    0,    0,    0,    0,
-  0,    0,    0,    0,    0,    0,    0,    0,       /* 0x90 - 0x9F */
-  0,    0,    0,    0,    0,    0,    0,    0,
-  0,    0,    0,    0,    0,    0,    0,    0,       /* 0xA0 - 0xAF */
-  0,    0,    0,    0,    0,    0,    0,    0, 
-  0,    0,    0,    0,    0,    0,    0,    0,       /* 0xB0 - 0xBF */
-  0,    0,    0,    0,    0,    0,    0,    0, 
-  0,    0,    0,    0,    0,    0,    0,    0,       /* 0xC0 - 0xCF */
-  0,    0,    0,    0,    0,    0,    0,    0, 
-  0,    0,    0,    0,    0,    0,    0,    0,       /* 0xD0 - 0xDF */
-  58,   44,   60,  127,   64,   57,   62,  128        /* 0xE0 - 0xE7 */
-};
-
-#ifdef QWERTY_KEYBOARD
-static  const  int8_t  HID_KEYBRD_Key[] = {
-  '\0',  '`',  '1',  '2',  '3',  '4',  '5',  '6',
-  '7',  '8',  '9',  '0',  '-',  '=',  '\0', '\r',
-  '\t',  'q',  'w',  'e',  'r',  't',  'y',  'u', 
-  'i',  'o',  'p',  '[',  ']',  '\\',
-  '\0',  'a',  's',  'd',  'f',  'g',  'h',  'j',  
-  'k',  'l',  ';',  '\'', '\0', '\n',
-  '\0',  '\0', 'z',  'x',  'c',  'v',  'b',  'n', 
-  'm',  ',',  '.',  '/',  '\0', '\0',
-  '\0',  '\0', '\0', ' ',  '\0', '\0', '\0', '\0', 
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-  '\0',  '\0', '\0', '\0', '\0', '\r', '\0', '\0', 
-  '\0', '\0', '\0', '\0', '\0', '\0',
-  '\0',  '\0', '7',  '4',  '1',
-  '\0',  '/',  '8',  '5',  '2',
-  '0',   '*',  '9',  '6',  '3',
-  '.',   '-',  '+',  '\0', '\n', '\0', '\0', '\0', '\0', '\0', '\0',
-  '\0',  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 
-  '\0', '\0', '\0', '\0'
-};
-
-static  const  int8_t  HID_KEYBRD_ShiftKey[] = {
-  '\0', '~',  '!',  '@',  '#',  '$',  '%',  '^',  '&',  '*',  '(',  ')',
-  '_',  '+',  '\0', '\0', '\0', 'Q',  'W',  'E',  'R',  'T',  'Y',  'U', 
-  'I',  'O',  'P',  '{',  '}',  '|',  '\0', 'A',  'S',  'D',  'F',  'G', 
-  'H',  'J',  'K',  'L',  ':',  '"',  '\0', '\n', '\0', '\0', 'Z',  'X',  
-  'C',  'V',  'B',  'N',  'M',  '<',  '>',  '?',  '\0', '\0',  '\0', '\0',
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0',    '\0', '\0', '\0', '\0', '\0',
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'
-};
-
-#else
-
-static  const  int8_t  HID_KEYBRD_Key[] = {
-  '\0',  '`',  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '0',
-  '-',  '=',  '\0', '\r', '\t',  'a',  'z',  'e',  'r',  't',  'y',  'u', 
-  'i',  'o',  'p',  '[',  ']', '\\', '\0',  'q',  's',  'd',  'f',  'g', 
-  'h',  'j',  'k',  'l',  'm',  '\0', '\0', '\n', '\0',  '\0', 'w',  'x', 
-  'c',  'v',  'b',  'n',  ',',  ';',  ':',  '!',  '\0', '\0', '\0',  '\0', 
-  '\0', ' ',  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 
-  '\0', '\0', '\0', '\0',  '\0', '\0', '\0', '\0', '\r', '\0', '\0', '\0', 
-  '\0', '\0', '\0', '\0', '\0', '\0',  '\0', '7',  '4',  '1','\0',  '/', 
-  '8',  '5',  '2', '0',   '*',  '9',  '6',  '3', '.',   '-',  '+',  '\0', 
-  '\n', '\0', '\0', '\0', '\0', '\0', '\0','\0',  '\0', '\0', '\0', '\0', '\0',
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'
-};
-
-static  const  int8_t  HID_KEYBRD_ShiftKey[] = {
-  '\0', '~',  '!',  '@',  '#',  '$',  '%',  '^',  '&',  '*',  '(',  ')',  '_',
-  '+',  '\0', '\0', '\0', 'A',  'Z',  'E',  'R',  'T',  'Y',  'U',  'I',  'O',
-  'P',  '{',  '}',  '*', '\0', 'Q',  'S',  'D',  'F',  'G',  'H',  'J',  'K', 
-  'L',  'M',  '%',  '\0', '\n', '\0', '\0', 'W',  'X',  'C',  'V',  'B',  'N',
-  '?',  '.',  '/',  '\0',  '\0', '\0','\0', '\0', '\0', '\0', '\0', '\0', '\0', 
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 
-  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'
-};
-#endif
+ 
 
 /**
 * @}
@@ -226,98 +124,121 @@ static void  KEYBRD_Init (void)
 {
   /* Call User Init*/
   USR_KEYBRD_Init();
+} 
+
+//数组元素对应关系:A  A连击  B  B连击 Select Start  上  下   左  右
+//                |   |     |   |     |       |    |   |   |   |
+//          手柄1:K   I     J   U    空格    回车   W   S   A   D
+//                |   |     |   |     |       |    |   |   |   |
+//          手柄2:3   6     2   5    空格    回车  ↑   ↓  ←  →
+
+const u8 KEYBD_FCPAD1_TABLE[10]={0X0E,0X0C,0X0D,0X18,0X2C,0X28,0X1A,0X16,0X04,0X07};//模拟手柄1
+const u8 KEYBD_FCPAD2_TABLE[10]={0X5B,0X5E,0X5A,0X5D,0X2C,0X28,0X52,0X51,0X50,0X4F};//模拟手柄2
+//键盘数据解码成FC手柄数据.
+//fcbuf:键盘输入数据
+//mode:0,不更新键盘输入数据;
+//     1,更新键盘输入数据
+void KEYBRD_FCPAD_Decode(uint8_t *fcbuf,uint8_t mode)
+{
+	static u8 pbuf[6];		//保存最近一次fc手柄的值
+	u8 j;
+	u8 da1=0,db1=0;
+	u8 da2=0,db2=0; 
+	if(mode)
+	{
+		for(j=0;j<6;j++)pbuf[j]=fcbuf[j];//更新数据
+	}
+	for(j=0;j<6;j++)//先判断A连击键?
+	{ 
+		if(KEYBD_FCPAD1_TABLE[1]==pbuf[j])
+		{
+			fcpad.b.a=!fcpad.b.a;	//手柄1 A键取反
+			da1=1; 					//标记手柄1 A连击有效
+		} 
+		if(KEYBD_FCPAD2_TABLE[1]==pbuf[j])
+		{
+			fcpad1.b.a=!fcpad1.b.a;	//手柄2 A键取反
+			da2=1; 					//标记手柄2 A连击有效
+		}
+		if(KEYBD_FCPAD1_TABLE[3]==pbuf[j])
+		{
+			fcpad.b.b=!fcpad.b.b;	//手柄1 B键取反
+			db1=1; 					//标记手柄1 B连击有效
+		} 
+		if(KEYBD_FCPAD2_TABLE[3]==pbuf[j])
+		{
+			fcpad1.b.b=!fcpad1.b.b;	//手柄2 B键取反
+			db2=1; 					//标记手柄2 B连击有效
+		} 		
+	}	
+	if(da1==0)fcpad.b.a=0;
+	if(da2==0)fcpad1.b.a=0;
+	if(db1==0)fcpad.b.b=0;
+	if(db2==0)fcpad1.b.b=0;
+	fcpad.b.select=0;
+	fcpad1.b.select=0;
+ 	fcpad.b.start=0;
+	fcpad1.b.start=0;
+ 	fcpad.b.up=0;
+	fcpad1.b.up=0;
+ 	fcpad.b.down=0;
+	fcpad1.b.down=0;
+ 	fcpad.b.left=0;
+	fcpad1.b.left=0;
+ 	fcpad.b.right=0;
+	fcpad1.b.right=0; 
+	for(j=0;j<6;j++)//先判断A连击键?
+	{ 
+		if(da1==0)//手柄1,A连击没有按下
+		{
+			if(KEYBD_FCPAD1_TABLE[0]==pbuf[j])fcpad.b.a=1;	//手柄1 A键按下 
+		}
+		if(da2==0)//手柄2,A连击没有按下
+		{
+			if(KEYBD_FCPAD2_TABLE[0]==pbuf[j])fcpad1.b.a=1;	//手柄2 A键按下 
+		}
+		if(db1==0)//手柄1,B连击没有按下
+		{
+			if(KEYBD_FCPAD1_TABLE[2]==pbuf[j])fcpad.b.b=1;	//手柄1 B键按下 
+		}
+		if(db2==0)//手柄2,B连击没有按下
+		{
+			if(KEYBD_FCPAD2_TABLE[2]==pbuf[j])fcpad1.b.b=1;	//手柄2 B键按下 
+		} 
+		if(KEYBD_FCPAD1_TABLE[4]==pbuf[j])fcpad.b.select=1;	//手柄1 select按下 
+		if(KEYBD_FCPAD2_TABLE[4]==pbuf[j])fcpad1.b.select=1;//手柄2 select按下 
+		if(KEYBD_FCPAD1_TABLE[5]==pbuf[j])fcpad.b.start=1;	//手柄1 start按下 
+		if(KEYBD_FCPAD2_TABLE[5]==pbuf[j])fcpad1.b.start=1;	//手柄2 start按下 		
+		if(KEYBD_FCPAD1_TABLE[6]==pbuf[j])fcpad.b.up=1;		//手柄1 up按下 
+		if(KEYBD_FCPAD2_TABLE[6]==pbuf[j])fcpad1.b.up=1;	//手柄2 up按下 
+		if(KEYBD_FCPAD1_TABLE[7]==pbuf[j])fcpad.b.down=1;	//手柄1 down按下 
+		if(KEYBD_FCPAD2_TABLE[7]==pbuf[j])fcpad1.b.down=1;	//手柄2 down按下 
+		if(KEYBD_FCPAD1_TABLE[8]==pbuf[j])fcpad.b.left=1;	//手柄1 left按下 
+		if(KEYBD_FCPAD2_TABLE[8]==pbuf[j])fcpad1.b.left=1;	//手柄2 left按下 
+		if(KEYBD_FCPAD1_TABLE[9]==pbuf[j])fcpad.b.right=1;	//手柄1 right按下 
+		if(KEYBD_FCPAD2_TABLE[9]==pbuf[j])fcpad1.b.right=1;	//手柄2 right按下 
+	}	
+//	printf("pad1:%x\r\n",fcpad);
+//	printf("pad2:%x\r\n",fcpad1);
+//	for(i=0;i<8;i++)
+//	{
+//		printf("%02x ",pbuf[i]);
+//	}
+//	printf("\r\n"); 
 }
 
-/**
-* @brief  KEYBRD_ProcessData.
-*         The function is to decode the pressed keys.
-* @param  pbuf : Pointer to the HID IN report data buffer
-* @retval None
-*/
-
+//键盘数据解码
 static void KEYBRD_Decode(uint8_t *pbuf)
 {
-  static  uint8_t   shift;
-  static  uint8_t   keys[KBR_MAX_NBR_PRESSED];
-  static  uint8_t   keys_new[KBR_MAX_NBR_PRESSED];
-  static  uint8_t   keys_last[KBR_MAX_NBR_PRESSED];
-  static  uint8_t   key_newest;
-  static  uint8_t   nbr_keys;
-  static  uint8_t   nbr_keys_new;
-  static  uint8_t   nbr_keys_last;
-  uint8_t   ix;
-  uint8_t   jx;
-  uint8_t   error;
-  uint8_t   output;            
-  
-  nbr_keys      = 0;
-  nbr_keys_new  = 0;
-  nbr_keys_last = 0;
-  key_newest    = 0x00;
-  
-  
-  /* Check if Shift key is pressed */                                                                         
-  if ((pbuf[0] == KBD_LEFT_SHIFT) || (pbuf[0] == KBD_RIGHT_SHIFT)) {
-    shift = TRUE;
-  } else {
-    shift = FALSE;
-  }
-  
-  error = FALSE;
-  
-  /* Check for the value of pressed key */
-  for (ix = 2; ix < 2 + KBR_MAX_NBR_PRESSED; ix++) {                       
-    if ((pbuf[ix] == 0x01) ||
-        (pbuf[ix] == 0x02) ||
-          (pbuf[ix] == 0x03)) {
-            error = TRUE;
-          }
-  }
-  
-  if (error == TRUE) {
-    return;
-  }
-  
-  nbr_keys     = 0;
-  nbr_keys_new = 0;
-  for (ix = 2; ix < 2 + KBR_MAX_NBR_PRESSED; ix++) {
-    if (pbuf[ix] != 0) {
-      keys[nbr_keys] = pbuf[ix];                                       
-      nbr_keys++;
-      for (jx = 0; jx < nbr_keys_last; jx++) {                         
-        if (pbuf[ix] == keys_last[jx]) {
-          break;
-        }
-      }
-      
-      if (jx == nbr_keys_last) {
-        keys_new[nbr_keys_new] = pbuf[ix];
-        nbr_keys_new++;
-      }
-    }
-  }
-  
-  if (nbr_keys_new == 1) {
-    key_newest = keys_new[0];
-    
-    if (shift == TRUE) {
-      output =  HID_KEYBRD_ShiftKey[HID_KEYBRD_Codes[key_newest]];
-    } else {
-      output =  HID_KEYBRD_Key[HID_KEYBRD_Codes[key_newest]];
-    }
-    
-    /* call user process handle */
-    USR_KEYBRD_ProcessData(output);
-  } else {
-    key_newest = 0x00;
-  }
-  
-  
-  nbr_keys_last  = nbr_keys;
-  for (ix = 0; ix < KBR_MAX_NBR_PRESSED; ix++) {
-    keys_last[ix] = keys[ix];
-  }
+	static u8 fcbuf[6];//保存最近一次fc手柄的值
+	u8 i;
+	pbuf+=2;
+	for(i=0;i<6;i++)if(pbuf[i]!=fcbuf[i])break;//不相等,说明有新的按键情况变化 
+ 	if(i==6)return;						//本次按键没有任何变化,直接返回
+	for(i=0;i<6;i++)fcbuf[i]=pbuf[i];	//拷贝新的按键值 
+	KEYBRD_FCPAD_Decode(fcbuf,1);		//更新FC手柄数据
 }
+
 
 /**
 * @}
