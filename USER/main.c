@@ -37,6 +37,26 @@
 #include "ledplay.h"
 #include "gradienter.h"
 #include "audioplay.h"
+#include "picviewer.h"
+#include "videoplay.h"
+#include "notepad.h"
+#include "exeplay.h"
+#include "paint.h"
+#include "camera.h"
+#include "recorder.h"
+#include "calculator.h"
+#include "qrplay.h"
+#include "webcamera.h"
+#include "gyroscope.h"
+#include "facereco.h"
+#include "keyplay.h"
+#include "appplay.h"
+#include "smsplay.h"
+#include "phoneplay.h"
+
+
+
+
 
 #include "usb_app.h"
 #include "usbplay.h"
@@ -71,8 +91,7 @@ enum
 };
 
 USB_OTG_CORE_HANDLE USB_OTG_dev;
-vu8 USB_STATUS_REG;		//USB状态
-vu8 bDeviceState;		//USB连接 情况
+
 
 void sys_reset(void)
 {//软件复位
@@ -141,7 +160,7 @@ int main(void)
 {
    HAL_Init();                     //初始化HAL库  
 #if 1	
-    Stm32_Clock_Init(480,25,2,10);   //设置时钟,180Mhz
+    Stm32_Clock_Init(480,25,2,10);   //设置时钟,240Mhz
     delay_init(240);                //初始化延时函数
 #else	
     Stm32_Clock_Init(384,25,2,8);   //设置时钟,180Mhz
@@ -191,9 +210,9 @@ int main(void)
 
 	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测NandFlash错误
 	
-	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存SRAMIN
-	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
-	Sleep(2000);
+//	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存SRAMIN
+//	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
+//	Sleep(2000);
 	
 	f_mount(fs[0],"0:",1); 		//挂载SD卡  
 	f_mount(fs[1],"1:",1); 		//挂载SPI FLASH. 
@@ -222,8 +241,12 @@ void led_task(void *pdata)
 		usmart_scan();
 		t++;
 		Sleep(125);
-		if(t==8)LED1_OFF();	//LED0灭
-		if(t==100)		//LED0亮
+		if(t==4)
+		{	
+			LED1_OFF();	//LED0灭
+			LED0_STA_TURN();//提示系统在运;
+		}			
+		if(t==8*5)		//LED0亮
 		{
 			t=0;
 			LED1_ON();
@@ -247,61 +270,25 @@ void key_thread(void *pdata)
 void ShowPicture(void);
 void MPU_Test(void);
 void usb_Task(void *pdata)
-{
-	u8 offline_cnt=0;
+{	
 	u8 tct=0;
-	u8 USB_STA;
-	u8 Divece_STA;
 
+	float psin,psex,psccm;
 	pdata=pdata;
 
- 	u_printf(DBG,"USB Connecting...");	//提示正在建立连接 	
 //	MPU_Test();	
 	while(1)
 	{
     Sleep(500);				  
-		if(USB_STA!=USB_STATUS_REG)//状态改变了 
-		{	 						   		  	   
-			if(USB_STATUS_REG&0x01)//正在写		  
-			{
-				LED1_ON();
-				u_printf(DBG,"USB Writing...");//提示USB正在写入数据    
-			}
-			if(USB_STATUS_REG&0x02)//正在读
-			{
-				LED1_ON();
-				u_printf(DBG,"USB Reading...");//提示USB正在读出数据		 
-			}	 										  
-			if(USB_STATUS_REG&0x04)
-				u_printf(DBG,"USB Write Err ");//提示写入错误  
-			if(USB_STATUS_REG&0x08)
-				u_printf(DBG,"USB Read  Err ");//提示读出错误   
-			USB_STA=USB_STATUS_REG;//记录最后的状态
-		}
-		if(Divece_STA!=bDeviceState) 
-		{
-			if(bDeviceState==1)
-				u_printf(DBG,"USB Connected    ");//提示USB连接已经建立
-			else	
-				u_printf(DBG,"USB DisConnected ");//提示USB被拔出了
-			Divece_STA=bDeviceState;
-		}
 		tct++;
-		if(tct==2)
+		if(tct==5)
 		{
 			tct=0;
-			LED1_OFF();
-			LED0_STA_TURN();//提示系统在运;
-			if(USB_STATUS_REG&0x10)
-			{
-				offline_cnt=0;//USB连接了,则清除offline计数器
-				bDeviceState=1;
-			}else//没有得到轮询 
-			{
-				offline_cnt++;  				
-				if(offline_cnt>10)bDeviceState=0;//2s内没收到在线标记,代表USB被拔出了 
-			}
-			USB_STATUS_REG=0;
+
+			psin=my_mem_perused(SRAMIN);
+			psex=my_mem_perused(SRAMEX);
+			psccm=my_mem_perused(SRAMCCM);
+			printf("in:%3.1f, ex:%3.1f, ccm:%3.1f, CPU:%d\r\n",psin/10,psex/10,psccm/10,OSCPUUsage);//打印内存占用率
 		} 
 	} 	
 }
@@ -311,17 +298,17 @@ void picture_task(void *pdata)
 //	ShowPicture();	//显示图片
 	while(1)
 	{
-		if(usbx.mode==USBD_MSC_MODE)			//U盘模式,才处理
-		{
-			u_printf(DBG,"USB USBH_MSC_MODE\r\n");
-			while((usbx.bDeviceState&0XC0)==0X40)//USB设备插入了,但是还没连接成功,猛查询.
-			{
-				usbapp_pulling();	//轮询处理USB事务
-				delay_us(1000);		//不能像HID那么猛...,U盘比较慢
-			}
-			u_printf(DBG,"USB After query\r\n");
-			usbapp_pulling();//处理USB事务
-		}
+//		if(usbx.mode==USBH_MSC_MODE)			//U盘模式,才处理
+//		{
+//			u_printf(DBG,"USB USBH_MSC_MODE\r\n");
+//			while((usbx.bDeviceState&0XC0)==0X40)//USB设备插入了,但是还没连接成功,猛查询.
+//			{
+//				usbapp_pulling();	//轮询处理USB事务
+//				delay_us(1000);		//不能像HID那么猛...,U盘比较慢
+//			}
+//			u_printf(DBG,"USB After query\r\n");
+//			usbapp_pulling();//处理USB事务
+//		}
 		Sleep(1000);
 	}
 }
@@ -363,11 +350,11 @@ void main_thread(void *pdata)
  			case camera_app		:camera_play();		break;//摄像头
 			case recorder_app	:recorder_play();	break;//录音机
  			case usb_app		:usb_play();		break;//USB连接
-// 	    case net_app		:net_play();		break;//网络测试
+ 	    case net_app		:net_play();		break;//网络测试
 			case calc_app		:calc_play();		break;//计算器   
 			case qr_app			:qr_play();			break;//二维码
-// 			case webcam_app		:webcam_play();		break;//网络摄像头
-//			case frec_app		:frec_play();		break;//人脸识别
+ 			case webcam_app		:webcam_play();		break;//网络摄像头
+			case frec_app		:frec_play();		break;//人脸识别
 			case gyro_app		:gyro_play();		break;//9轴传感器
 			case grad_app		:grad_play();		break;//水平仪
 			case key_app		:key_play();		break;//按键测试
@@ -535,4 +522,3 @@ void ShowPicture(void)
 	myfree(SRAMEX,picoffsettbl);			//释放内存	SRAMIN
 }
 #endif
-

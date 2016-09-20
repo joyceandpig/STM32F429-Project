@@ -51,9 +51,8 @@ u8  TIM5CH1_CAPTURE_STA=0;	//输入捕获状态
 u32	TIM5CH1_CAPTURE_VAL;	//输入捕获值(TIM2/TIM5是32位)
 
 extern vu8 aviframeup;
-//extern vu8 webcam_oensec;
+extern vu8 webcam_oensec;
 extern u16 reg_time;
-vu8 webcam_oensec;
 
 extern vu16 USART3_RX_STA;
 
@@ -65,7 +64,7 @@ vu8 framecnt;				//统一的帧计数器
 vu8 framecntout;			//统一的帧计数器输出变量 
 
 
-//定时器2通道2输入捕获配置	 
+//定时器2通道1输入捕获配置	 
 //arr：自动重装值
 //psc：时钟预分频数
 void TIM2_CH1_Cap_Init(u32 arr,u16 psc)
@@ -77,6 +76,7 @@ void TIM2_CH1_Cap_Init(u32 arr,u16 psc)
 		GPIO_InitTypeDef TPAD_GPIO_Handler;
 		__HAL_RCC_TIM2_CLK_ENABLE();//TIM2时钟使能    
 	  __HAL_RCC_GPIOA_CLK_ENABLE();           //开启GPIOA时钟
+	
 		HAL_GPIO_DeInit(GPIOA,GPIO_PIN_5);
     TPAD_GPIO_Handler.Pin=GPIO_PIN_5; //p5
     TPAD_GPIO_Handler.Mode=GPIO_MODE_AF_PP;  //推挽输出
@@ -86,35 +86,35 @@ void TIM2_CH1_Cap_Init(u32 arr,u16 psc)
     HAL_GPIO_Init(GPIOA,&TPAD_GPIO_Handler);
 	
 	  
-// 	TIM2->ARR=arr;  		//设定计数器自动重装值//刚好1ms    
-//	TIM2->PSC=psc;  		//预分频器,1M的计数频率	 
+ 	TIM2->ARR=arr;  		//设定计数器自动重装值//刚好1ms    
+	TIM2->PSC=psc;  		//预分频器,1M的计数频率	 
 
-//	TIM2->CCMR1|=1<<0;		//CC1S=01 	选择输入端 IC1映射到TI1上
-// 	TIM2->CCMR1|=0<<4; 		//IC1F=0000 配置输入滤波器 不滤波 
-// 
-//	TIM2->EGR=1<<0;			//软件控制产生更新事件,使写入PSC的值立即生效,否则将会要等到定时器溢出才会生效!
-//	TIM2->CCER|=0<<1; 		//CC1P=0	上升沿捕获
-//	TIM2->CCER|=1<<0; 		//CC1E=1 	允许捕获计数器的值到捕获寄存器中
-//																 
-//	TIM2->CR1|=0x01;    	//使能定时器2
+	TIM2->CCMR1|=1<<0;		//CC1S=01 	选择输入端 IC1映射到TI1上
+ 	TIM2->CCMR1|=0<<4; 		//IC1F=0000 配置输入滤波器 不滤波 
+ 
+	TIM2->EGR=1<<0;			//软件控制产生更新事件,使写入PSC的值立即生效,否则将会要等到定时器溢出才会生效!
+	TIM2->CCER|=0<<1; 		//CC1P=0	上升沿捕获
+	TIM2->CCER|=1<<0; 		//CC1E=1 	允许捕获计数器的值到捕获寄存器中
+																 
+	TIM2->CR1|=0x01;    	//使能定时器2
 	
-	  TIM_IC_InitTypeDef TIM2_CH1Config;  
-    
-    TIM2_Handler.Instance=TIM2;                          //通用定时器2
-    TIM2_Handler.Init.Prescaler=psc;                     //分频系数
-    TIM2_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;    //向上计数器
-    TIM2_Handler.Init.Period=arr;                        //自动装载值
-    TIM2_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;//时钟分频银子
-    HAL_TIM_IC_Init(&TIM2_Handler);//初始化输入捕获时基参数
-    
-    TIM2_CH1Config.ICPolarity=TIM_ICPOLARITY_RISING;    //上升沿捕获
-    TIM2_CH1Config.ICSelection=TIM_ICSELECTION_DIRECTTI;//映射到TI1上
-    TIM2_CH1Config.ICPrescaler=TIM_ICPSC_DIV1;          //配置输入分频，不分频
-    TIM2_CH1Config.ICFilter=0;                          //配置输入滤波器，不滤波
-    HAL_TIM_IC_ConfigChannel(&TIM2_Handler,&TIM2_CH1Config,TIM_CHANNEL_1);//配置TIM2通道1
-	
-    HAL_TIM_IC_Start_IT(&TIM2_Handler,TIM_CHANNEL_1);   //开启TIM2的捕获通道1，并且开启捕获中断
-    __HAL_TIM_ENABLE_IT(&TIM2_Handler,TIM_IT_UPDATE);   //使能更新中断
+//	  TIM_IC_InitTypeDef TIM2_CH1Config;  
+//    
+//    TIM2_Handler.Instance=TIM2;                          //通用定时器2
+//    TIM2_Handler.Init.Prescaler=psc;                     //分频系数
+//    TIM2_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;    //向上计数器
+//    TIM2_Handler.Init.Period=arr;                        //自动装载值
+//    TIM2_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;//时钟分频银子
+//    HAL_TIM_IC_Init(&TIM2_Handler);//初始化输入捕获时基参数
+//    
+//    TIM2_CH1Config.ICPolarity=TIM_ICPOLARITY_RISING;    //上升沿捕获
+//    TIM2_CH1Config.ICSelection=TIM_ICSELECTION_DIRECTTI;//映射到TI1上
+//    TIM2_CH1Config.ICPrescaler=TIM_ICPSC_DIV1;          //配置输入分频，不分频
+//    TIM2_CH1Config.ICFilter=0;                          //配置输入滤波器，不滤波
+//    HAL_TIM_IC_ConfigChannel(&TIM2_Handler,&TIM2_CH1Config,TIM_CHANNEL_1);//配置TIM2通道1
+//	
+//    HAL_TIM_IC_Start_IT(&TIM2_Handler,TIM_CHANNEL_1);   //开启TIM2的捕获通道1，并且开启捕获中断
+//    __HAL_TIM_ENABLE_IT(&TIM2_Handler,TIM_IT_UPDATE);   //使能更新中断
 }
 //通用定时器3中断初始化
 //这里时钟选择为APB1的2倍，而APB1为48M

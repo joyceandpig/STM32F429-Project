@@ -162,7 +162,7 @@ void DMA2_Stream1_IRQHandler(void)
 // OV_PWDN   ------------  PCF8574_P2
 void DCMI_Init(void)
 {
-	u32 tempreg=0;
+//	u32 tempreg=0;
 	//设置IO 
 //	RCC->AHB1ENR|=1<<0;		//使能外设PORTA时钟
 //	RCC->AHB1ENR|=1<<1;		//使能外设PORTB时钟

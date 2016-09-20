@@ -92,8 +92,10 @@ u16 TPAD_Get_Val(void)
 	TPAD_Reset();
 	while((TIM2->SR&0X02)==0)//等待捕获上升沿
 	{
-		if(TIM2->CNT>TPAD_ARR_MAX_VAL-500)return TIM2->CNT;//超时了,直接返回CNT的值
-	};	
+		if(TIM2->CNT>TPAD_ARR_MAX_VAL-500){
+			return TIM2->CNT;//超时了,直接返回CNT的值
+		}
+	}
 	return TIM2->CCR1;	  
 } 	  
 //读取n次,取最大值

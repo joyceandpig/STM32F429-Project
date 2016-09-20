@@ -8,6 +8,8 @@
 #include "usart.h" 
 #include "ff.h" 
 #include "ucos_ii.h" 
+#include "phoneplay.h"
+#include "smsplay.h"
 
 
 //////////////////////////////////////////////////////////////////////////////////	   

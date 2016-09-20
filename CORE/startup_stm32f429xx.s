@@ -1,7 +1,7 @@
 ;******************** (C) COPYRIGHT 2015 STMicroelectronics ********************
 ;* File Name          : startup_stm32f429xx.s
 ;* Author             : MCD Application Team
-;* Version            : V1.3.2
+;* Version            : V2.4.2
 ;* Date               : 13-November-2015
 ;* Description        : STM32F429x devices vector table for MDK-ARM toolchain. 
 ;*                      This module performs:
@@ -45,7 +45,7 @@
 ;   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Stack_Size      EQU     0x400;
+Stack_Size      EQU     0x00001000
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
 Stack_Mem       SPACE   Stack_Size
@@ -56,7 +56,9 @@ __initial_sp
 ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Heap_Size      EQU     0x000;
+;未用到编译器自带的内存管理(malloc,free等)，设置Heap_Szie为0
+Heap_Size       EQU     0x00000000
+
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base
@@ -192,7 +194,7 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
 ; Reset handler
 Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
-	    IMPORT  SystemInit					;寄存器代码,不需要在这里调用SystemInit函数,故屏蔽掉,库函数版本代码,可以留下
+        ;IMPORT  SystemInit					;寄存器代码,不需要在这里调用SystemInit函数,故屏蔽掉,库函数版本代码,可以留下
 											;不过需要在外部实现SystemInit函数,否则会报错.
         IMPORT  __main
                  LDR     R0, =0xE000ED88    ; 使能浮点运算 CP10,CP11
@@ -211,66 +213,6 @@ Reset_Handler    PROC
                  LDR     R0, =__main
                  BX      R0
                  ENDP
-					 
-        ;IMPORT  SystemInit
-        ;IMPORT  __main
-
-                 ;LDR     R0, =SystemInit
-                 ;BLX     R0
-				 
-				 ;IF {FPU} != "SoftVFP"
-                                                ;; Enable Floating Point Support at reset for FPU
-                 ;LDR.W   R0, =0xE000ED88         ; Load address of CPACR register
-                 ;LDR     R1, [R0]                ; Read value at CPACR
-                 ;ORR     R1,  R1, #(0xF <<20)    ; Set bits 20-23 to enable CP10 and CP11 coprocessors
-                                                ;; Write back the modified CPACR value
-                 ;STR     R1, [R0]                ; Wait for store to complete
-                 ;DSB
-                
-                                                ;; Disable automatic FP register content
-                                                ;; Disable lazy context switch
-                 ;LDR.W   R0, =0xE000EF34         ; Load address to FPCCR register
-                 ;LDR     R1, [R0]
-                 ;AND     R1,  R1, #(0x3FFFFFFF)  ; Clear the LSPEN and ASPEN bits
-                 ;STR     R1, [R0]
-                 ;ISB                             ; Reset pipeline now the FPU is enabled
-                 ;ENDIF
-				 					 
-                 ;LDR     R0, =__main
-                 ;BX      R0
-                 ;ENDP
-					 
-  ;LDR R0,= 0x00000114
-  ;LDR R1,= 0x40021014
-  ;STR R0,[R1] ;??FSMC??
-  ;LDR R0, =0X000001E0
-  ;LDR R1, =0X40021018
-  ;STR R0,[R1] ;GPIOD,GPIOE,GPIOF,GPIOG????
-  ;LDR R0,= 0x44BB44BB
-  ;LDR R1,= 0x40011400
-  ;STR R0,[R1]
-  ;LDR R0,= 0xBBBBBBBB
-  ;LDR R1,= 0x40011404
-  ;STR R0,[R1] ;??GPIOD
-  ;LDR R0,= 0xB44444BB
-  ;LDR R1,= 0x40011800
-  ;STR R0,[R1]
-  ;LDR R0,= 0xBBBBBBBB
-  ;LDR R1,= 0x40011804
-  ;STR R0,[R1] ;??GPIOE
-  ;LDR R0,= 0x44BBBBBB
-  ;LDR R1,= 0x40011C00
-  ;STR R0,[R1]
-  ;LDR R0,= 0xBBBB4444
-  ;LDR R1,= 0x40011C04
-  ;STR R0,[R1] ;??GPIOF
-  ;LDR R0,= 0x44BBBBBB
-  ;LDR R1,= 0x40012000
-  ;STR R0,[R1]
-  ;LDR R0,= 0x44444B44
-  ;LDR R1,= 0x40012004
-  ;STR R0,[R1] ;??GPIOG
-
 
 ; Dummy Exception Handlers (infinite loops which can be modified)
 

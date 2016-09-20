@@ -948,6 +948,7 @@ u8 app_system_file_check(u8* diskx)
 //		break;    
 //	}  
 //	return rval;  
+return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1149,7 +1150,8 @@ u8 app_system_parameter_init(void)
 //LCD背光自动控制
 void app_lcd_auto_bklight(void)
 {
-	u16 ir,ps,als; 
+//	u16 ir;
+	u16 ps,als; 
 //	AP3216C_ReadData(&ir,&ps,&als);
 	if(ps>700)//接近传感器,关闭屏幕背光
 	{

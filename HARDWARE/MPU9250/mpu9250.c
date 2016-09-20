@@ -419,7 +419,7 @@ void usart1_report_imu(short roll,short pitch,short yaw,short csb,int prs)
 void MPU_Test(void)
 {
 	u8 t=0,report=0;	            //默认不上报0，1上报
-	u8 key;
+
 	float pitch,roll,yaw; 	        //欧拉角
 	short aacx,aacy,aacz;	        //加速度传感器原始数据
 	short gyrox,gyroy,gyroz;        //陀螺仪原始数据 
