@@ -278,16 +278,17 @@ void usb_Task(void *pdata)
 //	MPU_Test();	
 	while(1)
 	{
-    Sleep(500);				  
+//    Sleep(500);		
+OSTimeDlyHMSM(0,0,0,500);		
 		tct++;
 		if(tct==5)
 		{
 			tct=0;
 
-			psin=my_mem_perused(SRAMIN);
-			psex=my_mem_perused(SRAMEX);
-			psccm=my_mem_perused(SRAMCCM);
-			printf("in:%3.1f, ex:%3.1f, ccm:%3.1f, CPU:%d\r\n",psin/10,psex/10,psccm/10,OSCPUUsage);//打印内存占用率
+//			psin=my_mem_perused(SRAMIN);
+//			psex=my_mem_perused(SRAMEX);
+//			psccm=my_mem_perused(SRAMCCM);
+//			printf("in:%3.1f, ex:%3.1f, ccm:%3.1f, CPU:%d\r\n",psin/10,psex/10,psccm/10,OSCPUUsage);//打印内存占用率
 		} 
 	} 	
 }

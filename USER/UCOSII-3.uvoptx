@@ -201,18 +201,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>130</LineNumber>
+          <LineNumber>255</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134297150</Address>
+          <Address>134506480</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>G:\娣炲垢绉戞妧\椤圭洰\寮€鍙戝钩鍙版惌寤?缁煎悎娴嬭瘯\STM32F429_娴嬭瘯宸ョ▼v1.1锛堝簱鐗堟湰-鏃燯I-绉绘鐩爣瀵硅薄锛?USER\stm32f4xx_it.c</Filename>
+          <Filename>G:\娣炲垢绉戞妧\椤圭洰\寮€鍙戝钩鍙版惌寤?缁煎悎娴嬭瘯\APP\Gyroscope\gyroscope.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\UCOSII_3\stm32f4xx_it.c\130</Expression>
+          <Expression>\\UCOSII_3\../APP/Gyroscope/gyroscope.c\255</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>251</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134506434</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>G:\娣炲垢绉戞妧\椤圭洰\寮€鍙戝钩鍙版惌寤?缁煎悎娴嬭瘯\APP\Gyroscope\gyroscope.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\UCOSII_3\../APP/Gyroscope/gyroscope.c\251</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -225,6 +241,11 @@
           <count>1</count>
           <WinNumber>1</WinNumber>
           <ItemText>videodev</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>system_task_return</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -241,7 +262,7 @@
       <DebugFlag>
         <trace>0</trace>
         <periodic>0</periodic>
-        <aLwin>1</aLwin>
+        <aLwin>0</aLwin>
         <aCover>0</aCover>
         <aSer1>0</aSer1>
         <aSer2>0</aSer2>
@@ -361,7 +382,7 @@
 
   <Group>
     <GroupName>USER</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
