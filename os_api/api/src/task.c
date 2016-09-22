@@ -32,8 +32,8 @@ int thread_create(void(*task)(void *p_arg), void *p_arg, unsigned int prio, unsi
 		if (!TaskTCB)
 			return NULL;
 	}
-
-	OSTaskCreate(	(OS_TCB 	*)TaskTCB,
+//	OSTaskCreate   20160922修改，根据参数个数，修改为OSTaskCreateExt，修改后9D测试功能立即正常了
+	OSTaskCreateExt(	(OS_TCB 	*)TaskTCB,
 								(CPU_CHAR 	*)name,
 								(OS_TASK_PTR)task,
 								(void 		*)p_arg,

@@ -55,9 +55,6 @@
 #include "phoneplay.h"
 
 
-
-
-
 #include "usb_app.h"
 #include "usbplay.h"
 
@@ -175,6 +172,8 @@ int main(void)
 	KEY_Init();
 	AT24CXX_Init();				    //初始化IIC
 	W25QXX_Init();				    //W25QXX初始化	
+	Adc_Init();					//初始化内部温度传感器  
+	
 	tp_dev.init();				    //初始化触摸屏
 	my_mem_init(SRAMIN);     //初始化内部内存池
 	my_mem_init(SRAMEX);		//初始化外部内存池
