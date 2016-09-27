@@ -7,7 +7,7 @@
 /* storage control modules to the FatFs module with a defined API.       */
 /*-----------------------------------------------------------------------*/
 #include "diskio.h"			/* FatFs lower layer API */
-//#include "sdio_sdcard.h"
+#include "sdio_sdcard.h"
 #include "w25qxx.h"
 #include "malloc.h"	 
 #include "nand.h"	 

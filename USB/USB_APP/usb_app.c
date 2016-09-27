@@ -109,7 +109,7 @@ void usbapp_mode_stop(void)
 		case USBD_MSC_MODE:
 			DCD_DevDisconnect(&USB_OTG_Core_dev);
 			USB_OTG_StopDevice(&USB_OTG_Core_dev); 
-			myfree(SRAMIN,MSC_BOT_Data);	//释放内存
+			myfree(SRAMEX,MSC_BOT_Data);	//释放内存
 			break;	 
 	} 
 	RCC->AHB2RSTR|=1<<7;	//USB OTG FS 复位
@@ -144,7 +144,7 @@ void usbapp_mode_set(u8 mode)
 			USBH_Init(&USB_OTG_Core_dev,USB_OTG_FS_CORE_ID,&USB_Host,&HID_cb,&USR_Callbacks);  
 			break;		
 		case USBD_MSC_MODE:
-			MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);
+			MSC_BOT_Data=mymalloc(SRAMEX,MSC_MEDIA_PACKET);
 			USBD_Init(&USB_OTG_Core_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);
 			break;	  
 	}

@@ -87,7 +87,7 @@ enum
 	msm_app   = SPB_ICOS_NUM + 2,
 };
 
-USB_OTG_CORE_HANDLE USB_OTG_dev;
+extern USB_OTG_CORE_HANDLE USB_OTG_Core_dev;
 
 
 void sys_reset(void)
@@ -206,7 +206,7 @@ int main(void)
 	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//ºÏ≤‚NandFlash¥ÌŒÛ
 	
 //	MSC_BOT_Data=mymalloc(SRAMEX,MSC_MEDIA_PACKET);			//…Í«Îƒ⁄¥ÊSRAMIN
-//	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
+//	USBD_Init(&USB_OTG_Core_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
 //	Sleep(2000);
 	
 	f_mount(fs[0],"0:",1); 		//π“‘ÿSDø®  

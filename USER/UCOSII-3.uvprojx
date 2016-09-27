@@ -1273,11 +1273,6 @@
               <FilePath>..\USB\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_bot.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_msc_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\USB\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_core.c</FilePath>
-            </File>
-            <File>
               <FileName>usbh_msc_scsi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USB\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_scsi.c</FilePath>
@@ -1301,6 +1296,11 @@
               <FileName>usbh_hid_mouse.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USB\STM32_USB_HOST_Library\Class\HID\src\usbh_hid_mouse.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USB\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_core.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1348,11 +1348,6 @@
           <GroupName>USB_APP</GroupName>
           <Files>
             <File>
-              <FileName>usb_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\USB\USB_APP\usb_app.c</FilePath>
-            </File>
-            <File>
               <FileName>usb_bsp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USB\USB_APP\usb_bsp.c</FilePath>
@@ -1371,6 +1366,11 @@
               <FileName>usbd_usr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USB\USB_APP\usbd_usr.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USB\USB_APP\usb_app.c</FilePath>
             </File>
             <File>
               <FileName>usbh_usr.c</FileName>
