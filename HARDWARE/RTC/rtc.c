@@ -29,56 +29,21 @@ RTC_DateTypeDef RTC_DateStruct;
 
 
 
-//等待RSF同步
-//返回值:0,成功;1,失败;
-u8 RTC_Wait_Synchro(void)
-{ 
-	u32 retry=0XFFFFF; 
-	//关闭RTC寄存器写保护
-	RTC->WPR=0xCA;
-	RTC->WPR=0x53; 
-	RTC->ISR&=~(1<<5);		//清除RSF位 
-	while(retry&&((RTC->ISR&(1<<5))==0x00))//等待影子寄存器同步
-	{
-		retry--;
-	}
-    if(retry==0)return 1;	//同步失败 
-	RTC->WPR=0xFF;			//使能RTC寄存器写保护  
-	return 0;
-}
-//BCD码转换为十进制数据
-//val:要转换的BCD码
-//返回值:十进制数据
-u8 RTC_BCD2DEC(u8 val)
-{
-	u8 temp=0;
-	temp=(val>>4)*10;
-	return (temp+(val&0X0F));
-}
 //获取RTC时间
 //*hour,*min,*sec:小时,分钟,秒钟 
 //*ampm:AM/PM,0=AM/24H,1=PM.
 void RTC_Get_Time(u8 *hour,u8 *min,u8 *sec,u8 *ampm)
 {
-	u8 retry=0;
-	u32 temp=0;
- 	while(RTC_Wait_Synchro()){retry++;if(retry>10)break;};//等待同步  	 
-	temp=RTC->TR;
-	*hour=RTC_BCD2DEC((temp>>16)&0X3F);
-	*min=RTC_BCD2DEC((temp>>8)&0X7F);
-	*sec=RTC_BCD2DEC(temp&0X7F);
-	*ampm=temp>>22; 
+	__HAL_RTC_WRITEPROTECTION_DISABLE(&RTC_Handler);
+  HAL_RTC_WaitForSynchro(&RTC_Handler);
+  __HAL_RTC_WRITEPROTECTION_ENABLE(&RTC_Handler);
 	
-//	__HAL_RTC_WRITEPROTECTION_DISABLE(&RTC_Handler);
-//  HAL_RTC_WaitForSynchro(&RTC_Handler);
-//  __HAL_RTC_WRITEPROTECTION_ENABLE(&RTC_Handler);
-//	
-//	HAL_RTC_GetTime(&RTC_Handler,&RTC_TimeStruct,RTC_FORMAT_BIN);
+	HAL_RTC_GetTime(&RTC_Handler,&RTC_TimeStruct,RTC_FORMAT_BIN);
 //	printf("sec:%d\r\n",RTC_TimeStruct.Seconds);
-//	*hour = RTC_TimeStruct.Hours;
-//	*min = RTC_TimeStruct.Minutes;
-//	*sec = RTC_TimeStruct.Seconds;
-//	*ampm = RTC_TimeStruct.TimeFormat;
+	*hour = RTC_TimeStruct.Hours;
+	*min = RTC_TimeStruct.Minutes;
+	*sec = RTC_TimeStruct.Seconds;
+	*ampm = RTC_TimeStruct.TimeFormat;
 }
 //获取RTC日期
 //*year,*mon,*date:年,月,日
@@ -197,7 +162,7 @@ void RTC_Set_AlarmA(u8 week,u8 hour,u8 min,u8 sec)
     RTC_AlarmSturuct.Alarm=RTC_ALARM_A;     //闹钟A
     HAL_RTC_SetAlarm_IT(&RTC_Handler,&RTC_AlarmSturuct,RTC_FORMAT_BIN);
     
-    HAL_NVIC_SetPriority(RTC_Alarm_IRQn,0x01,0x02); //抢占优先级1,子优先级2
+    HAL_NVIC_SetPriority(RTC_Alarm_IRQn,1,2); //抢占优先级1,子优先级2
     HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
 }
 
@@ -217,7 +182,7 @@ void RTC_Set_WakeUp(u32 wksel,u16 cnt)
 	
 		HAL_RTCEx_SetWakeUpTimer_IT(&RTC_Handler,cnt,wksel);            //设置重装载值和时钟 
 	
-    HAL_NVIC_SetPriority(RTC_WKUP_IRQn,0x02,0x02); //抢占优先级1,子优先级2
+    HAL_NVIC_SetPriority(RTC_WKUP_IRQn,1,2); //抢占优先级1,子优先级2
     HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
 }
 

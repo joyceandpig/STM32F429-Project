@@ -175,13 +175,7 @@ u8 gyro_play(void)
 	u8 fsize; 
 	u8 res=0;
 
-	double angle = 0.0;
-	u8 t = 0;
-	short xcenter,ycenter;	//中心坐标
-	short xr1,yr1,wr1;		//圆1坐标和边长
-	short xr2,yr2,wr2;		//圆2坐标和边长
-	short scalefac = 10;			//缩放因子
-	short oldxr2,oldyr2;
+
 	
  	//提示开始检测MPU6050 的DMP
  	window_msg_box((lcddev.width-200)/2,(lcddev.height-80)/2,200,80,(u8*)gyro_remind_tbl[0][gui_phy.language],(u8*)APP_REMIND_CAPTION_TBL[gui_phy.language],12,0,0,0);
@@ -249,29 +243,7 @@ u8 gyro_play(void)
 				gyro_circle_roll(xp+lcddev.width/2,ypr,2*rpr,dpr,temp);
 				temp=yaw*10;
 				gyro_circle_yaw(lcddev.width/2,ypr+rpr+fsize+ry,2*ry,dy,temp);
-				
-				
-				if((t%10)==0){  
-					angle=sqrt(pitch*pitch+roll*roll); 
-					if(rval){
-						printf("\r\n");//测试使用
-						rval = 0;
-					}
-					printf("calc angle: %f    ",angle);//测试使用					
-					yr1=ycenter+pitch*scalefac;
-					yr2=ycenter-pitch*scalefac;
-					xr1=xcenter+roll*scalefac;
-					xr2=xcenter-roll*scalefac; 
-					if(oldxr2!=xr2||oldyr2!=yr2){  
-						oldxr2=xr2;oldyr2=yr2; 
-						printf("draw angle: %f\r\n",angle);//测试使用
-						rval = 1;
-					}  
-				}
-				t++; 
-				
-//				printf("angle: %f\r\n",sqrt(pitch*pitch+roll*roll)); //测试使用，用于测试gyro文件调用mpu9250与gradi文件是否相同
-			 }
+			}
 			delay_ms(1);  
 		}
 	}

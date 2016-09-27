@@ -204,13 +204,13 @@ u8 grad_play(void)
 				if((t%10)==0)
 				{  
 					angle=sqrt(pitch*pitch+roll*roll); 
-					
+#if 0					
 					if(res){
 						printf("\r\n");//测试使用
 						res = 0;
 					}
 					printf("calc angle: %f    ",angle);//测试使用
-					
+#endif				
 					if(angle>=0.1)
 					{
 						if(bkcolor!=BLACK)
@@ -242,10 +242,10 @@ u8 grad_play(void)
 						oldxr2=xr2;oldyr2=yr2; 
 						grad_fill_circle(xr2,yr2,wr2,RED); 
 						grad_fill_circle(xr1,yr1,wr1,BLUE); 
-						
+#if 0						
 						printf("draw angle: %f\r\n",angle);//测试使用
 						res = 1;
-						
+#endif						
 						sprintf((char*)buf,"%.1f",angle);
 						len=strlen((char*)buf);
 						buf[len]=95+' ';
@@ -267,89 +267,6 @@ u8 grad_play(void)
 	grad_delete_font();	//删除字体
 	gui_memin_free(buf);//释放内存
 	return rval;
-
-//	buf=gui_memin_malloc(32);	//申请内存
-//	if(rval==0) 
-//	{
-//		mlcd_init(lcddev.width,lcddev.height,1);//初始化mlcd
-//		mlcd_clear(BLACK); 
-//		xcenter=lcddev.width/2;
-//		ycenter=lcddev.height/2; 
-//		wr1=lcddev.width/6;
-//		wr2=wr1+2; 
-//		scalefac=10;
-//		xr1=xcenter-wr1/2;
-//		yr1=ycenter-wr1/2;
-//		xr2=xcenter-wr2/2;
-//		yr2=ycenter-wr2/2;
-//		gui_phy.draw_point=(void(*)(u16,u16,u32))mlcd_draw_point;
-//	while(1)
-//	{
-//			if(system_task_return)break;//TPAD返回  
-//			res=mpu_mpl_get_data(&pitch,&roll,&yaw); 
-//			if(res==0)//读取MPL数据
-//			{  	
-//				if((t%10)==0){  
-//					angle=sqrt(pitch*pitch+roll*roll); 
-//					if(rval){
-//						printf("\r\n");//测试使用
-//						rval = 0;
-//					}
-//					printf("calc angle: %f    ",angle);//测试使用			
-//					if(angle>=0.1)
-//					{
-//						if(bkcolor!=BLACK)
-//						{
-//							bkcolor=BLACK; 
-//							oldxr2=0;oldyr2=0;
-//						}
-//						angle=-angle;
-//						stable=0;
-//					}else 
-//					{ 
-//						if(stable<10)stable++;	//等待状态稳定
-//						else
-//						{
-//							if(bkcolor!=GREEN)
-//							{
-//								bkcolor=GREEN; 
-//								oldxr2=0;oldyr2=0;
-//							} 
-//						}
-//					}					
-//					yr1=ycenter+pitch*scalefac;
-//					yr2=ycenter-pitch*scalefac;
-//					xr1=xcenter+roll*scalefac;
-//					xr2=xcenter-roll*scalefac; 
-//					if(oldxr2!=xr2||oldyr2!=yr2){  
-//						oldxr2=xr2;oldyr2=yr2; 
-//						printf("draw angle: %f\r\n",angle);//测试使用
-//						rval = 1;
-//						mlcd_clear(bkcolor);
-//						grad_fill_circle(xr2,yr2,wr2,RED); 
-//						grad_fill_circle(xr1,yr1,wr1,BLUE); 
-//						
-//						sprintf((char*)buf,"%.1f",angle);
-//						len=strlen((char*)buf);
-//						buf[len]=95+' ';
-//						buf[len+1]=0; 
-
-//						gui_phy.back_color=bkcolor; 
-//						gui_show_strmid(0,angy,lcddev.width,fsize,WHITE,fsize,buf);	//显示新角度 WHITE
-//						mlcd_display_layer(0);
-//					}  
-//				}
-//				t++; 
-//				continue;
-//			 }
-//			delay_ms(3);
-//		} 
-//		mlcd_delete();							//删除mlcd
-//		gui_phy.draw_point=LCD_Fast_DrawPoint;	//恢复为原来的画点函数 
-//	}
-//	grad_delete_font();	//删除字
-//	gui_memin_free(buf);//释放内存
-//	return 0;
 }
 
 

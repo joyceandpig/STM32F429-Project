@@ -25,7 +25,7 @@ struct _m_usmart_nametab usmart_nametab[]=
 	(void*) AT24CXX_Test,"void AT24CXX_Test(u8 n)",
 	(void*) W25QXX_Test,"void W25QXX_Test(u8 n)",
 #endif	
-	(void*) MPU_Test,"void MPU_Test(void)",
+	(void*) font_init,"u8 font_init(u8 cmd)",
 	(void*) video_play,"void video_play(void)",
 };	
 

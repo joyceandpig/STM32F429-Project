@@ -169,7 +169,7 @@ void recorder_enter_rec_mode(void)
 	//降低I2S DMA中断的优先级,让USB优先级可以打断DMA中断优先级
 //	MY_NVIC_Init(1,0,DMA1_Stream4_IRQn,2);	//抢占1，子优先级0，组2 
 //	MY_NVIC_Init(1,1,DMA1_Stream3_IRQn,2);	//抢占1，子优先级1，组2 
-	HAL_NVIC_SetPriority(DMA1_Stream4_IRQn,0,1);
+	HAL_NVIC_SetPriority(DMA1_Stream4_IRQn,1,0);
 	HAL_NVIC_SetPriority(DMA1_Stream3_IRQn,1,1);
 	
   sai_rx_callback=rec_sai_dma_rx_callback;//回调函数指wav_i2s_dma_callback
@@ -298,7 +298,7 @@ void recorder_load_ui(void)
 	gui_show_strmid(0,0,lcddev.width,gui_phy.tbheight,RECORDER_TITLE_COLOR,gui_phy.tbfsize,(u8*)APP_MFUNS_CAPTION_TBL[11][gui_phy.language]);//显示标题
  	gui_fill_rectangle(0,gui_phy.tbheight,lcddev.width,lcddev.height-gui_phy.tbheight,RECORDER_MAIN_BKCOLOR);//填充底色 
  	minibmp_decode((u8*)RECORDER_DEMO_PIC,(lcddev.width-100)/2,100+(lcddev.height-320)/2,100,100,0,0);//解码100*100的图片DEMO
-	recorder_vu_meter((lcddev.width-218)/2,(lcddev.height-320)/2+200+5,0);				//显示vu meter;
+	recorder_vu_meter((lcddev.width-218)/2,(lcddev.height-320)/2+200+5,10);				//显示vu meter;
 	app_gui_tcbar(0,lcddev.height-gui_phy.tbheight,lcddev.width,gui_phy.tbheight,0x01);	//上分界线
 }
 

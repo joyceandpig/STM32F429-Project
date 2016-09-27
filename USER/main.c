@@ -180,7 +180,6 @@ int main(void)
 	my_mem_init(SRAMCCM);		//初始化CCM内存池 
 	
 
-	printf("mpu init res:%d\r\n",MPU9250_Init());
 	gui_init();
 	piclib_init();				//piclib初始化
 	slcd_dma_init();
@@ -188,12 +187,9 @@ int main(void)
 	usbapp_init();
 	
 	printf("RTC Check...\r\n");			   
- 	if(RTC_Init())
-	{
+ 	if(RTC_Init()){
 		printf("RTC ERROR!\r\n"); //RTC检测
-	}
-	else 
-	{
+	}else {
 		calendar_get_time(&calendar);//得到当前时间
 		calendar_get_date(&calendar);//得到当前日期
 		printf("RTC OK!\r\n");;			   
@@ -209,7 +205,7 @@ int main(void)
 
 	if(FTL_Init())LCD_ShowString(30,170,200,16,16,"NAND Error!");	//检测NandFlash错误
 	
-//	MSC_BOT_Data=mymalloc(SRAMIN,MSC_MEDIA_PACKET);			//申请内存SRAMIN
+//	MSC_BOT_Data=mymalloc(SRAMEX,MSC_MEDIA_PACKET);			//申请内存SRAMIN
 //	USBD_Init(&USB_OTG_dev,USB_OTG_FS_CORE_ID,&USR_desc,&USBD_MSC_cb,&USR_cb);		    
 //	Sleep(2000);
 	
@@ -240,13 +236,11 @@ void led_task(void *pdata)
 		usmart_scan();
 		t++;
 		Sleep(125);
-		if(t==4)
-		{	
+		if(t==4){	
 			LED1_OFF();	//LED0灭
 			LED0_STA_TURN();//提示系统在运;
 		}			
-		if(t==8*5)		//LED0亮
-		{
+		if(t==8*5){		//LED0亮
 			t=0;
 			LED1_ON();
 		}
@@ -259,11 +253,10 @@ void key_thread(void *pdata)
 	while(1)
 	{
 		t = KEY_Scan(0);
-		if(t == 1)
-		{
+		if(t == 1){
 			system_task_return = 1;
 		}
-	Sleep(100);
+		Sleep(100);
 	}									 
 }
 void ShowPicture(void);
@@ -275,20 +268,16 @@ void usb_Task(void *pdata)
 	float psin,psex,psccm;
 	pdata=pdata;
 
-//	MPU_Test();	
 	while(1)
 	{
-//    Sleep(500);		
-OSTimeDlyHMSM(0,0,0,500);		
+		OSTimeDlyHMSM(0,0,0,500);		
 		tct++;
-		if(tct==5)
-		{
+		if(tct==5){
 			tct=0;
-
-//			psin=my_mem_perused(SRAMIN);
-//			psex=my_mem_perused(SRAMEX);
-//			psccm=my_mem_perused(SRAMCCM);
-//			printf("in:%3.1f, ex:%3.1f, ccm:%3.1f, CPU:%d\r\n",psin/10,psex/10,psccm/10,OSCPUUsage);//打印内存占用率
+			psin=my_mem_perused(SRAMIN);
+			psex=my_mem_perused(SRAMEX);
+			psccm=my_mem_perused(SRAMCCM);
+			printf("in:%3.1f, ex:%3.1f, ccm:%3.1f, CPU:%d\r\n",psin/10,psex/10,psccm/10,OSCPUUsage);//打印内存占用率
 		} 
 	} 	
 }
